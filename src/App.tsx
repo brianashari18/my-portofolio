@@ -14,10 +14,10 @@ const App = () => (
     <main className="w-full px-4 min-h-screen">
       <div className="container mx-auto">
         <Routes>
-          <Route path="/" element={<Home />} />
-          <Route path="/projects" element={<Projects />} />
-          <Route path="/about" element={<About />} />
-          <Route path="/contact" element={<Contact />} />
+          <Route path="/my-portofolio/" element={<Home />} />
+          <Route path="/my-portofolio/projects" element={<Projects />} />
+          <Route path="/my-portofolio/about" element={<About />} />
+          <Route path="/my-portofolio/contact" element={<Contact />} />
         </Routes>
       </div>
     </main>
