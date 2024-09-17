@@ -18,7 +18,7 @@ const Header = () => {
                 <div className="container mx-auto flex items-center justify-between px-4 py-5">
                     {/* Logo */}
                     <div className="w-60 max-w-full">
-                        <Link to="/" className="block text-gray-900 dark:text-gray-100">
+                        <Link to="/my-portofolio/" className="block text-gray-900 dark:text-gray-100">
                             MyPorto
                         </Link>
                     </div>
@@ -39,25 +39,25 @@ const Header = () => {
                     {/* Navbar Links for Large Screens */}
                     <nav className="hidden lg:flex lg:items-center lg:space-x-8 lg:ml-auto lg:px-0 lg:py-0">
                         <Link
-                            to="/"
+                            to="/my-portofolio/"
                             className="text-base font-medium text-gray-900 dark:text-gray-100 hover:text-primary transition-colors"
                         >
                             Home
                         </Link>
                         <Link
-                            to="/projects"
+                            to="/my-portofolio/projects"
                             className="text-base font-medium text-gray-900 dark:text-gray-100 hover:text-primary transition-colors"
                         >
                             Projects
                         </Link>
                         <Link
-                            to="/about"
+                            to="/my-portofolio/about"
                             className="text-base font-medium text-gray-900 dark:text-gray-100 hover:text-primary transition-colors"
                         >
                             About
                         </Link>
                         <Link
-                            to="/contact"
+                            to="/my-portofolio/contact"
                             className="text-base font-medium text-gray-900 dark:text-gray-100 hover:text-primary transition-colors"
                         >
                             Contact
@@ -78,7 +78,7 @@ const Header = () => {
             >
                 <nav className="flex flex-col p-4 space-y-4 mt-20">
                     <Link
-                        to="/"
+                        to="/my-portofolio/"
                         className="text-base font-medium text-gray-900 dark:text-gray-100 hover:text-primary transition-colors"
                         onClick={closeNavbar} // Close navbar when a link is clicked
                     >

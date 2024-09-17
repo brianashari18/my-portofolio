@@ -185,7 +185,7 @@ const Home = () => {
                     </p>
                     <motion.div className="mt-12" whileHover={{ scale: 1.1 }}>
                         <Link
-                            to="/contact"
+                            to="/my-portofolio/contact"
                             className="inline-block bg-white text-blue-600 px-8 py-4 rounded-full text-lg font-semibold shadow-lg hover:bg-gray-100 transition-colors"
                         >
                             Get In Touch

@@ -2,7 +2,7 @@ import { Link } from 'react-router-dom';
 import profileImg from '../assets/images/about/profile.jpg'; // Import the image correctly
 
 const About = () => (
-  <main className="bg-gray-50 dark:bg-gray-900 min-h-screen pt-32 pb-16">
+  <main className="bg-gray-50 dark:bg-gray-900 min-h-screen">
     <section
       id="about"
       className="bg-gray-100 dark:bg-gray-800 py-20 lg:py-32 relative overflow-hidden"
@@ -40,7 +40,7 @@ const About = () => (
               </p>
 
               <Link
-                to="/contact"
+                to="/my-portofolio/contact"
                 className="inline-flex items-center justify-center py-3 px-8 text-base font-medium text-center text-white bg-blue-600 border border-transparent rounded-lg shadow-lg hover:bg-blue-700 hover:scale-105 transition-all duration-300 focus:outline-none focus:ring-2 focus:ring-blue-500"
               >
                 Get In Touch
