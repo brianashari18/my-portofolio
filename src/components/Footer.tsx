@@ -21,7 +21,7 @@ const Footer = () => (
                 {/* Social Media Icons */}
                 <div className="flex space-x-6 mb-4">
                     <a
-                        href="#"
+                        href="https://github.com/brianashari18"
                         aria-label="GitHub"
                         className="text-gray-800 dark:text-gray-200 hover:text-gray-600 dark:hover:text-gray-400 transition-colors duration-300"
                     >
@@ -30,7 +30,7 @@ const Footer = () => (
                         </svg>
                     </a>
                     <a
-                        href="#"
+                        href="https://www.linkedin.com/in/brian-anashari-099744151/"
                         aria-label="LinkedIn"
                         className="text-gray-800 dark:text-gray-200 hover:text-blue-600 dark:hover:text-blue-400 transition-colors duration-300"
                     >
