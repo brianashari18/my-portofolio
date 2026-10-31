@@ -1,0 +1,54 @@
+@media (prefers-reduced-motion: no-preference) {
+  [data-nova-enter], [data-nova-enter-sequence] > *, [data-nova-motion='visible'] {
+    animation: nova-reveal var(--reveal-duration, 1000ms) cubic-bezier(.16, 1, .3, 1) var(--reveal-delay, 0ms) backwards;
+  }
+
+  [data-nova-motion='pending']:not(:focus-within) {
+    opacity: 0;
+    translate: 0 var(--reveal-distance, .6rem);
+  }
+
+  [data-nova-sequence='soft'] {
+    --reveal-duration: 950ms;
+    --reveal-blur: 2px;
+    --reveal-distance: .4rem;
+  }
+
+  [data-nova-enter-sequence] {
+    --reveal-duration: 680ms;
+    --reveal-start-opacity: .65;
+    --reveal-blur: 0px;
+  }
+
+  [data-nova-media] { --reveal-blur: 0px; }
+  :is([data-nova-enter-sequence], [data-nova-sequence]) > :nth-child(2) { --reveal-delay: 120ms; }
+  :is([data-nova-enter-sequence], [data-nova-sequence]) > :nth-child(3) { --reveal-delay: 240ms; }
+  :is([data-nova-enter-sequence], [data-nova-sequence]) > :nth-child(n + 4) { --reveal-delay: 360ms; }
+  .nova-hero__portrait { --reveal-delay: 120ms; }
+  .nova-proof { --reveal-delay: 480ms; }
+
+  [data-nova-enter]:focus-within,
+  [data-nova-enter-sequence] > :focus-within,
+  [data-nova-motion='visible']:focus-within { animation: none; }
+
+  .nova-experience-accordion details[open] > div {
+    animation: nova-reveal 350ms cubic-bezier(.16, 1, .3, 1) both;
+    --reveal-blur: 0px;
+    --reveal-distance: .25rem;
+  }
+
+  @supports (interpolate-size: allow-keywords) {
+    .nova-experience-accordion { interpolate-size: allow-keywords; }
+    .nova-experience-accordion details::details-content {
+      block-size: 0;
+      overflow: clip;
+      transition: block-size 330ms cubic-bezier(.16, 1, .3, 1), content-visibility 330ms allow-discrete;
+    }
+    .nova-experience-accordion details[open]::details-content { block-size: auto; }
+  }
+}
+
+@keyframes nova-reveal {
+  from { opacity: var(--reveal-start-opacity, 0); filter: blur(var(--reveal-blur, 3px)); translate: 0 var(--reveal-distance, .6rem); }
+  to { opacity: 1; filter: blur(0); translate: none; }
+}

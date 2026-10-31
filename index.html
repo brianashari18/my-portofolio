@@ -1,20 +1,37 @@
 <!doctype html>
-<html lang="en" class="dark scroll-smooth">
+<html lang="en">
   <head>
     <meta charset="UTF-8" />
-    <link rel="icon" type="image/svg+xml" href="/vite.svg" />
+    <link rel="icon" type="image/svg+xml" href="/my-portofolio/favicon.svg" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Brian Anashari | Mobile App & Software Developer</title>
-    <meta name="description" content="Portfolio of Brian Anashari - Mobile App Developer specializing in Flutter, React, TypeScript, and Firebase." />
-    <meta name="keywords" content="Brian Anashari, Mobile Developer, Flutter Developer, React Developer, Portfolio, Software Engineer" />
-    <meta name="theme-color" content="#0f172a" />
-    
-    <!-- Google Fonts -->
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <meta name="theme-color" content="#fffdf9" />
+    <script>
+      try {
+        const savedTheme = localStorage.getItem('portfolio-theme');
+        const initialTheme = savedTheme === 'dark' || savedTheme === 'light'
+          ? savedTheme
+          : (window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light');
+        document.documentElement.dataset.theme = initialTheme;
+        document.documentElement.style.colorScheme = initialTheme;
+        document.querySelector('meta[name="theme-color"]')?.setAttribute('content', initialTheme === 'dark' ? '#171615' : '#fffdf9');
+      } catch {
+        document.documentElement.dataset.theme = 'light';
+      }
+    </script>
+    <meta name="description" content="Building mobile applications and intelligent software systems, with experience across native iOS, backend services, and AI-powered workflows." />
+    <meta property="og:title" content="Software Engineer specializing in Mobile & AI | Brian Anashari" />
+    <meta property="og:description" content="Building mobile applications and intelligent software systems, with experience across native iOS, backend services, and AI-powered workflows." />
+    <meta property="og:type" content="website" />
+    <meta property="og:url" content="https://brianashari18.github.io/my-portofolio/" />
+    <meta property="og:image" content="https://brianashari18.github.io/my-portofolio/social-card.svg" />
+    <meta name="twitter:card" content="summary_large_image" />
+    <link rel="canonical" href="https://brianashari18.github.io/my-portofolio/" />
+    <script>
+      const deepLink = new URLSearchParams(window.location.search).get('p');
+      if (deepLink) window.history.replaceState(null, '', deepLink);
+    </script>
   </head>
-  <body class="bg-slate-950 text-slate-100 font-sans selection:bg-cyan-500 selection:text-white antialiased min-h-screen">
+  <body>
     <div id="root"></div>
     <script type="module" src="/src/main.tsx"></script>
   </body>

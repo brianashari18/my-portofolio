@@ -1,0 +1,16 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Loading page… | Brian Anashari</title>
+    <script>
+      const appPath = '/my-portofolio/';
+      const requested = window.location.pathname + window.location.search + window.location.hash;
+      if (window.location.pathname.startsWith(appPath)) {
+        window.location.replace(`${appPath}?p=${encodeURIComponent(requested)}`);
+      }
+    </script>
+  </head>
+  <body><p>Opening the requested page…</p></body>
+</html>

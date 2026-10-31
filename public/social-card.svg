@@ -1,0 +1,10 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="630" viewBox="0 0 1200 630">
+  <rect width="1200" height="630" fill="#f6f5f0" />
+  <circle cx="1055" cy="92" r="230" fill="#e4ebd2" />
+  <path d="M0 520h1200v110H0z" fill="#1d2923" />
+  <text x="92" y="126" fill="#657e22" font-family="monospace" font-size="22" letter-spacing="3">BRIAN ANASHARI · ENGINEERING PORTFOLIO</text>
+  <text x="92" y="285" fill="#1d2923" font-family="Arial,sans-serif" font-size="65" font-weight="700">Software Engineer</text>
+  <text x="92" y="375" fill="#657e22" font-family="Arial,sans-serif" font-size="65" font-weight="700">specializing in Mobile &amp; AI.</text>
+  <text x="92" y="455" fill="#68736c" font-family="Arial,sans-serif" font-size="27">Mobile applications · AI workflows · Software systems</text>
+  <text x="92" y="587" fill="#f6f5f0" font-family="monospace" font-size="18">brianashari18.github.io/my-portofolio</text>
+</svg>
