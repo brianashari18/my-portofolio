@@ -6,6 +6,7 @@ import expenseImage from '../assets/images/projects/expense-tracker-app.webp';
 import mealsImage from '../assets/images/projects/meals-app.webp';
 import chatImage from '../assets/images/projects/chat-app.webp';
 import profileImage from '../assets/images/about/profile-optimized.jpg';
+import { supplementaryProjectWorkflows } from './projectWorkflows';
 
 export type ProjectCategory = 'iOS Development' | 'Flutter Development' | 'AI / ML Engineering' | 'Backend Engineering' | 'Software Engineering';
 export type GalleryTone = 'paper' | 'blush' | 'surface' | 'sage' | 'ink';
@@ -19,6 +20,41 @@ export interface ProjectGalleryImage {
   frame?: 'phone' | 'none';
   /** Older readers can still render a generic phone frame. */
   frameStyle?: 'ios' | 'android';
+}
+
+export interface ProjectWorkflowRoute {
+  title: string;
+  description: string;
+  technologies?: string[];
+}
+
+export interface ProjectWorkflowStep {
+  title: string;
+  description: string;
+  reason?: string;
+  technologies?: string[];
+}
+
+export interface ProjectDatasetStat {
+  value: string;
+  label: string;
+}
+
+export interface ProjectDataset {
+  title: string;
+  summary: string;
+  stats: ProjectDatasetStat[];
+  note?: string;
+}
+
+export interface ProjectWorkflow {
+  rationale?: string;
+  intro: string;
+  dataset?: ProjectDataset;
+  routes: ProjectWorkflowRoute[];
+  convergence: string;
+  steps: ProjectWorkflowStep[];
+  output: string;
 }
 
 export interface Project {
@@ -42,6 +78,7 @@ export interface Project {
   solution?: string;
   features?: string[];
   architecture?: { summary: string; diagram?: string; caption?: string };
+  workflow?: ProjectWorkflow;
   engineeringChallenges?: string[];
   contributions?: string[];
   results?: string[];
@@ -101,40 +138,67 @@ export const personalInfo: PersonalInfo = {
   profileImage,
 };
 
-export const projects: Project[] = [
+const projectRecords: Project[] = [
   {
     id: 'sprout', slug: 'sprout', title: 'Sprout', tagline: 'Guided reflection, grounded in emotional awareness',
-    description: 'A journaling app that pairs guided entries and user-selected emotions with local analysis and weekly reflection.',
+    description: 'A self-reflection journaling app with writing prompts and emotion check-ins, followed by weekly summaries of emotional patterns and possible triggers.',
     categories: ['iOS Development', 'AI / ML Engineering', 'Backend Engineering'], platforms: ['iOS'],
     technologies: ['SwiftUI', 'SwiftData', 'Core ML', 'Foundation Models', 'Speech', 'AVFoundation', 'Go', 'FastAPI', 'Qdrant', 'Ollama', 'bge-m3', 'Docker'],
-    role: 'iOS Developer', timeline: '2026', featured: true,
-    problem: 'Starting a journal entry can feel difficult, and individual entries can be hard to revisit as a longer pattern.',
+    role: 'iOS Developer · AI Engineer · Backend', timeline: '2026', featured: true,
+    problem: 'People who journal for self-reflection may stop when faced with a blank page or struggle to name their emotions precisely. Without structured feedback across entries, it can be difficult to recognize longer-term emotional patterns and recurring triggers.',
     solution: 'The iOS app combines guided prompts and user-selected emotion labels with local valence suggestions. Weekly summaries use a separate Go gateway and FastAPI worker with Qdrant retrieval; a distinct Apple Foundation Models path can generate reflective feedback when available.',
     features: ['Guided journal prompts', 'User-selected emotion and intensity', 'Core ML valence suggestion with lexical fallback', 'Weekly summary and retrieval workflow', 'Availability-gated Apple Foundation Models feedback'],
     architecture: { summary: 'The SwiftUI client stores journal data locally and calls a Go API gateway for weekly summaries. A separate FastAPI worker handles retrieval and narrative generation; a separate on-device Foundation Models service provides optional reflective feedback.' },
+    workflow: {
+      rationale: 'People who journal for self-reflection may stop when faced with a blank page or struggle to name their emotions precisely. Without structured feedback across entries, it can be difficult to recognize longer-term emotional patterns and recurring triggers.',
+      intro: 'Guided journaling is supported by local emotion suggestions, remote weekly summaries, and optional on-device reflection.',
+      routes: [
+        { title: 'Guided journal entry', description: 'The iOS app stores entries locally and lets the user choose an emotion and intensity.', technologies: ['SwiftUI', 'SwiftData'] },
+        { title: 'Weekly summary service', description: 'A Go gateway sends summary requests to a separate FastAPI worker with retrieval and narrative generation.', technologies: ['Go', 'FastAPI', 'Qdrant', 'Ollama'] },
+        { title: 'Optional reflection', description: 'A separate Apple Foundation Models path can provide feedback when the required device capability is available.', technologies: ['Foundation Models'] },
+      ],
+      convergence: 'Model suggestions are presented alongside the user’s own emotion selection; weekly summaries and optional feedback are separate paths.',
+      steps: [
+        { title: 'Write a guided entry', description: 'Use a prompt to help shape a journal entry and save it in the iOS app.' },
+        { title: 'Choose an emotion', description: 'Record a self-selected emotion and intensity; local valence analysis can offer a separate suggestion.', reason: 'Keeping the selected emotion distinct from model output preserves the user’s self-report.' },
+        { title: 'Build a weekly summary', description: 'Send the relevant entries through the Go gateway to the retrieval and narrative worker.' },
+        { title: 'Request optional reflection', description: 'Use the on-device Foundation Models path when the operating system and device support it.' },
+      ],
+      output: 'Locally stored journal entries, a weekly summary through the separate service, and optional on-device reflection when available.',
+    },
   },
   {
     id: 'foamy', slug: 'foamy', title: 'Foamy (MySkin)', tagline: 'Skincare analysis and routine companion',
-    description: 'A skincare companion for product label scanning, ingredient lookup, product comparisons, and routine journaling.',
+    description: 'A skincare companion for people managing facial skin concerns, combining product label scanning and ingredient lookup with product comparisons and progress journaling.',
     categories: ['iOS Development'], platforms: ['iOS'], technologies: ['SwiftUI', 'SwiftData', 'Vision', 'URLSession', 'Combine'],
     role: 'iOS Developer', timeline: '2026', featured: true, thumbnail: foamyImage, heroImage: foamyImage,
     gallery: [{ src: foamyImage, alt: 'Foamy app screens showing product discovery, routine tracking, and progress photos', caption: 'Product discovery, routine tracking, and progress photos.' }],
-    problem: 'Product details and routine observations can be difficult to compare and keep together over time.',
+    problem: 'People managing facial skin concerns can find it difficult to compare product information and track skin changes over time, making product choices uncertain and progress hard to review.',
     solution: 'Foamy uses Vision text recognition to turn product-label photos into searchable text, then brings product and ingredient lookup together with a locally stored skin journal and comparison history.',
     features: ['Camera capture and product-label OCR', 'Product search and ingredient details', 'Product comparison history', 'Routine and journey notes with progress photos'],
     architecture: { summary: 'SwiftUI feature flows connect camera capture and Vision OCR to product and ingredient APIs. SwiftData models persist profiles, tracked products, comparisons, skincare journeys, milestones, entries, and progress photos.' },
+    contributions: [
+      'Developed the iOS app across product scanning, product information, comparison, and skin-journaling flows.',
+      'Integrated Vision text recognition with product and ingredient lookup APIs.',
+      'Built SwiftData-backed records for profiles, tracked products, comparisons, skincare journeys, entries, and progress photos.',
+    ],
   },
   {
     id: 'hichef', slug: 'hichef', title: 'HiChef', tagline: 'From recipe pages to guided cooking steps',
-    description: 'A cooking assistant that imports recipe pages, organizes instructions, and supports voice-guided cooking.',
+    description: 'An iOS cooking assistant that imports online recipes, breaks instructions into smaller steps, and supports voice-guided cooking.',
     categories: ['iOS Development', 'AI / ML Engineering'], platforms: ['iOS'],
     technologies: ['SwiftUI', 'SwiftData', 'Foundation Models', 'NaturalLanguage', 'Speech', 'AVFoundation'],
     role: 'iOS Developer', timeline: '2026', featured: true, thumbnail: hichefImage, heroImage: hichefImage,
     gallery: [{ src: hichefImage, alt: 'HiChef app screens showing recipe import, cooking steps, voice mode, and timer', caption: 'Recipe import, step breakdown, hands-free voice mode, and cooking timer.' }],
-    problem: 'Online recipes can be difficult to follow while cooking, especially when instructions are lengthy and hands are occupied.',
+    problem: 'Intermediate home cooks can struggle to follow online recipes when instructions are complex or cluttered, and manually handling a phone is inconvenient when cooking leaves their hands occupied.',
     solution: 'HiChef extracts recipe information from webpages, stores recipes locally, and refines instructions into smaller steps. Speech recognition and spoken playback support hands-free navigation while cooking.',
     features: ['Recipe URL import and webpage extraction', 'Structured ingredient and instruction data', 'Instruction breakdown into smaller steps', 'Indonesian speech recognition and text-to-speech controls'],
     architecture: { summary: 'A recipe-import pipeline extracts relevant webpage sections and uses Apple Foundation Models to structure recipe content. SwiftData stores recipes; NaturalLanguage helps refine instructions for the speech-guided cooking flow.' },
+    contributions: [
+      'Developed the iOS recipe-import flow to extract recipe content from webpages.',
+      'Implemented recipe structuring and instruction breakdown using Apple Foundation Models and NaturalLanguage.',
+      'Built local recipe persistence with SwiftData and Indonesian speech-guided controls for hands-free cooking.',
+    ],
   },
   {
     id: 'muncakin', slug: 'muncakin', title: 'Muncakin', tagline: 'Mountain-aware packing for a better-prepared hike',
@@ -146,6 +210,11 @@ export const projects: Project[] = [
     solution: 'Muncakin loads a gear catalog and selects standard or mountain-conditional items for a trip. The generated list can be edited and grouped by function or gear zone.',
     features: ['Trip setup with dates and group size', 'Gear checklist adapted to mountain type and trip duration', 'Functional or zone-based checklist grouping', 'Packed-state, add, edit, and remove actions'],
     architecture: { summary: 'A bundled JSON gear catalog is filtered by mountain type and item necessity, then mapped to trip-specific gear quantities. The packing view model supports checklist editing and alternative grouping modes.' },
+    contributions: [
+      'Built trip setup for mountain, duration, and group-size inputs.',
+      'Implemented conditional gear selection and quantity calculation from the trip details.',
+      'Developed an editable packing checklist with packed state and functional or zone-based grouping.',
+    ],
   },
   {
     id: 'step-up', slug: 'step-up', title: 'Step Up', tagline: 'Small movement breaks, built into the day',
@@ -157,49 +226,315 @@ export const projects: Project[] = [
     solution: 'Step Up pairs short guided stretch plans with timed sessions and progress views. The active timer can be surfaced through a Live Activity and a home-screen widget.',
     features: ['Guided stretch plans and movement steps', 'Timed activity sessions', 'Streak and exercise statistics', 'Leaderboard and profile flows', 'Live Activity and WidgetKit support'],
     architecture: { summary: 'The SwiftUI app coordinates exercise and timer flows with ActivityKit and a WidgetKit extension. Firebase Authentication and Firestore-backed repositories support account and progress-related screens.' },
+    contributions: [
+      'Built the iOS guided stretch-plan and timed exercise-session flows.',
+      'Implemented ActivityKit Live Activities and WidgetKit support to surface an active session outside the app.',
+      'Connected account and exercise-progress flows to Firebase Authentication and Cloud Firestore.',
+    ],
+  },
+  {
+    id: 'ppt-generator', slug: 'ppt-generator', title: 'PPT Generator', tagline: 'From source material to editable presentation decks',
+    description: 'A backend RAG path retrieves relevant passages from provided text, while a separate web-research path gathers external sources. An outline-first workflow turns that context into a structured, editable presentation.',
+    categories: ['AI / ML Engineering', 'Backend Engineering', 'Software Engineering'], platforms: ['Web'],
+    technologies: ['Python', 'FastAPI', 'LangChain', 'Hugging Face Embeddings', 'FAISS', 'SearXNG', 'Crawl4AI', 'Playwright', 'React', 'Vite', 'TypeScript', 'Server-Sent Events'],
+    role: 'AI Engineer · Telkom Indonesia', featured: false,
+    problem: 'Creating a research-backed deck means finding useful evidence, deciding how it supports the story, and turning that story into slides people can review. When research and slide writing happen in separate tools, context can get lost between those steps and the generated deck is harder to inspect as it takes shape.',
+    solution: 'The backend prepares generation context through two paths. Its RAG API accepts source text, splits it into 700-character chunks with a 70-character overlap, embeds the chunks, and stores them in an in-memory FAISS index. It then retrieves the 10 passages most similar to the combined prompt and topic. A separate web-research path searches with SearXNG and extracts page content with Crawl4AI and Playwright. The React interface uses the unified generation endpoint for web research: it presents an outline first, streams slides as they are generated, and lets users preview and edit the result before exporting HTML or PowerPoint.',
+    features: ['Split source text into overlapping chunks, embed it, and retrieve the 10 closest passages with FAISS', 'Discover web sources through SearXNG and extract page content with Crawl4AI and Playwright', 'Create a presentation outline before generating slide content', 'Stream the outline and completed slides to the interface over Server-Sent Events', 'Choose from four slide design templates and review or edit the presentation', 'Export the result as PowerPoint or editable HTML'],
+    architecture: { summary: 'The FastAPI backend includes a RAG path that embeds source text and retrieves the 10 closest chunks from an in-memory FAISS index, plus a web-research path that searches with SearXNG and extracts pages with Crawl4AI and Playwright. The unified web flow uses researched context to generate an outline, then creates slides one at a time. A React and TypeScript frontend receives progress and slide updates over Server-Sent Events and supports preview, editing, and export.' },
+    workflow: {
+      rationale: 'Research context and story structure solve different parts of the task. Retrieving or gathering evidence first, then planning the outline before drafting slides, makes the material and intended narrative easier to review.',
+      intro: 'The backend accepts source text for retrieval and can gather web research; the unified web flow makes its outline and slide progress visible as the deck is generated.',
+      routes: [
+        { title: 'Source-text retrieval', description: 'The backend splits supplied text into 700-character chunks with 70 characters of overlap, embeds them, and retrieves the 10 closest passages for the prompt and topic through FAISS. Overlap keeps nearby text available when context crosses a chunk boundary.', technologies: ['LangChain', 'Hugging Face Embeddings', 'FAISS'] },
+        { title: 'Web research', description: 'The research path searches for relevant pages with SearXNG, then extracts page content with Crawl4AI and Playwright.', technologies: ['SearXNG', 'Crawl4AI', 'Playwright'] },
+      ],
+      convergence: 'Retrieved or researched context is passed into presentation generation. The unified web flow uses its web-research context for the outline and slide stream.',
+      steps: [
+        { title: 'Build the outline', description: 'The LLM proposes a sequence of slides from the prompt and gathered research context.', reason: 'Reviewing the story structure before slide writing makes the planned narrative visible early.' },
+        { title: 'Generate slides progressively', description: 'The system creates slides one at a time and sends each completed slide to the interface.', reason: 'Progressive updates let users follow the generation and inspect slides as they arrive.', technologies: ['Server-Sent Events'] },
+        { title: 'Preview and edit', description: 'The web interface displays the outline and generated slides, then lets users review and adjust the presentation.', technologies: ['React', 'TypeScript'] },
+        { title: 'Export the deck', description: 'Generate a PowerPoint or editable HTML presentation.', technologies: ['HTML', 'PPTX'] },
+      ],
+      output: 'An editable presentation available as HTML or PowerPoint.',
+    },
+    contributions: [
+      'Implemented the FastAPI backend and its source-text RAG path, including overlapping text chunks, Hugging Face embeddings, and FAISS similarity retrieval.',
+      'Built the web research path with SearXNG, Crawl4AI, and Playwright, and the outline-first slide-generation workflow.',
+      'Developed the React and TypeScript interface for templates, Server-Sent Events progress, slide preview and editing, and HTML or PowerPoint export.',
+    ],
+    links: [
+      { label: 'Backend source (private)', href: 'https://github.com/brianashari18/ppt-generator', kind: 'github' },
+      { label: 'Frontend source (private)', href: 'https://github.com/brianashari18/ppt-generator-frontend', kind: 'github' },
+    ],
+  },
+  {
+    id: 'document-formatting', slug: 'document-formatting', title: 'Excel AutoFormatting', tagline: 'Consistent formatting for Excel-based question sets',
+    description: 'An Excel automation workflow that standardizes question documents with LLM-assisted processing while keeping embedded images and cross-references in view.',
+    categories: ['AI / ML Engineering', 'Software Engineering'], platforms: ['Python · Excel'],
+    technologies: ['Python', 'FastAPI', 'Excel processing', 'LLM workflows'],
+    role: 'AI Engineer · Telkom Indonesia', featured: false,
+    problem: 'Question spreadsheets can contain inconsistent headers and layouts alongside embedded images and references between questions. Manual cleanup risks losing structure or applying different formatting across a workbook.',
+    solution: 'The workflow preprocesses each workbook, detects metadata and headers, then groups question text with enough surrounding context for LLM-assisted normalization. It maps the normalized fields into a target template and handles embedded images and cross-references as part of the workbook output.',
+    features: ['Preprocess workbooks and detect metadata and header rows', 'Group question text into context-aware chunks for LLM processing', 'Normalize fields and map them to a target Excel template', 'Handle embedded images during template insertion', 'Detect and preserve cross-references between questions'],
+    architecture: { summary: 'Workbook preprocessing identifies sheet structure and question context. LLM-assisted normalization prepares consistent fields for template mapping; image reinsertion and cross-reference handling preserve workbook elements beyond plain text.' },
+    workflow: {
+      rationale: 'Question spreadsheets can contain inconsistent headers and layouts alongside embedded images and references between questions. Manual cleanup risks losing structure or applying different formatting across a workbook.',
+      intro: 'The workbook is inspected before its question content is normalized and inserted into a standard report template.',
+      routes: [
+        { title: 'Source workbook', description: 'The input can contain sheet metadata, varied headers, question text, embedded images, and cross-references.' },
+      ],
+      convergence: 'Detected structure and question context move through the formatting pipeline.',
+      steps: [
+        { title: 'Preprocess and inspect', description: 'Read workbook metadata and detect header rows.', reason: 'The workflow needs the sheet structure before it can map fields into a template.' },
+        { title: 'Prepare question context', description: 'Group related question text into contextual chunks and inject that context for processing.', reason: 'Keeping nearby question context together helps the LLM process long or linked question content.' },
+        { title: 'Normalize fields', description: 'Use the LLM response to extract information and standardize column names.', technologies: ['Telkom LLM'] },
+        { title: 'Fill the report template', description: 'Load the target template and insert processed text.', technologies: ['FastAPI'] },
+        { title: 'Restore workbook elements', description: 'Reinsert embedded images and handle references between questions.' },
+      ],
+      output: 'A consistently formatted Excel workbook with its question context and embedded elements retained.',
+    },
+    contributions: [
+      'Implemented the Python and FastAPI workbook workflow, from metadata and header detection through contextual question chunking and LLM-assisted normalization.',
+      'Built the template-mapping stage to place normalized question content into a consistent Excel output.',
+      'Handled embedded-image reinsertion and cross-reference preservation in the formatted workbook.',
+    ],
+    links: [{ label: 'GitHub repository', href: 'https://github.com/brianashari18/document-formatting', kind: 'github' }],
+  },
+  {
+    id: 'ifrs-document-checker', slug: 'ifrs-document-checker', title: 'IFRS DocumentChecker', tagline: 'From contract documents to structured IFRS 15 data',
+    description: 'An OCR and LLM-assisted document workflow that extracts selected information from PKS and BAST files, then consolidates the results into an Excel workbook for review.',
+    categories: ['AI / ML Engineering', 'Backend Engineering', 'Software Engineering'], platforms: ['Web · Excel'],
+    technologies: ['OCR', 'Multimodal AI', 'LLM workflows', 'Excel processing'],
+    role: 'AI Engineer · Telkom Indonesia', featured: false,
+    problem: 'Preparing IFRS 15 data can require reviewing information spread across long contract and handover documents, then manually transferring it into a consistent spreadsheet. The presentation identifies that manual extraction as slow and vulnerable to missed details.',
+    solution: 'The workflow uses OCR to make PDF and image documents searchable, processes extracted text in context-aware chunks, and prompts an LLM to identify selected fields. The extracted information is consolidated and checked in an Excel template for review.',
+    features: ['Extract text from PDF and image documents with OCR', 'Process PKS and BAST content in manageable context windows', 'Use LLM prompts to identify selected IFRS 15 information', 'Consolidate and validate extracted fields in an Excel workbook'],
+    architecture: { summary: 'Source documents pass through OCR, then extracted text is chunked for LLM-based field extraction. The results are consolidated and checked against a structured Excel output.' },
+    workflow: {
+      rationale: 'Preparing IFRS 15 data can require reviewing information spread across long contract and handover documents, then manually transferring it into a consistent spreadsheet. The presentation identifies that manual extraction as slow and vulnerable to missed details.',
+      intro: 'PKS and BAST documents follow type-specific extraction routes, then join for consolidation and validation.',
+      routes: [
+        { title: 'PKS documents', description: 'OCR converts the PDF or image content to text for PKS information extraction.', technologies: ['OCR', 'Multimodal AI'] },
+        { title: 'BAST documents', description: 'OCR converts the PDF or image content to text for BAST information extraction.', technologies: ['OCR', 'Multimodal AI'] },
+      ],
+      convergence: 'Text from both document routes enters the contextual extraction and reporting stages.',
+      steps: [
+        { title: 'Chunk long documents', description: 'Split OCR text into manageable sections for extraction.', reason: 'Contextual chunking and prompting are used to process long documents and varied information.' },
+        { title: 'Extract requested fields', description: 'Prompt the LLM to identify the selected contract information.', technologies: ['LLM workflows'] },
+        { title: 'Consolidate and validate', description: 'Bring extracted fields together and check them before populating the report.' },
+        { title: 'Fill the Excel template', description: 'Place the reviewed information into the predefined workbook template.', technologies: ['Excel processing'] },
+      ],
+      output: 'A structured Excel report ready for review.',
+    },
+    contributions: [
+      'Implemented OCR processing for PDF and image documents, preparing their content for extraction.',
+      'Built the context-aware chunking and LLM extraction flow for selected fields across PKS and BAST documents.',
+      'Implemented consolidation, validation, and output of extracted information in the Excel template.',
+    ],
+  },
+  {
+    id: 'face-lock', slug: 'face-lock', title: 'Face Lock', tagline: 'Face-based access monitoring across web and mobile clients',
+    description: 'A college project combining a face-recognition service with backend, mobile, and web components for access logs, alerts, and user monitoring.',
+    categories: ['AI / ML Engineering', 'Backend Engineering', 'Flutter Development', 'Software Engineering'], platforms: ['Web', 'Mobile'],
+    technologies: ['InsightFace', 'ArcFace', 'Python', 'Go', 'Gin', 'MySQL', 'Flutter', 'React'],
+    role: 'AI Engineer · Full-stack Developer', featured: false,
+    solution: 'The recognition service compares face embeddings for access verification. Separate Go, Flutter, and React repositories cover API access, mobile monitoring, and web-based authorization and dashboards.',
+    features: ['Face detection and embedding-based verification', 'Access logs and user management', 'Mobile access monitoring and notifications', 'Web dashboard with role-based views', 'Real-time backend events and alerts'],
+    contributions: [
+      'Built the Python face-recognition service using InsightFace and ArcFace for face detection and embedding-based verification.',
+      'Implemented the Go/Gin API and MySQL-backed access-log and user-management flows, including WebSocket and Firebase Cloud Messaging support.',
+      'Developed the Flutter monitoring client and React dashboard for access activity, authorization, and alert-related views.',
+    ],
+    links: [
+      { label: 'Face recognition service', href: 'https://github.com/brianashari18/face_lock_ai', kind: 'github' },
+      { label: 'Flutter mobile app', href: 'https://github.com/evlynnn/Frontend_Mobile_ComPro', kind: 'github' },
+      { label: 'Backend API', href: 'https://github.com/Althaf747/ComputingProject-Backend', kind: 'github' },
+      { label: 'Web dashboard', href: 'https://github.com/evlynnn/frontend-web-compro', kind: 'github' },
+    ],
+  },
+  {
+    id: 'flicknfit', slug: 'flicknfit', title: 'FlickNFit', tagline: 'Fashion discovery with scan and wardrobe flows',
+    description: 'A college project spanning a Flutter mobile client and Go API, with client screens for product discovery, wardrobe, and scan-related features.',
+    categories: ['Flutter Development', 'Backend Engineering', 'Software Engineering'], platforms: ['Mobile', 'API'],
+    technologies: ['Flutter', 'Dart', 'Go', 'Fiber', 'GORM', 'MySQL', 'Firebase'],
+    role: 'Flutter & Backend Developer', featured: false,
+    solution: 'The mobile source includes screens for product and brand browsing, saved items, scan history, and style recommendations. A separate Go service provides account, catalog, and review APIs; the source also contains sample data, so live connections for every client screen are not established.',
+    features: ['Browse product and brand screens', 'View saved-item and wardrobe screens', 'Review scan-history screens', 'Browse style-recommendation screens', 'Account, product, and review API flows'],
+    contributions: [
+      'Developed the Flutter client screens for product and brand browsing, saved items, wardrobe, scan history, and style recommendations.',
+      'Implemented the Go/Fiber backend with GORM and MySQL for account, catalog, and review API flows.',
+    ],
+    links: [
+      { label: 'Flutter mobile app', href: 'https://github.com/FlicknFit/flicknfit-mobile', kind: 'github' },
+      { label: 'Go backend API', href: 'https://github.com/brianashari18/flicknfit-backend', kind: 'github' },
+    ],
+  },
+  {
+    id: 'fitspace', slug: 'fitspace', title: 'FitSpace', tagline: 'Sports venue discovery and booking across web and mobile',
+    description: 'A college project spanning web and Flutter apps for finding sports venues, viewing fields, and managing bookings, with a Python service for venue recommendations.',
+    categories: ['Flutter Development', 'Backend Engineering', 'Software Engineering'], platforms: ['Web', 'Mobile'],
+    technologies: ['React', 'JavaScript', 'Flutter', 'Dart', 'Python', 'Flask', 'geopy', 'Firebase', 'Maps'],
+    role: 'Web, Mobile & Backend Developer', featured: false,
+    solution: 'The web and mobile clients include venue and field browsing, booking flows, payment confirmation, reviews, and venue-management screens. The Python service fetches venue data and ranks recommendations using geographic distance calculations.',
+    features: ['Browse nearby and recommended courts', 'View venue details and field schedules', 'Create and review bookings', 'Manage venues, fields, and user reviews', 'Recommend venues using geographic distance calculations'],
+    contributions: [
+      'Developed the React web client for venue discovery, schedules, bookings, reviews, and venue management.',
+      'Built the Flutter mobile client for browsing venues and fields and managing booking flows.',
+      'Implemented the Python/Flask recommendation service to fetch venue data and rank options using geographic distance calculations.',
+    ],
+    links: [
+      { label: 'Website frontend', href: 'https://github.com/brianashari18/fitspace_sports_venue_booking_website_frontend', kind: 'github' },
+      { label: 'Flutter mobile app', href: 'https://github.com/brianashari18/fitspace_sports_venue_booking_mobile', kind: 'github' },
+      { label: 'Venue recommendation service', href: 'https://github.com/brianashari18/fitspace_sports_venue_booking_ai', kind: 'github' },
+    ],
+  },
+  {
+    id: 'stocarbon', slug: 'stocarbon', title: 'StoCarbon', tagline: 'Mobile workflows for carbon plot verification',
+    description: 'A college Flutter project with seller and verifier screens for carbon plots, zone management, and review records.',
+    categories: ['Flutter Development', 'Software Engineering'], platforms: ['Mobile'],
+    technologies: ['Flutter', 'Dart', 'Firebase Authentication', 'Google Sign-In', 'fl_chart'],
+    role: 'Flutter Developer', featured: false,
+    solution: 'The Flutter source separates seller plot and zone screens from verifier review screens, with supporting region, team, and transaction views. The repository README is a starter template, so release and live-service status are not established.',
+    features: ['Seller plot and zone screens', 'Verifier review queue screens', 'Region and team records', 'Transaction history and detail views'],
+    contributions: [
+      'Developed the Flutter seller workspace for plot creation and zone management.',
+      'Built the verifier review-queue screens and plot review flow.',
+      'Implemented supporting region, team, and transaction-history views.',
+    ],
+    links: [{ label: 'GitHub repository', href: 'https://github.com/brianashari18/stocarbon_mobile_app', kind: 'github' }],
+  },
+  {
+    id: 'music-information-retrieval-ta', slug: 'music-information-retrieval-ta', title: 'Final Thesis',
+    tagline: 'Indonesian pop chord recognition with LSTM and instrument separation',
+    description: 'A Music Information Retrieval study on chord extraction from Indonesian pop audio. The model predicts one of 24 major/minor triad classes for each known, aligned segment; it does not detect chord boundaries or directly predict Roman-numeral functions.',
+    categories: ['AI / ML Engineering', 'Software Engineering'], platforms: ['Python', 'Jupyter Notebook'],
+    technologies: ['Python', 'PyTorch', 'librosa', 'Demucs', 'HPSS', 'MFCC', 'Chromagram', 'RNN', 'GRU', 'LSTM', 'BiLSTM', 'Transformer'],
+    role: 'Researcher · ML Engineer', featured: false,
+    problem: 'The study addresses a research gap identified in its paper: Indonesian pop lacked a frame-level chord-recognition baseline, while a small annotated dataset made the task vulnerable to class imbalance, vocal and percussion noise, and overfitting in high-capacity models.',
+    solution: 'I built a data-centric Automatic Chord Extraction pipeline around a curated, manually annotated corpus of 50 Indonesian pop songs (about 3.2 hours and 4,561 labeled segments). It aligns chord labels with audio, tests Demucs stem separation and Harmonic-Percussive Source Separation (HPSS), pools temporal features, and compares audio representations and sequence models. The final classifier uses chromagram sequences with a unidirectional LSTM to predict 24 major/minor triad classes within provided segment boundaries.',
+    features: [
+      'Curate chord labels for 50 Indonesian pop songs, totaling about 3.2 hours and 4,561 annotated segments',
+      'Predict one of 24 major/minor triad chord classes for each aligned audio segment',
+      'Compare raw audio and Demucs-separated instrument mixes, with HPSS to reduce percussive interference',
+      'Evaluate pooled Constant-Q Chromagram and MFCC representations',
+      'Compare recurrent and Transformer configurations, then use a unidirectional LSTM for the final sequence model',
+    ],
+    architecture: { summary: 'Chord and time annotations form the reference labels. In parallel, the audio path separates instrument stems with Demucs, applies HPSS and median temporal pooling, and extracts chromagram or MFCC features. The final chromagram sequence feeds a PyTorch LSTM; experiments compare features, model capacity, and stem combinations.' },
+    contributions: [
+      'Built the chord-data pipeline: collecting chord sheets, analyzing keys and harmonic context, cleaning labels, mapping song sections, and aligning chord events with audio.',
+      'Implemented the audio-processing path for Demucs stem separation, HPSS, temporal pooling, and MFCC/chromagram feature extraction.',
+      'Developed the PyTorch experiments comparing feature representations, instrument inputs, and RNN, GRU, LSTM, BiLSTM, and Transformer configurations.',
+    ],
+    engineeringChallenges: [
+      'A small dataset and imbalanced chord classes limited generalization; the study used Focal Loss and reported cross-validation results.',
+      'Vocals and percussion can obscure harmonic content, so the pipeline tested stem separation, HPSS, and temporal pooling as signal-processing interventions.',
+      'Higher-capacity BiLSTM and Transformer configurations overfit in this low-resource setting, motivating a unidirectional LSTM for the final classifier.',
+    ],
+    results: [
+      'In the paper’s reported 5-fold, song-level comparison, guitar+piano input reached 57.9 ± 9.3% mean validation accuracy, compared with 56.8 ± 11.5% for raw audio.',
+      'The guitar+piano+bass mix achieved the highest reported majmin chord-quality score: 0.596 ± 0.090, compared with 0.590 ± 0.084 for raw audio. The best input differed by metric.',
+    ],
+    links: [
+      { label: 'Chord data scraper', href: 'https://github.com/brianashari18/ta-chord-scrapping', kind: 'github' },
+      { label: 'Chord data cleaning', href: 'https://github.com/brianashari18/ta-scrapping-part-cleaning', kind: 'github' },
+      { label: 'Chord section mapping', href: 'https://github.com/brianashari18/ta-scrapping-part-mapping', kind: 'github' },
+      { label: 'Time-alignment cleaning', href: 'https://github.com/brianashari18/ta-time-alignment-cleaning', kind: 'github' },
+      { label: 'Chord and timing merger', href: 'https://github.com/brianashari18/ta-time-alignment-merging', kind: 'github' },
+      { label: 'Audio source separation', href: 'https://github.com/brianashari18/ta-instrument-separation', kind: 'github' },
+      { label: 'Audio feature extraction', href: 'https://github.com/brianashari18/ta-song-extraction', kind: 'github' },
+      { label: 'Sequence-model experiments', href: 'https://github.com/brianashari18/ta-model', kind: 'github' },
+    ],
   },
   {
     id: 'e-wise', slug: 'e-wise', title: 'E-Wise', tagline: 'E-waste management and responsible disposal',
-    description: 'A Flutter app focused on responsible e-waste disposal and recycling, with Firebase listed in its project record.',
+    description: 'A Flutter app for learning about responsible e-waste disposal, finding nearby e-bank collection points, requesting pickups, and managing reward points.',
     categories: ['Flutter Development', 'Software Engineering'], platforms: ['Android', 'iOS'],
-    technologies: ['Flutter', 'Dart', 'Firebase'], featured: false,
+    technologies: ['Flutter', 'Dart', 'Firebase Authentication', 'Cloud Firestore', 'FlutterMap', 'Geolocator'],
+    role: 'Flutter Developer', featured: false,
+    problem: 'E-Wise aims to reduce electronic waste, but responsible disposal involves several steps: learning how to handle e-waste, finding a collection point, arranging a handoff, and tracking the resulting points. The app brings those steps into one mobile experience.',
+    solution: 'E-Wise combines educational content and e-bank discovery with location-aware pickup requests. Firebase Authentication and Cloud Firestore support account, pickup, chat, and WisePoint records.',
+    features: [
+      'Read educational content about e-waste and responsible disposal',
+      'Search e-bank locations and view nearby collection points on a map',
+      'Request e-waste pickup with size, address, schedule, and notes',
+      'Review pickup status and WisePoint balance and history',
+      'Redeem WisePoints through cash or e-wallet flows',
+      'Use account, profile, and admin-chat screens',
+    ],
+    architecture: { summary: 'The Flutter app organizes screens and state with GetX controllers and repositories. Firebase Authentication handles account access, while Cloud Firestore stores user, e-bank, pickup, chat, point, and transaction records. Location and geocoding services support nearby e-bank discovery and pickup details.' },
+    contributions: [
+      'Developed the Flutter app across e-waste education, e-bank discovery, pickup requests, WisePoint, and support flows.',
+      'Implemented location and map features to find nearby e-banks and prepare pickup details.',
+      'Connected account access and user, pickup, chat, and point workflows to Firebase Authentication and Cloud Firestore.',
+    ],
+    links: [{ label: 'GitHub repository', href: 'https://github.com/brianashari18/e-wise', kind: 'github' }],
   },
   {
-    id: 'chat-app', slug: 'chat-app', title: 'Chat App', tagline: 'A Flutter chat application',
-    description: 'A chat app built with Flutter and Firebase for communication and collaboration.',
+    id: 'chat-app', slug: 'chat-app', title: 'Chat App', tagline: 'An early Flutter project built through a chat app',
+    description: 'An early Flutter learning project exploring mobile app development through a chat experience.',
     categories: ['Flutter Development', 'Software Engineering'], platforms: ['Android', 'iOS'],
-    technologies: ['Flutter', 'Dart', 'Firebase'], featured: false, thumbnail: chatImage, heroImage: chatImage,
+    technologies: ['Flutter', 'Dart'], role: 'Flutter Developer', featured: false, thumbnail: chatImage, heroImage: chatImage,
+    problem: 'This project began as a learning exercise: build a chat app to practice developing a mobile application with Flutter.',
     gallery: [{ src: chatImage, alt: 'Flutter chat app project screens', caption: 'Project screens from the Flutter chat app.' }],
+    contributions: [
+      'Developed the Flutter chat app as an early project for practicing mobile application development.',
+    ],
   },
   {
-    id: 'expense-tracker', slug: 'expense-tracker', title: 'Expense Tracker', tagline: 'A simple way to track daily expenses',
-    description: 'A Flutter app for recording and reviewing daily expenses.',
+    id: 'expense-tracker', slug: 'expense-tracker', title: 'Expense Tracker', tagline: 'Learning Flutter through daily expense tracking',
+    description: 'A Flutter learning project built around recording and reviewing daily expenses.',
     categories: ['Flutter Development', 'Software Engineering'], platforms: ['Android', 'iOS'],
-    technologies: ['Flutter', 'Dart'], featured: false, thumbnail: expenseImage, heroImage: expenseImage,
+    technologies: ['Flutter', 'Dart'], role: 'Flutter Developer', featured: false, thumbnail: expenseImage, heroImage: expenseImage,
+    problem: 'This project was part of learning Flutter: tracking daily expenses offered a practical app flow to build and explore.',
     gallery: [{ src: expenseImage, alt: 'Flutter expense tracker app project screens', caption: 'Project screens from the expense tracker app.' }],
+    features: ['Record daily expenses', 'Review recorded expense entries'],
+    contributions: [
+      'Built the Flutter app flow for recording daily expenses and reviewing saved entries as a hands-on learning project.',
+    ],
   },
   {
-    id: 'meals-app', slug: 'meals-app', title: 'Meals App', tagline: 'Recipes and meal planning',
-    description: 'A Flutter app for discovering recipes and creating meal plans.',
+    id: 'meals-app', slug: 'meals-app', title: 'Meals App', tagline: 'Learning Flutter through recipes and meal planning',
+    description: 'A Flutter learning project for discovering recipes and organizing meal plans.',
     categories: ['Flutter Development', 'Software Engineering'], platforms: ['Android', 'iOS'],
-    technologies: ['Flutter', 'Dart'], featured: false, thumbnail: mealsImage, heroImage: mealsImage,
+    technologies: ['Flutter', 'Dart'], role: 'Flutter Developer', featured: false, thumbnail: mealsImage, heroImage: mealsImage,
+    problem: 'This project was part of learning Flutter: recipe discovery and meal planning offered a practical product flow to build.',
     gallery: [{ src: mealsImage, alt: 'Flutter meals app project screens', caption: 'Project screens from the meals app.' }],
+    features: ['Browse recipes', 'Choose recipes for a meal plan', 'Review planned meals'],
+    contributions: [
+      'Developed the Flutter recipe-discovery and meal-planning flows as a hands-on learning project.',
+    ],
   },
   {
-    id: 'quiz-app', slug: 'quiz-app', title: 'Quiz App', tagline: 'A quiz application built with Flutter',
-    description: 'A simple quiz application developed using Flutter.',
+    id: 'quiz-app', slug: 'quiz-app', title: 'Quiz App', tagline: 'Learning Flutter through a quiz app',
+    description: 'A Flutter learning project built around a simple quiz experience.',
     categories: ['Flutter Development', 'Software Engineering'], platforms: ['Android', 'iOS'],
-    technologies: ['Flutter', 'Dart'], featured: false, thumbnail: quizImage, heroImage: quizImage,
+    technologies: ['Flutter', 'Dart'], role: 'Flutter Developer', featured: false, thumbnail: quizImage, heroImage: quizImage,
+    problem: 'This project was part of learning Flutter: a simple quiz gave me a practical app flow to design and build.',
     gallery: [{ src: quizImage, alt: 'Flutter quiz app project screens', caption: 'Project screens from the quiz app.' }],
+    features: ['Start a quiz', 'Answer questions', 'Finish a quiz session'],
+    contributions: [
+      'Developed the Flutter quiz experience as a hands-on learning project.',
+    ],
   },
   {
-    id: 'role-dice-app', slug: 'role-dice-app', title: 'Role Dice App', tagline: 'A dice roller for role-playing games',
-    description: 'A simple Flutter app that simulates dice rolls for role-playing games.',
+    id: 'role-dice-app', slug: 'role-dice-app', title: 'Role Dice App', tagline: 'Learning Flutter through a role-playing dice roller',
+    description: 'A Flutter learning project that simulates dice rolls for role-playing games.',
     categories: ['Flutter Development', 'Software Engineering'], platforms: ['Android', 'iOS'],
-    technologies: ['Flutter', 'Dart'], featured: false, thumbnail: roleDiceImage, heroImage: roleDiceImage,
+    technologies: ['Flutter', 'Dart'], role: 'Flutter Developer', featured: false, thumbnail: roleDiceImage, heroImage: roleDiceImage,
+    problem: 'This project was part of learning Flutter: a dice roller provided a compact interactive app flow to design and build.',
     gallery: [{ src: roleDiceImage, alt: 'Flutter role-playing dice app project screens', caption: 'Project screens from the role dice app.' }],
+    features: ['Roll a virtual die', 'View the simulated result'],
+    contributions: [
+      'Developed the Flutter dice-rolling experience as a hands-on learning project.',
+    ],
   },
 ];
+
+export const projects: Project[] = projectRecords.map((project) => {
+  const workflow = project.workflow ?? supplementaryProjectWorkflows[project.id];
+  return workflow ? { ...project, workflow } : project;
+});
 
 export const experiences: Experience[] = [
   {
@@ -227,22 +562,23 @@ export const skillCategories: SkillCategory[] = [
     { name: 'Swift', evidence: 'Demonstrated', evidenceIds: ['apple-developer-academy'] },
     { name: 'SwiftUI', evidence: 'Demonstrated', evidenceIds: ['apple-developer-academy', 'sprout', 'foamy', 'hichef', 'muncakin'] },
     { name: 'UIKit', evidence: 'Demonstrated', evidenceIds: ['apple-developer-academy'] },
-    { name: 'Flutter', evidence: 'Demonstrated', evidenceIds: ['e-wise', 'chat-app', 'expense-tracker', 'meals-app', 'quiz-app', 'role-dice-app'] },
+    { name: 'Flutter', evidence: 'Demonstrated', evidenceIds: ['e-wise', 'chat-app', 'expense-tracker', 'meals-app', 'quiz-app', 'role-dice-app', 'face-lock', 'flicknfit', 'fitspace', 'stocarbon'] },
     { name: 'Android development', evidence: 'Exploring', evidenceIds: [], evidenceNote: 'Area of interest' },
   ] },
   { name: 'AI & data', skills: [
     { name: 'OCR', evidence: 'Demonstrated', evidenceIds: ['telkom-indonesia'] },
-    { name: 'LLM workflows', evidence: 'Demonstrated', evidenceIds: ['telkom-indonesia'] },
-    { name: 'Retrieval-augmented generation', evidence: 'Demonstrated', evidenceIds: ['telkom-indonesia'] },
+    { name: 'LLM workflows', evidence: 'Demonstrated', evidenceIds: ['telkom-indonesia', 'ppt-generator', 'document-formatting'] },
+    { name: 'Retrieval-augmented generation', evidence: 'Demonstrated', evidenceIds: ['telkom-indonesia', 'ppt-generator'] },
     { name: 'Core ML', evidence: 'Demonstrated', evidenceIds: ['sprout'] },
+    { name: 'Python', evidence: 'Demonstrated', evidenceIds: ['ppt-generator', 'document-formatting', 'face-lock', 'fitspace'] },
   ] },
   { name: 'Backend & software systems', skills: [
-    { name: 'Go', evidence: 'Demonstrated', evidenceIds: ['sprout'] },
-    { name: 'FastAPI', evidence: 'Demonstrated', evidenceIds: ['sprout'] },
-    { name: 'Firebase', evidence: 'Demonstrated', evidenceIds: ['e-wise', 'chat-app', 'step-up'] },
+    { name: 'Go', evidence: 'Demonstrated', evidenceIds: ['sprout', 'face-lock', 'flicknfit'] },
+    { name: 'FastAPI', evidence: 'Demonstrated', evidenceIds: ['sprout', 'ppt-generator'] },
+    { name: 'Firebase', evidence: 'Demonstrated', evidenceIds: ['e-wise', 'chat-app', 'step-up', 'face-lock', 'flicknfit', 'fitspace', 'stocarbon'] },
     { name: 'Database programming', evidence: 'Demonstrated', evidenceIds: ['lensa'] },
     { name: 'ERP customization', evidence: 'Demonstrated', evidenceIds: ['lensa'] },
-    { name: 'React & TypeScript', evidence: 'Demonstrated', evidenceIds: [], evidenceNote: 'This portfolio website' },
+    { name: 'React & TypeScript', evidence: 'Demonstrated', evidenceIds: ['ppt-generator'], evidenceNote: 'Portfolio and presentation-generator frontend' },
   ] },
 ];
 

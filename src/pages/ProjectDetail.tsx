@@ -3,7 +3,9 @@ import type { MouseEvent, ReactNode } from 'react';
 import { Link, useParams, useSearchParams } from 'react-router-dom';
 import ProjectImageDialog from '../components/ProjectImageDialog';
 import ProjectArtwork from '../components/ProjectArtwork';
+import ProjectWorkflowMap from '../components/ProjectWorkflowMap';
 import { usePortfolioContent } from '../context/usePortfolioContent';
+import { defaultPortfolioContent } from '../data/portfolioData';
 import type { Project, ProjectGalleryImage } from '../data/portfolioData';
 import { resolvePortfolioImage } from '../lib/resolvePortfolioImage';
 import NotFound from './NotFound';
@@ -13,6 +15,7 @@ interface StorySection {
   title: string;
   content: ReactNode;
   dark?: boolean;
+  wide?: boolean;
 }
 
 export default function ProjectDetail() {
@@ -48,10 +51,26 @@ function ProjectCase({ project, search, previous, next }: { project: Project; se
     title: image.title?.trim() || `Screenshot ${index + 1}`,
   })) : [];
   const diagram = resolvePortfolioImage(project.architecture?.diagram);
+  const bundledWorkflow = defaultPortfolioContent.projects.find((item) => item.id === project.id)?.workflow;
+  const workflow = project.workflow
+    ? { ...bundledWorkflow, ...project.workflow, rationale: project.workflow.rationale ?? bundledWorkflow?.rationale }
+    : bundledWorkflow;
   const sections: StorySection[] = [];
 
-  if (project.problem) sections.push({ id: 'challenge', title: 'The challenge', content: <p>{project.problem}</p> });
+  const rationale = project.problem?.trim() ? project.problem : workflow?.rationale;
+  if (rationale) sections.push({ id: 'challenge', title: 'Why this project exists', content: <p>{rationale}</p> });
   if (project.solution) sections.push({ id: 'approach', title: 'The approach', content: <p>{project.solution}</p> });
+  if ((project.role && project.role !== 'College project') || project.contributions?.length) sections.push({
+    id: 'contribution', title: 'My role',
+    content: <>
+      {project.role && project.role !== 'College project' && <p className="nova-case-role">{project.role}</p>}
+      {project.contributions?.length ? <ul className="nova-story-list">{project.contributions.map((item) => <li key={item}>{item}</li>)}</ul> : null}
+    </>,
+  });
+  if (workflow) sections.push({
+    id: 'workflow', title: 'How it works', wide: true,
+    content: <ProjectWorkflowMap workflow={workflow} />,
+  });
   if (project.features?.length) sections.push({
     id: 'features', title: 'What it does',
     content: <ul className="nova-feature-list">{project.features.map((feature) => <li key={feature}>{feature}</li>)}</ul>,
@@ -88,7 +107,6 @@ function ProjectCase({ project, search, previous, next }: { project: Project; se
     content: <ul className="nova-technology-list">{project.technologies.map((technology) => <li key={technology}>{technology}</li>)}</ul>,
   });
   const optionalSections = [
-    { id: 'contribution', title: 'My contribution', items: project.contributions },
     { id: 'decisions', title: 'Engineering decisions', items: project.engineeringChallenges },
     { id: 'results', title: 'Results', items: project.results },
     { id: 'reflection', title: 'Reflection', items: project.reflections },
@@ -115,7 +133,7 @@ function ProjectCase({ project, search, previous, next }: { project: Project; se
     </header>
     <dl className="nova-case__facts">
       <div><dt>Platform</dt><dd>{project.platforms.join(' · ')}</dd></div>
-      {project.role && <div><dt>Role</dt><dd>{project.role}</dd></div>}
+      {project.role && <div><dt>{project.role === 'College project' ? 'Project context' : 'Role'}</dt><dd>{project.role}</dd></div>}
       {project.status && <div><dt>Status</dt><dd>{project.status}</dd></div>}
       {!!project.technologies.length && <div><dt>Tools</dt><dd>{project.technologies.slice(0, 3).join(' · ')}</dd></div>}
     </dl>
@@ -143,9 +161,9 @@ function ProjectCase({ project, search, previous, next }: { project: Project; se
         {sections.map(({ id, title }) => <Link key={id} to={{ hash: `#${id}`, search }}>{title}</Link>)}
       </nav>}
       <div>
-        {sections.map(({ id, title, content, dark }) => <section key={id} id={id} tabIndex={-1} className={`nova-case-section${dark ? ' nova-case-section--dark' : ''}`}>
+        {sections.map(({ id, title, content, dark, wide }) => <section key={id} id={id} tabIndex={-1} className={`nova-case-section${dark ? ' nova-case-section--dark' : ''}${wide ? ' nova-case-section--wide' : ''}`}>
           <h2>{title}</h2>
-          <div className="nova-case-section__content">{content}</div>
+          <div className={`nova-case-section__content${wide ? ' nova-case-section__content--wide' : ''}`}>{content}</div>
         </section>)}
       </div>
     </div>}

@@ -567,12 +567,14 @@ function projectGalleryFrom(project?: Project): ProjectGalleryImage[] {
 }
 
 function projectToForm(project?: Project): ProjectForm {
+  const fallbackProject = defaultPortfolioContent.projects.find((item) => item.id === project?.id);
   return {
     id: project?.id ?? '', slug: project?.slug ?? '', title: project?.title ?? '', tagline: project?.tagline ?? '', description: project?.description ?? '',
     categories: project?.categories.join('\n') ?? '', platforms: project?.platforms.join('\n') ?? '', technologies: project?.technologies.join('\n') ?? '',
     role: project?.role ?? '', timeline: project?.timeline ?? '', status: project?.status ?? '', featured: project?.featured ?? false,
     galleryTone: project?.galleryTone ?? '',
-    problem: project?.problem ?? '', solution: project?.solution ?? '', features: project?.features?.join('\n') ?? '',
+    problem: project?.problem?.trim() ? project.problem : project?.workflow?.rationale ?? fallbackProject?.problem ?? fallbackProject?.workflow?.rationale ?? '',
+    solution: project?.solution ?? '', features: project?.features?.join('\n') ?? '',
     architectureSummary: project?.architecture?.summary ?? '', architectureDiagram: project?.architecture?.diagram ?? '', architectureCaption: project?.architecture?.caption ?? '',
     engineeringChallenges: project?.engineeringChallenges?.join('\n') ?? '', contributions: project?.contributions?.join('\n') ?? '',
     results: project?.results?.join('\n') ?? '', reflections: project?.reflections?.join('\n') ?? '',
@@ -633,6 +635,7 @@ function ProjectEditor({ project, onApply, onDelete }: { project?: Project; onAp
       ...(selectedCover ? { thumbnail: selectedCover, heroImage: selectedCover } : {}), ...(form.galleryTone ? { galleryTone: form.galleryTone } : {}), ...(galleryImages.length ? { gallery: galleryImages } : {}),
       ...(form.problem.trim() ? { problem: form.problem.trim() } : {}), ...(form.solution.trim() ? { solution: form.solution.trim() } : {}),
       ...(parseLines(form.features).length ? { features: parseLines(form.features) } : {}), ...(architecture ? { architecture } : {}),
+      ...(project?.workflow ? { workflow: project.workflow } : {}),
       ...(parseLines(form.engineeringChallenges).length ? { engineeringChallenges: parseLines(form.engineeringChallenges) } : {}),
       ...(parseLines(form.contributions).length ? { contributions: parseLines(form.contributions) } : {}), ...(parseLines(form.results).length ? { results: parseLines(form.results) } : {}),
       ...(parseLines(form.reflections).length ? { reflections: parseLines(form.reflections) } : {}), ...(links.length ? { links } : {}),
@@ -653,18 +656,18 @@ function ProjectEditor({ project, onApply, onDelete }: { project?: Project; onAp
       <TextField label="Categories · one per line" multiline value={form.categories} onChange={(value) => setField('categories', value)} required hint="Examples: iOS Development, AI / ML Engineering" />
       <TextField label="Platforms · one per line" multiline value={form.platforms} onChange={(value) => setField('platforms', value)} required />
       <TextField className="admin-field--wide" label="Technologies · one per line" multiline value={form.technologies} onChange={(value) => setField('technologies', value)} />
-      <TextField label="Role" value={form.role} onChange={(value) => setField('role', value)} />
+      <TextField label="Role" value={form.role} onChange={(value) => setField('role', value)} hint="Your role in this project, not the project type or team context." />
       <TextField label="Timeline" value={form.timeline} onChange={(value) => setField('timeline', value)} />
       <TextField label="Status" value={form.status} onChange={(value) => setField('status', value)} hint="For example: Prototype, In progress." />
       <label className="admin-checkbox"><input type="checkbox" checked={form.featured} onChange={(event) => setField('featured', event.target.checked)} /><span>Show in selected work</span></label>
-      <TextField className="admin-field--wide" label="Problem and context" multiline value={form.problem} onChange={(value) => setField('problem', value)} />
+      <TextField className="admin-field--wide" label="Why this project exists" multiline value={form.problem} onChange={(value) => setField('problem', value)} hint="Describe the problem, need, or research question that motivated the project." />
       <TextField className="admin-field--wide" label="Approach" multiline value={form.solution} onChange={(value) => setField('solution', value)} />
       <TextField className="admin-field--wide" label="Features · one per line" multiline value={form.features} onChange={(value) => setField('features', value)} />
       <TextField className="admin-field--wide" label="Technical implementation" multiline value={form.architectureSummary} onChange={(value) => setField('architectureSummary', value)} />
       <ImageField label="Architecture diagram URL" folder={`projects/${form.id || form.slug || 'new-project'}`} value={form.architectureDiagram} onChange={(value) => setField('architectureDiagram', value)} applyHint="Apply to draft, then Save & publish." />
       <TextField label="Diagram caption" value={form.architectureCaption} onChange={(value) => setField('architectureCaption', value)} />
       <TextField label="Engineering challenges · one per line" multiline value={form.engineeringChallenges} onChange={(value) => setField('engineeringChallenges', value)} />
-      <TextField label="My contributions · one per line" multiline value={form.contributions} onChange={(value) => setField('contributions', value)} />
+      <TextField label="My contributions · one per line" multiline value={form.contributions} onChange={(value) => setField('contributions', value)} hint="Name the parts you personally implemented or decided; leave out unverified team-level work." />
       <TextField label="Results · one per line" multiline value={form.results} onChange={(value) => setField('results', value)} />
       <TextField label="Reflection · one per line" multiline value={form.reflections} onChange={(value) => setField('reflections', value)} />
       <TextField className="admin-field--wide" label="Links · one per line: label | URL | kind" multiline value={form.links} onChange={(value) => setField('links', value)} hint="Kinds: github, demo, video, other." />
