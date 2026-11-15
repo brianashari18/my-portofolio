@@ -1,4 +1,27 @@
 import profileImage from '../assets/images/about/profile-optimized.jpg';
+import roleDiceIntroImage from '../assets/images/projects/role-dice/roll-dice-intro.webp';
+import quizIntroImage from '../assets/images/projects/quiz-app/quiz-intro.png';
+import quizQuestionImage from '../assets/images/projects/quiz-app/quiz-question.png';
+import chatAppLoginImage from '../assets/images/projects/chat-app/login.png';
+import expenseTrackerOverviewImage from '../assets/images/projects/expense-tracker/overview.webp';
+import mealsCategoriesImage from '../assets/images/projects/meals-app/categories.webp';
+import mealsRecipeListImage from '../assets/images/projects/meals-app/recipe-list.webp';
+import mealsRecipeDetailImage from '../assets/images/projects/meals-app/recipe-detail.webp';
+import eWiseHomeImage from '../assets/images/projects/e-wise/home-dashboard.jpg';
+import eWisePointsImage from '../assets/images/projects/e-wise/wise-points.webp';
+import eWiseSplashImage from '../assets/images/projects/e-wise/splash.png';
+import eWiseMapImage from '../assets/images/projects/e-wise/map-order-status.webp';
+import fitSpaceDiscoveryImage from '../assets/images/projects/fitspace/venue-discovery.png';
+import fitSpaceScheduleImage from '../assets/images/projects/fitspace/booking-schedule.png';
+import fitSpaceSplashImage from '../assets/images/projects/fitspace/splash.png';
+import flickNFitWardrobeImage from '../assets/images/projects/flicknfit/wardrobe-outfit.webp';
+import flickNFitProductDetailsImage from '../assets/images/projects/flicknfit/product-details.webp';
+import mabrurLoginImage from '../assets/images/projects/mabrur/login.webp';
+import mabrurPrayerHomeImage from '../assets/images/projects/mabrur/prayer-home.webp';
+import mabrurPrayerListImage from '../assets/images/projects/mabrur/prayer-list.webp';
+import mabrurPrayerDetailImage from '../assets/images/projects/mabrur/prayer-detail.webp';
+import stoCarbonVerifierImage from '../assets/images/projects/stocarbon/verifier-dashboard.webp';
+import stoCarbonSplashImage from '../assets/images/projects/stocarbon/splash.webp';
 import { supplementaryProjectWorkflows } from './projectWorkflows';
 
 export type ProjectCategory = 'iOS Development' | 'Flutter Development' | 'AI / ML Engineering' | 'Backend Engineering' | 'Software Engineering';
@@ -346,7 +369,11 @@ const projectRecords: Project[] = [
     description: 'A Flutter mobile client paired with a Go API for product discovery, saved items, and scan-based style features.',
     categories: ['Flutter Development', 'Backend Engineering', 'Software Engineering'], platforms: ['Mobile', 'API'],
     technologies: ['Flutter', 'Dart', 'Go', 'Fiber', 'GORM', 'MySQL', 'Firebase'],
-    role: 'Flutter & Backend Developer', featured: false,
+    role: 'Flutter & Backend Developer', featured: false, thumbnail: flickNFitWardrobeImage,
+    gallery: [
+      { src: flickNFitWardrobeImage, alt: 'FlickNFit wardrobe screen with a composed outfit and individual clothing items', title: 'Wardrobe outfit', caption: 'A saved outfit assembled from individual clothing items.', frame: 'none' },
+      { src: flickNFitProductDetailsImage, alt: 'FlickNFit product detail screen showing a clothing image, price, rating, and product actions', title: 'Product details', caption: 'Review a fashion item and its details before saving it.', frame: 'phone', frameStyle: 'android' },
+    ],
     solution: 'The mobile source includes screens for product and brand browsing, saved items, scan history, and style recommendations. A separate Go service provides account, catalog, and review APIs; the source also contains sample data, so live connections for every client screen are not established.',
     features: ['Browse products, brands, and categories', 'Save products and manage wardrobe items', 'Review body and face scan history', 'Explore style recommendations', 'Account, product, and review API flows'],
     architecture: { summary: 'The Flutter client defines screens for product discovery, saved wardrobe items, scan history, and recommendations. A Go/Fiber service provides account, catalog, and review APIs using GORM and MySQL. The repositories contain sample data, so live integration is not established for every client flow.' },
@@ -364,7 +391,12 @@ const projectRecords: Project[] = [
     description: 'A web and Flutter mobile project for finding sports venues, viewing available fields, and managing bookings, with a Python service for venue recommendations.',
     categories: ['Flutter Development', 'Backend Engineering', 'Software Engineering'], platforms: ['Web', 'Mobile'],
     technologies: ['React', 'JavaScript', 'Flutter', 'Dart', 'Python', 'Flask', 'geopy', 'Firebase', 'Maps'],
-    role: 'Web, Mobile & Backend Developer', featured: false,
+    role: 'Web, Mobile & Backend Developer', featured: false, thumbnail: fitSpaceDiscoveryImage,
+    gallery: [
+      { src: fitSpaceDiscoveryImage, alt: 'FitSpace venue discovery screen with sport filters, nearby courts, ratings, and prices', title: 'Venue discovery', caption: 'Browse nearby venues and compare sports, ratings, and starting prices.', frame: 'phone', frameStyle: 'android' },
+      { src: fitSpaceScheduleImage, alt: 'FitSpace booking screen with a weekly calendar and hourly court availability', title: 'Booking schedule', caption: 'A calendar and time-slot view for selecting a court booking.', frame: 'none' },
+      { src: fitSpaceSplashImage, alt: 'FitSpace app splash screen with the FitSpace brand mark', title: 'App launch', caption: 'The mobile app launch screen.', frame: 'phone', frameStyle: 'android' },
+    ],
     solution: 'The web and mobile clients include venue and field browsing, booking flows, payment confirmation, reviews, and venue-management screens. The Python service fetches venue data and ranks recommendations using geographic distance calculations.',
     features: ['Browse nearby and recommended courts', 'View venue details and field schedules', 'Create and review bookings', 'Manage venues, fields, and user reviews', 'Recommend venues using geographic distance calculations'],
     architecture: { summary: 'React and Flutter clients provide venue browsing, schedules, bookings, reviews, and management screens. A Python/Flask recommendation service fetches venue data and ranks options using geographic distance calculations.' },
@@ -384,7 +416,11 @@ const projectRecords: Project[] = [
     description: 'A Flutter app with seller and verifier flows for creating carbon plots, managing zones, and reviewing related transactions.',
     categories: ['Flutter Development', 'Software Engineering'], platforms: ['Mobile'],
     technologies: ['Flutter', 'Dart', 'Firebase Authentication', 'Google Sign-In', 'fl_chart'],
-    role: 'Flutter Developer', featured: false,
+    role: 'Flutter Developer', featured: false, thumbnail: stoCarbonVerifierImage,
+    gallery: [
+      { src: stoCarbonVerifierImage, alt: 'StoCarbon verifier dashboard showing plot review counts and a monthly performance chart', title: 'Verifier dashboard', caption: 'A summary screen for pending, approved, and rejected plot reviews.', frame: 'phone', frameStyle: 'android' },
+      { src: stoCarbonSplashImage, alt: 'StoCarbon app splash screen with its carbon-stock trading platform mark', title: 'App launch', caption: 'The mobile app launch screen.', frame: 'phone', frameStyle: 'android' },
+    ],
     solution: 'The Flutter source separates seller plot and zone screens from verifier review screens, with supporting region, team, and transaction views. The repository README is a starter template, so release and live-service status are not established.',
     features: ['Seller plot and zone screens', 'Verifier review queue screens', 'Region and team records', 'Transaction history and detail views'],
     architecture: { summary: 'The Flutter client separates seller plot and zone workflows from verifier review screens, with supporting region, team, and transaction-history views.' },
@@ -439,8 +475,8 @@ const projectRecords: Project[] = [
   },
   {
     id: 'spatiotemporal-drowsiness-detection', slug: 'spatiotemporal-drowsiness-detection', title: 'Spatiotemporal Drowsiness Detection',
-    tagline: 'Data Slayer 2025 · Top 12 in Kaggle qualifying · 4th in the final',
-    description: 'A team computer-vision entry for Data Slayer 3.0, classifying one-second in-car video sequences as drowsy or non-drowsy. Team belikopidulu reached the top 12 in the Kaggle qualifying phase and placed 4th in the final.',
+    tagline: 'Data Slayer 2025 · Preliminary 4th of 163 · Final Top 4',
+    description: 'A team computer-vision entry for Data Slayer 3.0, classifying one-second in-car video sequences as drowsy or non-drowsy. Team belikopidulu placed 4th out of 163 teams in the preliminary round and reached the top 4 in the final.',
     categories: ['AI / ML Engineering'], platforms: ['Kaggle'],
     technologies: ['VideoMAE', 'BiLSTM'], role: 'AI/ML team collaborator', timeline: '2025', featured: false,
     problem: 'Data Slayer 3.0 challenged teams to classify one-second in-car clips as drowsy or non-drowsy. The training set covered 15 subjects, with eight videos per subject across front and side camera views. Drowsiness examples showed microsleep or yawning; non-drowsiness examples showed focus or talking. The task was evaluated with Macro F1.',
@@ -488,8 +524,8 @@ const projectRecords: Project[] = [
       'Frame-to-frame crop jitter risked teaching the model position changes rather than drowsiness patterns.',
     ],
     results: [
-      'Team belikopidulu reached the top 12 in the Kaggle qualifying phase.',
-      'The team placed 4th in the Data Slayer 2025 final round.',
+      'Team belikopidulu placed 4th out of 163 teams in the Data Slayer 3.0 preliminary round.',
+      'The team reached the top 4 in the Data Slayer 2025 final.',
       'The presentation reports a 91.66% mean F1 across five validation folds (range 0.7913–1.0000). This is the model’s cross-validation result, not its Kaggle leaderboard score.',
     ],
     links: [
@@ -502,7 +538,13 @@ const projectRecords: Project[] = [
     description: 'A Flutter app for learning about responsible e-waste disposal, finding nearby e-bank collection points, requesting pickups, and managing reward points.',
     categories: ['Flutter Development', 'Software Engineering'], platforms: ['Android', 'iOS'],
     technologies: ['Flutter', 'Dart', 'Firebase Authentication', 'Cloud Firestore', 'FlutterMap', 'Geolocator'],
-    role: 'Flutter Developer', featured: false,
+    role: 'Flutter Developer', featured: false, thumbnail: eWiseHomeImage,
+    gallery: [
+      { src: eWiseHomeImage, alt: 'E-Wise home screen with e-waste information, pickup, e-Bank, and WisePoint shortcuts', title: 'Home and services', caption: 'Entry points for e-waste education, collection, nearby e-banks, and points.', frame: 'phone', frameStyle: 'android' },
+      { src: eWisePointsImage, alt: 'E-Wise WisePoint screen with a points balance, redeem and add actions, and an activity chart', title: 'WisePoint', caption: 'A points overview with redemption and activity information.', frame: 'phone', frameStyle: 'android' },
+      { src: eWiseSplashImage, alt: 'E-Wise opening screen with its e-waste recycling mark', title: 'App launch', caption: 'The mobile app launch screen.', frame: 'phone', frameStyle: 'android' },
+      { src: eWiseMapImage, alt: 'E-Wise pickup status screen with a map pin and nearby route context', title: 'Pickup status map', caption: 'A location view accompanies the e-waste pickup status.', frame: 'phone', frameStyle: 'android' },
+    ],
     problem: 'E-Wise aims to reduce electronic waste, but responsible disposal involves several steps: learning how to handle e-waste, finding a collection point, arranging a handoff, and tracking the resulting points. The app brings those steps into one mobile experience.',
     solution: 'E-Wise combines educational content and e-bank discovery with location-aware pickup requests. Firebase Authentication and Cloud Firestore support account, pickup, chat, and WisePoint records.',
     features: [
@@ -522,10 +564,29 @@ const projectRecords: Project[] = [
     links: [{ label: 'GitHub repository', href: 'https://github.com/brianashari18/e-wise', kind: 'github' }],
   },
   {
+    id: 'mabrur-hajj-umrah', slug: 'mabrur-hajj-umrah', title: 'Mabrur Hajj & Umrah App',
+    tagline: 'Prayer guidance and group tools for a pilgrimage companion',
+    description: 'A mobile companion app concept for Hajj and Umrah, with prayer guidance and group communication.',
+    categories: ['Software Engineering'], platforms: ['Mobile'], technologies: [], featured: false,
+    thumbnail: mabrurPrayerHomeImage,
+    gallery: [
+      { src: mabrurLoginImage, alt: 'Mabrur sign-in screen with email and password fields', title: 'Sign in', caption: 'Entry point for accessing the Hajj and Umrah companion.', frame: 'phone', frameStyle: 'android' },
+      { src: mabrurPrayerHomeImage, alt: 'Mabrur home screen with Hajj and Umrah prayer categories and a list of prayer topics', title: 'Prayer home', caption: 'Explore prayer topics from the app’s main screen.', frame: 'phone', frameStyle: 'android' },
+      { src: mabrurPrayerListImage, alt: 'Mabrur screen listing prayer guidance for Hajj and Umrah', title: 'Prayer list', caption: 'Browse the collection of prayer guidance.', frame: 'phone', frameStyle: 'android' },
+      { src: mabrurPrayerDetailImage, alt: 'Mabrur prayer detail screen displaying the selected prayer and supporting text', title: 'Prayer details', caption: 'Open an individual prayer to read its content.', frame: 'phone', frameStyle: 'android' },
+    ],
+    problem: 'The concept brings prayer guidance and group communication into a single Hajj and Umrah companion.',
+    solution: 'A mobile app concept centered on prayer guidance, with group tools for pilgrimage coordination.',
+    features: ['Browse prayer guidance', 'Read individual prayer details', 'Sign in to the companion app'],
+  },
+  {
     id: 'chat-app', slug: 'chat-app', title: 'Chat App', tagline: 'An early Flutter project built through a chat app',
     description: 'An early Flutter learning project exploring mobile app development through a chat experience.',
     categories: ['Flutter Development', 'Software Engineering'], platforms: ['Android', 'iOS'],
-    technologies: ['Flutter', 'Dart'], role: 'Flutter Developer', featured: false,
+    technologies: ['Flutter', 'Dart'], role: 'Flutter Developer', featured: false, thumbnail: chatAppLoginImage,
+    gallery: [
+      { src: chatAppLoginImage, alt: 'Chat App sign-in screen with email and password fields', title: 'Login screen', caption: 'The supplied screen shows the sign-in entry point; this image set does not include a message thread.', frame: 'phone', frameStyle: 'android' },
+    ],
     problem: 'This project began as a learning exercise: build a chat app to practice developing a mobile application with Flutter.',
     contributions: [
       'Developed the Flutter chat app as an early project for practicing mobile application development.',
@@ -535,7 +596,10 @@ const projectRecords: Project[] = [
     id: 'expense-tracker', slug: 'expense-tracker', title: 'Expense Tracker', tagline: 'Learning Flutter through daily expense tracking',
     description: 'A Flutter learning project built around recording and reviewing daily expenses.',
     categories: ['Flutter Development', 'Software Engineering'], platforms: ['Android', 'iOS'],
-    technologies: ['Flutter', 'Dart'], role: 'Flutter Developer', featured: false,
+    technologies: ['Flutter', 'Dart'], role: 'Flutter Developer', featured: false, thumbnail: expenseTrackerOverviewImage,
+    gallery: [
+      { src: expenseTrackerOverviewImage, alt: 'Expense Tracker screen showing sample entries for a Flutter course, cinema, and hiking', title: 'Expense list', caption: 'A sample list demonstrates how the app records and reviews daily spending.', frame: 'phone', frameStyle: 'android' },
+    ],
     problem: 'This project was part of learning Flutter: tracking daily expenses offered a practical app flow to build and explore.',
     features: ['Record daily expenses', 'Review recorded expense entries'],
     contributions: [
@@ -546,7 +610,12 @@ const projectRecords: Project[] = [
     id: 'meals-app', slug: 'meals-app', title: 'Meals App', tagline: 'Learning Flutter through recipes and meal planning',
     description: 'A Flutter learning project for discovering recipes and organizing meal plans.',
     categories: ['Flutter Development', 'Software Engineering'], platforms: ['Android', 'iOS'],
-    technologies: ['Flutter', 'Dart'], role: 'Flutter Developer', featured: false,
+    technologies: ['Flutter', 'Dart'], role: 'Flutter Developer', featured: false, thumbnail: mealsCategoriesImage,
+    gallery: [
+      { src: mealsCategoriesImage, alt: 'Meals App category screen with cuisine and meal category cards', title: 'Recipe categories', caption: 'Explore recipe categories as part of a Flutter learning project.', frame: 'phone', frameStyle: 'android' },
+      { src: mealsRecipeListImage, alt: 'Meals App recipe list displaying pasta and other sample dishes', title: 'Recipe collection', caption: 'Browse a list of dishes before opening an individual recipe.', frame: 'phone', frameStyle: 'android' },
+      { src: mealsRecipeDetailImage, alt: 'Meals App recipe detail screen with a dish description and ingredient list', title: 'Recipe details', caption: 'Review a recipe and its ingredients on the detail screen.', frame: 'phone', frameStyle: 'android' },
+    ],
     problem: 'This project was part of learning Flutter: recipe discovery and meal planning offered a practical product flow to build.',
     features: ['Browse recipes', 'Choose recipes for a meal plan', 'Review planned meals'],
     contributions: [
@@ -557,7 +626,11 @@ const projectRecords: Project[] = [
     id: 'quiz-app', slug: 'quiz-app', title: 'Quiz App', tagline: 'Learning Flutter through a quiz app',
     description: 'A Flutter learning project built around a simple quiz experience.',
     categories: ['Flutter Development', 'Software Engineering'], platforms: ['Android', 'iOS'],
-    technologies: ['Flutter', 'Dart'], role: 'Flutter Developer', featured: false,
+    technologies: ['Flutter', 'Dart'], role: 'Flutter Developer', featured: false, thumbnail: quizIntroImage,
+    gallery: [
+      { src: quizIntroImage, alt: 'Quiz App welcome screen with a Start Quiz button', title: 'Quiz introduction', caption: 'A welcome screen for starting a quiz.', frame: 'phone', frameStyle: 'android' },
+      { src: quizQuestionImage, alt: 'Quiz App multiple-choice question about the building blocks of Flutter UI', title: 'Answer a question', caption: 'A multiple-choice question screen.', frame: 'phone', frameStyle: 'android' },
+    ],
     problem: 'This project was part of learning Flutter: a simple quiz gave me a practical app flow to design and build.',
     features: ['Start a quiz', 'Answer questions', 'Finish a quiz session'],
     contributions: [
@@ -568,7 +641,10 @@ const projectRecords: Project[] = [
     id: 'role-dice-app', slug: 'role-dice-app', title: 'Role Dice App', tagline: 'Learning Flutter through a role-playing dice roller',
     description: 'A Flutter learning project that simulates dice rolls for role-playing games.',
     categories: ['Flutter Development', 'Software Engineering'], platforms: ['Android', 'iOS'],
-    technologies: ['Flutter', 'Dart'], role: 'Flutter Developer', featured: false,
+    technologies: ['Flutter', 'Dart'], role: 'Flutter Developer', featured: false, thumbnail: roleDiceIntroImage,
+    gallery: [
+      { src: roleDiceIntroImage, alt: 'Role Dice App opening screen with a yellow two-dot die', title: 'Dice roller', caption: 'The opening screen of a small Flutter dice-rolling learning project.', frame: 'phone', frameStyle: 'android' },
+    ],
     problem: 'This project was part of learning Flutter: a dice roller provided a compact interactive app flow to design and build.',
     features: ['Roll a virtual die', 'View the simulated result'],
     contributions: [
