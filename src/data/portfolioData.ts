@@ -16,6 +16,7 @@ import fitSpaceScheduleImage from '../assets/images/projects/fitspace/booking-sc
 import fitSpaceSplashImage from '../assets/images/projects/fitspace/splash.png';
 import flickNFitWardrobeImage from '../assets/images/projects/flicknfit/wardrobe-outfit.webp';
 import flickNFitProductDetailsImage from '../assets/images/projects/flicknfit/product-details.webp';
+import flickNFitSplashImage from '../assets/images/projects/flicknfit/splash.webp';
 import mabrurLoginImage from '../assets/images/projects/mabrur/login.webp';
 import mabrurPrayerHomeImage from '../assets/images/projects/mabrur/prayer-home.webp';
 import mabrurPrayerListImage from '../assets/images/projects/mabrur/prayer-list.webp';
@@ -373,6 +374,7 @@ const projectRecords: Project[] = [
     gallery: [
       { src: flickNFitWardrobeImage, alt: 'FlickNFit wardrobe screen with a composed outfit and individual clothing items', title: 'Wardrobe outfit', caption: 'A saved outfit assembled from individual clothing items.', frame: 'none' },
       { src: flickNFitProductDetailsImage, alt: 'FlickNFit product detail screen showing a clothing image, price, rating, and product actions', title: 'Product details', caption: 'Review a fashion item and its details before saving it.', frame: 'phone', frameStyle: 'android' },
+      { src: flickNFitSplashImage, alt: 'FlickNFit app launch screen with its illustrated brand mark', title: 'App launch', caption: 'The opening screen introduces the FlickNFit mobile app.', frame: 'phone', frameStyle: 'android' },
     ],
     solution: 'The mobile source includes screens for product and brand browsing, saved items, scan history, and style recommendations. A separate Go service provides account, catalog, and review APIs; the source also contains sample data, so live connections for every client screen are not established.',
     features: ['Browse products, brands, and categories', 'Save products and manage wardrobe items', 'Review body and face scan history', 'Explore style recommendations', 'Account, product, and review API flows'],
