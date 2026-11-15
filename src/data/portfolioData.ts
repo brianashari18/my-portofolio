@@ -17,6 +17,9 @@ import fitSpaceSplashImage from '../assets/images/projects/fitspace/splash.png';
 import flickNFitWardrobeImage from '../assets/images/projects/flicknfit/wardrobe-outfit.webp';
 import flickNFitProductDetailsImage from '../assets/images/projects/flicknfit/product-details.webp';
 import flickNFitSplashImage from '../assets/images/projects/flicknfit/splash.webp';
+import mabrurAccountImage from '../assets/images/projects/mabrur/account.webp';
+import mabrurGroupMeetingImage from '../assets/images/projects/mabrur/group-meeting.webp';
+import mabrurJoinMeetingImage from '../assets/images/projects/mabrur/join-meeting.jpeg';
 import mabrurLoginImage from '../assets/images/projects/mabrur/login.webp';
 import mabrurPrayerHomeImage from '../assets/images/projects/mabrur/prayer-home.webp';
 import mabrurPrayerListImage from '../assets/images/projects/mabrur/prayer-list.webp';
@@ -576,6 +579,9 @@ const projectRecords: Project[] = [
       { src: mabrurPrayerHomeImage, alt: 'Mabrur home screen with Hajj and Umrah prayer categories and a list of prayer topics', title: 'Prayer home', caption: 'Explore prayer topics from the app’s main screen.', frame: 'phone', frameStyle: 'android' },
       { src: mabrurPrayerListImage, alt: 'Mabrur screen listing prayer guidance for Hajj and Umrah', title: 'Prayer list', caption: 'Browse the collection of prayer guidance.', frame: 'phone', frameStyle: 'android' },
       { src: mabrurPrayerDetailImage, alt: 'Mabrur prayer detail screen displaying the selected prayer and supporting text', title: 'Prayer details', caption: 'Open an individual prayer to read its content.', frame: 'phone', frameStyle: 'android' },
+      { src: mabrurAccountImage, alt: 'Mabrur account screen showing a username and user role', title: 'Account', caption: 'Review the signed-in account and its role.', frame: 'phone', frameStyle: 'android' },
+      { src: mabrurJoinMeetingImage, alt: 'Mabrur join meeting screen with a sample room ID field', title: 'Join a meeting', caption: 'Enter a room ID to join a group session.', frame: 'phone', frameStyle: 'android' },
+      { src: mabrurGroupMeetingImage, alt: 'Mabrur group meeting screen with participant tiles and controls for chat and prayer', title: 'Group meeting', caption: 'A shared session view with entry points for chat and prayer.', frame: 'phone', frameStyle: 'android' },
     ],
     problem: 'The concept brings prayer guidance and group communication into a single Hajj and Umrah companion.',
     solution: 'A mobile app concept centered on prayer guidance, with group tools for pilgrimage coordination.',
