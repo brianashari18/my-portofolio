@@ -26,6 +26,7 @@ import mabrurPrayerListImage from '../assets/images/projects/mabrur/prayer-list.
 import mabrurPrayerDetailImage from '../assets/images/projects/mabrur/prayer-detail.webp';
 import stoCarbonVerifierImage from '../assets/images/projects/stocarbon/verifier-dashboard.webp';
 import stoCarbonSplashImage from '../assets/images/projects/stocarbon/splash.webp';
+import stoCarbonZoneCreationImage from '../assets/images/projects/stocarbon/zone-creation.jpg';
 import { supplementaryProjectWorkflows } from './projectWorkflows';
 
 export type ProjectCategory = 'iOS Development' | 'Flutter Development' | 'AI / ML Engineering' | 'Backend Engineering' | 'Software Engineering';
@@ -424,6 +425,7 @@ const projectRecords: Project[] = [
     role: 'Flutter Developer', featured: false, thumbnail: stoCarbonVerifierImage,
     gallery: [
       { src: stoCarbonVerifierImage, alt: 'StoCarbon verifier dashboard showing plot review counts and a monthly performance chart', title: 'Verifier dashboard', caption: 'A summary screen for pending, approved, and rejected plot reviews.', frame: 'phone', frameStyle: 'android' },
+      { src: stoCarbonZoneCreationImage, alt: 'StoCarbon form for creating a zone with fields for zone name, address, coordinates, and region', title: 'Create a zone', caption: 'A form for entering zone details before adding it to the app.', frame: 'phone', frameStyle: 'android' },
       { src: stoCarbonSplashImage, alt: 'StoCarbon app splash screen with its carbon-stock trading platform mark', title: 'App launch', caption: 'The mobile app launch screen.', frame: 'phone', frameStyle: 'android' },
     ],
     solution: 'The Flutter source separates seller plot and zone screens from verifier review screens, with supporting region, team, and transaction views. The repository README is a starter template, so release and live-service status are not established.',
