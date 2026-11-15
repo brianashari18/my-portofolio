@@ -56,7 +56,7 @@ export default function ProjectImageDialog({ images, index, onChange, onClose }:
     <div className="nova-image-dialog__bar">
       <div aria-live="polite" aria-atomic="true">
         <h2 id="project-image-title">{image.title}</h2>
-        {multiple && <span>Image {index + 1} of {images.length}</span>}
+        {multiple && <span>Screen {String(index + 1).padStart(2, '0')} of {String(images.length).padStart(2, '0')}</span>}
       </div>
       <button type="button" onClick={() => dialog.current?.close()}>Close <span aria-hidden="true">×</span></button>
     </div>
@@ -66,7 +66,7 @@ export default function ProjectImageDialog({ images, index, onChange, onClose }:
         data-zoomed={zoomWidth ? true : undefined}
         ref={viewport}
         role={zoomWidth ? 'region' : undefined}
-        aria-label={zoomWidth ? 'Zoomed screenshot, scroll to see more' : undefined}
+        aria-label={zoomWidth ? 'Zoomed image, scroll to see more' : undefined}
         tabIndex={zoomWidth ? 0 : undefined}
       >
         <img key={image.src} ref={screenshot} src={image.src} alt={image.alt} style={zoomWidth ? { width: zoomWidth } : undefined} />

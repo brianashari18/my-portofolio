@@ -3,9 +3,11 @@ import type { MouseEvent, ReactNode } from 'react';
 import { Link, useParams, useSearchParams } from 'react-router-dom';
 import ProjectImageDialog from '../components/ProjectImageDialog';
 import ProjectArtwork from '../components/ProjectArtwork';
+import ProjectWorkflowMap from '../components/ProjectWorkflowMap';
 import { usePortfolioContent } from '../context/usePortfolioContent';
+import { defaultPortfolioContent } from '../data/portfolioData';
 import type { Project, ProjectGalleryImage } from '../data/portfolioData';
-import { resolvePortfolioImage } from '../lib/resolvePortfolioImage';
+import { getDefaultProjectImageFrame, getProjectGalleryImage, resolvePortfolioImage } from '../lib/resolvePortfolioImage';
 import NotFound from './NotFound';
 
 interface StorySection {
@@ -13,6 +15,7 @@ interface StorySection {
   title: string;
   content: ReactNode;
   dark?: boolean;
+  wide?: boolean;
 }
 
 export default function ProjectDetail() {
@@ -39,19 +42,41 @@ function ProjectCase({ project, search, previous, next }: { project: Project; se
   const gallery = new Map<string, ProjectGalleryImage>();
   for (const image of project.gallery ?? []) {
     const src = resolvePortfolioImage(image.src);
-    if (src && !gallery.has(src)) gallery.set(src, { ...image, src });
+    if (src && !gallery.has(src)) gallery.set(src, getProjectGalleryImage(project, image, src));
   }
-  const leadSource = resolvePortfolioImage(project.heroImage) ?? gallery.keys().next().value ?? resolvePortfolioImage(project.thumbnail);
-  const hero: ProjectGalleryImage | undefined = leadSource ? gallery.get(leadSource) ?? { src: leadSource, alt: `${project.title} project preview` } : undefined;
-  const images = hero ? [hero, ...[...gallery.values()].filter(({ src }) => src !== hero.src)].map((image, index) => ({
+  const defaultFrame = getDefaultProjectImageFrame(project.platforms);
+  for (const source of [project.heroImage, project.thumbnail]) {
+    const src = resolvePortfolioImage(source);
+    if (src && !gallery.has(src)) gallery.set(src, { src, alt: `${project.title} project preview`, ...defaultFrame });
+  }
+  const images = [...gallery.values()].map((image, index) => ({
     ...image,
-    title: image.title?.trim() || `Screenshot ${index + 1}`,
-  })) : [];
+    title: image.title?.trim() || `Screen ${String(index + 1).padStart(2, '0')}`,
+  }));
+  const coverSource = resolvePortfolioImage(project.thumbnail) ?? resolvePortfolioImage(project.heroImage) ?? images[0]?.src;
+  const heroIndex = images.findIndex(({ src }) => src === coverSource);
+  const hero = heroIndex >= 0 ? images[heroIndex] : undefined;
   const diagram = resolvePortfolioImage(project.architecture?.diagram);
+  const bundledWorkflow = defaultPortfolioContent.projects.find((item) => item.id === project.id)?.workflow;
+  const workflow = project.workflow
+    ? { ...bundledWorkflow, ...project.workflow, rationale: project.workflow.rationale ?? bundledWorkflow?.rationale }
+    : bundledWorkflow;
   const sections: StorySection[] = [];
 
-  if (project.problem) sections.push({ id: 'challenge', title: 'The challenge', content: <p>{project.problem}</p> });
+  const rationale = project.problem?.trim() ? project.problem : workflow?.rationale;
+  if (rationale) sections.push({ id: 'challenge', title: 'Why this project exists', content: <p>{rationale}</p> });
   if (project.solution) sections.push({ id: 'approach', title: 'The approach', content: <p>{project.solution}</p> });
+  if ((project.role && project.role !== 'College project') || project.contributions?.length) sections.push({
+    id: 'contribution', title: 'My role',
+    content: <>
+      {project.role && project.role !== 'College project' && <p className="nova-case-role">{project.role}</p>}
+      {project.contributions?.length ? <ul className="nova-story-list">{project.contributions.map((item) => <li key={item}>{item}</li>)}</ul> : null}
+    </>,
+  });
+  if (workflow) sections.push({
+    id: 'workflow', title: 'How it works', wide: true,
+    content: <ProjectWorkflowMap workflow={workflow} />,
+  });
   if (project.features?.length) sections.push({
     id: 'features', title: 'What it does',
     content: <ul className="nova-feature-list">{project.features.map((feature) => <li key={feature}>{feature}</li>)}</ul>,
@@ -60,10 +85,11 @@ function ProjectCase({ project, search, previous, next }: { project: Project; se
     id: 'gallery',
     title: 'Product walkthrough',
     content: <div className="nova-case-gallery__grid">
-      {images.slice(1).map((image, index) => <figure key={image.src}>
-        <button className="nova-case-gallery__button" type="button" aria-haspopup="dialog" onClick={(event) => openImage(index + 1, event)}>
+      {images.map((image, index) => index === heroIndex ? null : <figure key={image.src}>
+        <button className="nova-case-gallery__button" type="button" aria-haspopup="dialog" aria-label={`Open screen ${index + 1} of ${images.length}: ${image.title}`} onClick={(event) => openImage(index, event)}>
           <span className="nova-case-gallery__preview" data-gallery-tone={project.galleryTone}>
-            <img src={image.src} alt="" loading="lazy" decoding="async" />
+            <span className="nova-case-gallery__sequence">Screen {String(index + 1).padStart(2, '0')}</span>
+            <ProjectArtwork image={image} decorative />
           </span>
           <span className="nova-case-gallery__label">
             <span>{image.title}</span><span aria-hidden="true">↗</span>
@@ -88,7 +114,6 @@ function ProjectCase({ project, search, previous, next }: { project: Project; se
     content: <ul className="nova-technology-list">{project.technologies.map((technology) => <li key={technology}>{technology}</li>)}</ul>,
   });
   const optionalSections = [
-    { id: 'contribution', title: 'My contribution', items: project.contributions },
     { id: 'decisions', title: 'Engineering decisions', items: project.engineeringChallenges },
     { id: 'results', title: 'Results', items: project.results },
     { id: 'reflection', title: 'Reflection', items: project.reflections },
@@ -114,8 +139,8 @@ function ProjectCase({ project, search, previous, next }: { project: Project; se
       <p>{project.tagline}</p>
     </header>
     <dl className="nova-case__facts">
-      <div><dt>Platform</dt><dd>{project.platforms.join(' · ')}</dd></div>
-      {project.role && <div><dt>Role</dt><dd>{project.role}</dd></div>}
+      {project.platforms.length > 0 && <div><dt>Platform</dt><dd>{project.platforms.join(' · ')}</dd></div>}
+      {project.role && <div><dt>{project.role === 'College project' ? 'Project context' : 'Role'}</dt><dd>{project.role}</dd></div>}
       {project.status && <div><dt>Status</dt><dd>{project.status}</dd></div>}
       {!!project.technologies.length && <div><dt>Tools</dt><dd>{project.technologies.slice(0, 3).join(' · ')}</dd></div>}
     </dl>
@@ -126,11 +151,12 @@ function ProjectCase({ project, search, previous, next }: { project: Project; se
         <p>{project.description}</p>
       </div>
       {hero && <figure className="nova-case-stage__image">
-        <button className="nova-case-image-button" type="button" aria-haspopup="dialog" onClick={(event) => openImage(0, event)}>
+        <button className="nova-case-image-button" type="button" aria-haspopup="dialog" aria-label={`Open cover, screen ${heroIndex + 1} of ${images.length}: ${hero.title}`} onClick={(event) => openImage(heroIndex, event)}>
           <ProjectArtwork image={hero} loading="eager" />
-          <span className="nova-case-image-button__action">View screenshot <span aria-hidden="true">↗</span></span>
+          <span className="nova-case-image-button__action">View image <span aria-hidden="true">↗</span></span>
         </button>
-        {(hero.title || hero.caption) && <figcaption>
+        {(images.length > 1 || hero.title || hero.caption) && <figcaption>
+          {images.length > 1 && <span className="nova-case-stage__sequence">Cover · Screen {String(heroIndex + 1).padStart(2, '0')} of {String(images.length).padStart(2, '0')}</span>}
           {hero.title && <strong>{hero.title}</strong>}
           {hero.caption && <span>{hero.caption}</span>}
         </figcaption>}
@@ -143,9 +169,9 @@ function ProjectCase({ project, search, previous, next }: { project: Project; se
         {sections.map(({ id, title }) => <Link key={id} to={{ hash: `#${id}`, search }}>{title}</Link>)}
       </nav>}
       <div>
-        {sections.map(({ id, title, content, dark }) => <section key={id} id={id} tabIndex={-1} className={`nova-case-section${dark ? ' nova-case-section--dark' : ''}`}>
+        {sections.map(({ id, title, content, dark, wide }) => <section key={id} id={id} tabIndex={-1} className={`nova-case-section${dark ? ' nova-case-section--dark' : ''}${wide ? ' nova-case-section--wide' : ''}`}>
           <h2>{title}</h2>
-          <div className="nova-case-section__content">{content}</div>
+          <div className={`nova-case-section__content${wide ? ' nova-case-section__content--wide' : ''}`}>{content}</div>
         </section>)}
       </div>
     </div>}

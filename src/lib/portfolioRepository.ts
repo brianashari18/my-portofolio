@@ -1,4 +1,4 @@
-import type { PortfolioContent, ProjectGalleryImage } from '../data/portfolioData';
+import type { PortfolioContent, ProjectGalleryImage, ProjectWorkflow, ProjectWorkflowStep } from '../data/portfolioData';
 import { supabase } from './supabase';
 
 const CONTENT_ROW_ID = 'main';
@@ -62,6 +62,7 @@ function isProject(value: unknown): value is PortfolioContent['projects'][number
   if ('galleryTone' in value && !['paper', 'blush', 'surface', 'sage', 'ink'].includes(String(value.galleryTone))) return false;
   if ('gallery' in value && (!Array.isArray(value.gallery) || !value.gallery.every(isGalleryImage))) return false;
   if ('architecture' in value && (!isRecord(value.architecture) || !isString(value.architecture.summary) || ('diagram' in value.architecture && !isString(value.architecture.diagram)) || ('caption' in value.architecture && !isString(value.architecture.caption)))) return false;
+  if ('workflow' in value && !isProjectWorkflow(value.workflow)) return false;
   if ('links' in value && (!Array.isArray(value.links) || !value.links.every((link) => isRecord(link) && isString(link.label) && isString(link.href) && ['github', 'demo', 'video', 'other'].includes(String(link.kind))))) return false;
   return true;
 }
@@ -70,8 +71,21 @@ function isGalleryImage(value: unknown): value is ProjectGalleryImage {
   return isRecord(value) && isString(value.src) && isString(value.alt) &&
     (!('title' in value) || isString(value.title)) &&
     (!('caption' in value) || isString(value.caption)) &&
-    (!('frame' in value) || value.frame === 'phone' || value.frame === 'none') &&
+    (!('frame' in value) || value.frame === 'phone' || value.frame === 'laptop' || value.frame === 'none') &&
     (!('frameStyle' in value) || value.frameStyle === 'ios' || value.frameStyle === 'android');
+}
+
+function isProjectWorkflow(value: unknown): value is ProjectWorkflow {
+  return isRecord(value) && isString(value.intro) && isString(value.convergence) && isString(value.output) &&
+    (!('rationale' in value) || isString(value.rationale)) &&
+    Array.isArray(value.routes) && value.routes.every((route) => isRecord(route) && isString(route.title) && isString(route.description) && (!('technologies' in route) || isStringArray(route.technologies))) &&
+    Array.isArray(value.steps) && value.steps.every((step) => isWorkflowStep(step));
+}
+
+function isWorkflowStep(value: unknown): value is ProjectWorkflowStep {
+  return isRecord(value) && isString(value.title) && isString(value.description) &&
+    (!('reason' in value) || isString(value.reason)) &&
+    (!('technologies' in value) || isStringArray(value.technologies));
 }
 
 function isExperience(value: unknown): value is PortfolioContent['experiences'][number] {

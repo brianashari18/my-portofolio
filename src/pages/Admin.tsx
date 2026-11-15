@@ -7,6 +7,7 @@ import { usePortfolioContent } from '../context/usePortfolioContent';
 import { defaultPortfolioContent } from '../data/portfolioData';
 import type { EvidenceLevel, Experience, GalleryTone, PortfolioContent, Project, ProjectCategory, ProjectGalleryImage, Skill } from '../data/portfolioData';
 import { checkPortfolioAdmin, readPortfolioContent } from '../lib/portfolioRepository';
+import { getDefaultProjectImageFrame, getProjectGalleryImage } from '../lib/resolvePortfolioImage';
 import { PORTFOLIO_IMAGE_ACCEPT, PORTFOLIO_IMAGE_MAX_BYTES, uploadPortfolioImage } from '../lib/imageStorage';
 import { isSupabaseConfigured, supabase } from '../lib/supabase';
 
@@ -557,22 +558,31 @@ interface ProjectForm {
 
 function projectGalleryFrom(project?: Project): ProjectGalleryImage[] {
   if (!project) return [];
-  const images = (project.gallery ?? []).map((image) => ({ ...image }));
+  const seen = new Set<string>();
+  const images = (project.gallery ?? []).filter((image) => {
+    if (!image.src || seen.has(image.src)) return false;
+    seen.add(image.src);
+    return true;
+  }).map((image) => getProjectGalleryImage(project, image));
+  const defaultFrame = getDefaultProjectImageFrame(project.platforms);
   for (const src of [project.heroImage, project.thumbnail]) {
-    if (src && !images.some((image) => image.src === src)) {
-      images.push({ src, alt: `Screenshot from ${project.title}`, frame: 'none' });
+    if (src && !seen.has(src)) {
+      seen.add(src);
+      images.push({ src, alt: `Screenshot from ${project.title}`, ...defaultFrame });
     }
   }
   return images;
 }
 
 function projectToForm(project?: Project): ProjectForm {
+  const fallbackProject = defaultPortfolioContent.projects.find((item) => item.id === project?.id);
   return {
     id: project?.id ?? '', slug: project?.slug ?? '', title: project?.title ?? '', tagline: project?.tagline ?? '', description: project?.description ?? '',
     categories: project?.categories.join('\n') ?? '', platforms: project?.platforms.join('\n') ?? '', technologies: project?.technologies.join('\n') ?? '',
     role: project?.role ?? '', timeline: project?.timeline ?? '', status: project?.status ?? '', featured: project?.featured ?? false,
     galleryTone: project?.galleryTone ?? '',
-    problem: project?.problem ?? '', solution: project?.solution ?? '', features: project?.features?.join('\n') ?? '',
+    problem: project?.problem?.trim() ? project.problem : project?.workflow?.rationale ?? fallbackProject?.problem ?? fallbackProject?.workflow?.rationale ?? '',
+    solution: project?.solution ?? '', features: project?.features?.join('\n') ?? '',
     architectureSummary: project?.architecture?.summary ?? '', architectureDiagram: project?.architecture?.diagram ?? '', architectureCaption: project?.architecture?.caption ?? '',
     engineeringChallenges: project?.engineeringChallenges?.join('\n') ?? '', contributions: project?.contributions?.join('\n') ?? '',
     results: project?.results?.join('\n') ?? '', reflections: project?.reflections?.join('\n') ?? '',
@@ -633,6 +643,7 @@ function ProjectEditor({ project, onApply, onDelete }: { project?: Project; onAp
       ...(selectedCover ? { thumbnail: selectedCover, heroImage: selectedCover } : {}), ...(form.galleryTone ? { galleryTone: form.galleryTone } : {}), ...(galleryImages.length ? { gallery: galleryImages } : {}),
       ...(form.problem.trim() ? { problem: form.problem.trim() } : {}), ...(form.solution.trim() ? { solution: form.solution.trim() } : {}),
       ...(parseLines(form.features).length ? { features: parseLines(form.features) } : {}), ...(architecture ? { architecture } : {}),
+      ...(project?.workflow ? { workflow: project.workflow } : {}),
       ...(parseLines(form.engineeringChallenges).length ? { engineeringChallenges: parseLines(form.engineeringChallenges) } : {}),
       ...(parseLines(form.contributions).length ? { contributions: parseLines(form.contributions) } : {}), ...(parseLines(form.results).length ? { results: parseLines(form.results) } : {}),
       ...(parseLines(form.reflections).length ? { reflections: parseLines(form.reflections) } : {}), ...(links.length ? { links } : {}),
@@ -653,24 +664,25 @@ function ProjectEditor({ project, onApply, onDelete }: { project?: Project; onAp
       <TextField label="Categories · one per line" multiline value={form.categories} onChange={(value) => setField('categories', value)} required hint="Examples: iOS Development, AI / ML Engineering" />
       <TextField label="Platforms · one per line" multiline value={form.platforms} onChange={(value) => setField('platforms', value)} required />
       <TextField className="admin-field--wide" label="Technologies · one per line" multiline value={form.technologies} onChange={(value) => setField('technologies', value)} />
-      <TextField label="Role" value={form.role} onChange={(value) => setField('role', value)} />
+      <TextField label="Role" value={form.role} onChange={(value) => setField('role', value)} hint="Your role in this project, not the project type or team context." />
       <TextField label="Timeline" value={form.timeline} onChange={(value) => setField('timeline', value)} />
       <TextField label="Status" value={form.status} onChange={(value) => setField('status', value)} hint="For example: Prototype, In progress." />
       <label className="admin-checkbox"><input type="checkbox" checked={form.featured} onChange={(event) => setField('featured', event.target.checked)} /><span>Show in selected work</span></label>
-      <TextField className="admin-field--wide" label="Problem and context" multiline value={form.problem} onChange={(value) => setField('problem', value)} />
+      <TextField className="admin-field--wide" label="Why this project exists" multiline value={form.problem} onChange={(value) => setField('problem', value)} hint="Describe the problem, need, or research question that motivated the project." />
       <TextField className="admin-field--wide" label="Approach" multiline value={form.solution} onChange={(value) => setField('solution', value)} />
       <TextField className="admin-field--wide" label="Features · one per line" multiline value={form.features} onChange={(value) => setField('features', value)} />
       <TextField className="admin-field--wide" label="Technical implementation" multiline value={form.architectureSummary} onChange={(value) => setField('architectureSummary', value)} />
       <ImageField label="Architecture diagram URL" folder={`projects/${form.id || form.slug || 'new-project'}`} value={form.architectureDiagram} onChange={(value) => setField('architectureDiagram', value)} applyHint="Apply to draft, then Save & publish." />
       <TextField label="Diagram caption" value={form.architectureCaption} onChange={(value) => setField('architectureCaption', value)} />
       <TextField label="Engineering challenges · one per line" multiline value={form.engineeringChallenges} onChange={(value) => setField('engineeringChallenges', value)} />
-      <TextField label="My contributions · one per line" multiline value={form.contributions} onChange={(value) => setField('contributions', value)} />
+      <TextField label="My contributions · one per line" multiline value={form.contributions} onChange={(value) => setField('contributions', value)} hint="Name the parts you personally implemented or decided; leave out unverified team-level work." />
       <TextField label="Results · one per line" multiline value={form.results} onChange={(value) => setField('results', value)} />
       <TextField label="Reflection · one per line" multiline value={form.reflections} onChange={(value) => setField('reflections', value)} />
       <TextField className="admin-field--wide" label="Links · one per line: label | URL | kind" multiline value={form.links} onChange={(value) => setField('links', value)} hint="Kinds: github, demo, video, other." />
     </div>
     <ProjectGalleryEditor
       projectTitle={form.title}
+      platforms={parseLines(form.platforms)}
       folder={`projects/${form.id || form.slug || 'new-project'}`}
       images={gallery}
       coverSource={coverSource}
@@ -686,8 +698,9 @@ function ProjectEditor({ project, onApply, onDelete }: { project?: Project; onAp
   </form>;
 }
 
-function ProjectGalleryEditor({ projectTitle, folder, images, coverSource, tone, onChange, onCoverChange, onToneChange, isUploading, onUploadingChange }: {
+function ProjectGalleryEditor({ projectTitle, platforms, folder, images, coverSource, tone, onChange, onCoverChange, onToneChange, isUploading, onUploadingChange }: {
   projectTitle: string;
+  platforms: string[];
   folder: string;
   images: ProjectGalleryImage[];
   coverSource: string;
@@ -700,6 +713,7 @@ function ProjectGalleryEditor({ projectTitle, folder, images, coverSource, tone,
 }) {
   const [notice, setNotice] = useState('');
   const [errorMessage, setErrorMessage] = useState('');
+  const defaultFrame = getDefaultProjectImageFrame(platforms);
 
   function updateImage(index: number, changes: Partial<ProjectGalleryImage>) {
     onChange(images.map((image, itemIndex) => itemIndex === index ? { ...image, ...changes } : image));
@@ -724,8 +738,8 @@ function ProjectGalleryEditor({ projectTitle, folder, images, coverSource, tone,
   }
 
   function addUrlRow() {
-    onChange([...images, { src: '', alt: `Screenshot from ${projectTitle || 'this project'}`, frame: 'phone' }]);
-    setNotice('Paste an image URL in the new row. New images start in the phone frame.');
+    onChange([...images, { src: '', alt: `Screenshot from ${projectTitle || 'this project'}`, ...defaultFrame }]);
+    setNotice('Paste an image URL in the new row. Its starting frame follows the selected platform; you can change it for each screenshot.');
     setErrorMessage('');
   }
 
@@ -738,7 +752,7 @@ function ProjectGalleryEditor({ projectTitle, folder, images, coverSource, tone,
     try {
       for (const file of files) {
         const src = await uploadPortfolioImage(file, folder);
-        uploaded.push({ src, alt: `Screenshot from ${projectTitle || 'this project'}`, frame: 'phone' });
+        uploaded.push({ src, alt: `Screenshot from ${projectTitle || 'this project'}`, ...defaultFrame });
       }
       onChange([...images, ...uploaded]);
       if (!coverSource && uploaded[0]) onCoverChange(uploaded[0].src);
@@ -806,7 +820,7 @@ function ProjectGalleryEditor({ projectTitle, folder, images, coverSource, tone,
 
   return <fieldset className="admin-gallery" disabled={isUploading}>
     <legend>Project screenshots</legend>
-    <p className="admin-gallery__intro">Choose a cover and arrange the remaining screenshots in the order someone would use the app. Name each screen and describe the feature it shows.</p>
+    <p className="admin-gallery__intro">Choose a cover, then order screenshots as a walkthrough. Name each screen, describe what it shows, and choose a frame for that screenshot.</p>
     <div className="admin-gallery__settings">
       <label className="admin-field">
         <span>Gallery backdrop</span>
@@ -824,7 +838,7 @@ function ProjectGalleryEditor({ projectTitle, folder, images, coverSource, tone,
         <label className="admin-gallery__upload">
           <span>{isUploading ? 'Uploading screenshots…' : 'Upload screenshots'}</span>
           <input type="file" accept={PORTFOLIO_IMAGE_ACCEPT} multiple onChange={uploadFiles} disabled={isUploading} />
-          <small>Select several files at once · PNG, JPEG, WebP, AVIF, or HEIC/HEIF · HEIC converts to JPEG · up to {PORTFOLIO_IMAGE_MAX_BYTES / 1024 / 1024} MB each. Uploaded files are public.</small>
+        <small>Select several files at once · PNG, JPEG, WebP, AVIF, or HEIC/HEIF · HEIC converts to JPEG · up to {PORTFOLIO_IMAGE_MAX_BYTES / 1024 / 1024} MB each. Frame defaults follow the selected platform and can be changed per screenshot.</small>
         </label>
         <div className="admin-gallery__paste">
           <span>Paste screenshot</span>
@@ -837,7 +851,8 @@ function ProjectGalleryEditor({ projectTitle, folder, images, coverSource, tone,
     {images.length > 0 && <ol className="admin-gallery__list" aria-label="Project screenshots in display order">
       {images.map((image, index) => <li className="admin-gallery-item" key={`${image.src || 'new'}-${index}`}>
         <div className="admin-gallery-item__preview" data-gallery-tone={tone || 'surface'}>
-          {image.src ? <ProjectArtwork image={image.src === coverSource ? image : { ...image, frame: 'none' }} decorative /> : <span>Screenshot preview</span>}
+          <span className="admin-gallery-item__sequence">Screen {String(index + 1).padStart(2, '0')} of {String(images.length).padStart(2, '0')}</span>
+          {image.src ? <ProjectArtwork image={image} decorative /> : <span>Screenshot preview</span>}
         </div>
         <div className="admin-gallery-item__content">
           <div className="admin-gallery-item__toolbar">
@@ -854,19 +869,21 @@ function ProjectGalleryEditor({ projectTitle, folder, images, coverSource, tone,
             <TextField label="Alt text" value={image.alt} onChange={(alt) => updateImage(index, { alt })} required={Boolean(image.src)} hint="Describe what is visible on the screen." />
             <TextField label="Caption" value={image.caption ?? ''} onChange={(caption) => updateImage(index, { caption })} hint="Explain what the screenshot demonstrates." />
             <label className="admin-field">
-              <span>Frame when used as cover</span>
-              <select value={image.frame === 'phone' ? image.frameStyle ?? 'phone' : 'none'} onChange={(event) => {
+              <span>Presentation frame</span>
+              <select value={image.frame === 'phone' ? image.frameStyle ?? 'phone' : image.frame ?? 'none'} onChange={(event) => {
                 const style = event.currentTarget.value;
                 updateImage(index, {
-                  frame: style === 'none' ? 'none' : 'phone',
+                  frame: style === 'ios' || style === 'android' ? 'phone' : style as ProjectGalleryImage['frame'],
                   frameStyle: style === 'ios' || style === 'android' ? style : undefined,
                 });
               }}>
                 <option value="none">Original image</option>
-                <option value="phone">Minimal phone frame</option>
+                <option value="phone">Neutral phone frame</option>
                 <option value="ios">iOS frame</option>
                 <option value="android">Android frame</option>
+                <option value="laptop">Laptop / web frame</option>
               </select>
+              <small>Applies wherever this screenshot appears, including the cover, walkthrough, and project card.</small>
             </label>
           </div>
         </div>

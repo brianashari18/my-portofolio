@@ -86,7 +86,7 @@
 .admin-gallery__paste small { color: var(--muted); font-size: 10px; font-weight: 400; line-height: 1.45; }
 .admin-gallery__list { display: grid; gap: 14px; margin: 0; padding: 0; list-style: none; counter-reset: gallery; }
 .admin-gallery-item { display: grid; grid-template-columns: minmax(110px, 150px) minmax(0, 1fr); gap: 16px; min-width: 0; padding: 14px; border: 1px solid var(--line); background: var(--admin-card); counter-increment: gallery; }
-.admin-gallery-item__preview { display: grid; min-height: 186px; place-items: center; align-self: start; overflow: hidden; border-radius: 8px; background: var(--paper-deep); color: var(--muted); font-size: 10px; }
+.admin-gallery-item__preview { position: relative; display: grid; min-height: 186px; place-items: center; align-self: start; overflow: hidden; border-radius: 8px; background: var(--paper-deep); color: var(--muted); font-size: 10px; }
 .admin-gallery-item__preview[data-gallery-tone="paper"] { background: var(--paper); }
 .admin-gallery-item__preview[data-gallery-tone="blush"] { background: var(--blush); }
 .admin-gallery-item__preview[data-gallery-tone="surface"] { background: var(--surface); }
@@ -94,6 +94,8 @@
 .admin-gallery-item__preview[data-gallery-tone="ink"] { background: var(--night); }
 .admin-gallery-item__preview > img { width: auto; max-width: 100%; max-height: 180px; object-fit: contain; }
 .admin-gallery-item__preview .nova-device-frame { width: auto; height: min(180px, 100%); max-width: 100%; }
+.admin-gallery-item__preview .nova-laptop-frame { width: 94%; max-width: 250px; }
+.admin-gallery-item__sequence { position: absolute; z-index: 3; top: 7px; left: 7px; padding: 4px 6px; border-radius: 999px; background: color-mix(in srgb, var(--admin-surface) 92%, transparent); color: var(--ink); font-size: 8px; font-weight: 700; letter-spacing: .05em; line-height: 1; text-transform: uppercase; }
 .admin-gallery-item__content { display: grid; min-width: 0; gap: 12px; }
 .admin-gallery-item__toolbar { display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 8px 16px; padding-bottom: 9px; border-bottom: 1px solid var(--line); }
 .admin-gallery-item__toolbar .admin-checkbox { min-height: 40px; }
@@ -151,4 +153,5 @@
   .admin-gallery-item { grid-template-columns: 1fr; padding: 10px; }
   .admin-gallery-item__preview { min-height: 180px; }
   .admin-gallery-item__preview .nova-device-frame { height: 170px; }
+  .admin-gallery-item__preview .nova-laptop-frame { width: min(92%, 300px); }
 }

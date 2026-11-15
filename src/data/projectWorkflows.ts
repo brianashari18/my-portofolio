@@ -1,0 +1,228 @@
+import type { ProjectWorkflow } from './portfolioData';
+
+/** Detailed, project-specific workflows for entries whose content records do not yet include one. */
+export const supplementaryProjectWorkflows: Record<string, ProjectWorkflow> = {
+  foamy: {
+    rationale: 'Product details and routine observations can be difficult to compare and keep together over time.',
+    intro: 'Foamy connects product-label capture and product lookup with comparison and routine-journaling flows.',
+    routes: [
+      { title: 'Product label', description: 'Capture a product label so Vision can recognize its text.', technologies: ['Vision'] },
+      { title: 'Product discovery', description: 'Search product and ingredient information through the app’s lookup services.', technologies: ['URLSession'] },
+    ],
+    convergence: 'Recognized and searched product information can be kept alongside personal product and routine records.',
+    steps: [
+      { title: 'Capture and read a label', description: 'Use the camera and Vision text recognition to make label content searchable.' },
+      { title: 'Look up product details', description: 'Resolve a product and retrieve its available ingredient information.' },
+      { title: 'Compare and track products', description: 'Keep products and comparison history in the app’s SwiftData-backed records.' },
+      { title: 'Record a skincare journey', description: 'Add routine notes, milestones, entries, and progress photos.' },
+    ],
+    output: 'Product and ingredient details alongside saved comparisons and skincare-journal records.',
+  },
+  hichef: {
+    rationale: 'Intermediate home cooks can struggle to follow online recipes when instructions are complex or cluttered, and manually handling a phone is inconvenient when cooking leaves their hands occupied.',
+    intro: 'HiChef turns a recipe page into a locally saved recipe with smaller, voice-guided cooking steps.',
+    routes: [{ title: 'Recipe webpage', description: 'Import a recipe from a URL and extract its relevant page content.' }],
+    convergence: 'The extracted recipe becomes structured ingredients and instructions that can be revisited in the app.',
+    steps: [
+      { title: 'Import a recipe', description: 'Extract recipe information from a webpage and structure the result with Apple Foundation Models.', technologies: ['Foundation Models'] },
+      { title: 'Save recipe details', description: 'Store ingredients and instructions in the local SwiftData recipe library.', technologies: ['SwiftData'] },
+      { title: 'Break down instructions', description: 'Use NaturalLanguage processing to refine instructions into smaller steps.', technologies: ['NaturalLanguage'] },
+      { title: 'Follow the cooking flow', description: 'Navigate instructions with Indonesian speech recognition and spoken playback.', technologies: ['Speech', 'AVFoundation'] },
+    ],
+    output: 'A saved recipe that can be followed through a guided, hands-free cooking flow.',
+  },
+  muncakin: {
+    rationale: 'Generic packing lists do not account for different mountain trips, leaving preparation scattered and easy to overlook.',
+    intro: 'Muncakin builds an editable checklist from trip details and a bundled gear catalog.',
+    routes: [
+      { title: 'Trip details', description: 'Set up the mountain type, trip duration, and group size.' },
+      { title: 'Gear catalog', description: 'Use the bundled catalog to select standard and mountain-conditional items.' },
+    ],
+    convergence: 'Trip details and selected gear become a checklist sized for the planned outing.',
+    steps: [
+      { title: 'Select relevant gear', description: 'Filter standard and conditional items using the selected mountain type.' },
+      { title: 'Calculate quantities', description: 'Adapt item quantities to trip duration and party size.' },
+      { title: 'Review and edit the list', description: 'Mark items packed and add, edit, or remove checklist entries.' },
+      { title: 'Group the checklist', description: 'Arrange items by function or gear zone, depending on how the packing view is used.' },
+    ],
+    output: 'A trip-specific packing checklist that can be reviewed and edited before a hike.',
+  },
+  'step-up': {
+    rationale: 'Desk workers and students may spend long stretches seated and find it difficult to build a consistent movement habit.',
+    intro: 'Step Up combines guided stretch plans with timed movement sessions.',
+    routes: [{ title: 'Stretch plan', description: 'Choose a guided movement plan made up of exercise steps.' }],
+    convergence: 'A selected plan becomes a timed session whose active state can be surfaced outside the app.',
+    steps: [
+      { title: 'Choose a movement plan', description: 'Select a guided plan and move through its exercise steps.' },
+      { title: 'Run a timed session', description: 'Start and follow an exercise session in the app.' },
+      { title: 'Surface the active session', description: 'Show timer state through a Live Activity or home-screen widget.', technologies: ['ActivityKit', 'WidgetKit'] },
+    ],
+    output: 'A guided stretch session with a timer surface on supported iOS interfaces.',
+  },
+  'face-lock': {
+    rationale: 'The project brings face-based verification together with access logs and monitoring clients across mobile and web repositories.',
+    intro: 'The repositories separate face matching, API handling, and the interfaces used to review access activity.',
+    routes: [
+      { title: 'Recognition service', description: 'A Python service uses InsightFace and ArcFace for face-detection and embedding-based verification.', technologies: ['Python', 'InsightFace', 'ArcFace'] },
+      { title: 'Monitoring clients', description: 'Flutter and React clients cover mobile monitoring and a web dashboard.', technologies: ['Flutter', 'React'] },
+    ],
+    convergence: 'Recognition results and access activity pass through a separate Go API and MySQL-backed service.',
+    steps: [
+      { title: 'Process a face input', description: 'The recognition service detects a face and compares its embedding for verification.' },
+      { title: 'Record access activity', description: 'The Go/Gin API handles access-log and user-management flows.', technologies: ['Go', 'Gin', 'MySQL'] },
+      { title: 'Review activity in client apps', description: 'Mobile and web interfaces provide access monitoring, user views, and alert-related screens.' },
+    ],
+    output: 'Access activity represented in mobile and web monitoring interfaces; production validation is not established by the repository record.',
+  },
+  flicknfit: {
+    rationale: 'The project groups fashion-product discovery, saved wardrobe items, and scan-related screens into one mobile experience.',
+    intro: 'The mobile repository contains browsing, wardrobe, scan-history, and recommendation flows; its sample data means live-service coverage is not confirmed.',
+    routes: [
+      { title: 'Mobile app screens', description: 'The Flutter source includes product and brand browsing, saved items, wardrobe, scans, and style recommendations.' },
+      { title: 'Go API', description: 'The backend source exposes account, catalog, and review API areas.', technologies: ['Go', 'Fiber', 'GORM', 'MySQL'] },
+    ],
+    convergence: 'These repository areas describe a product-discovery journey, while the connection status of each screen remains unconfirmed.',
+    steps: [
+      { title: 'Browse products and brands', description: 'Explore product categories and brand listings in the mobile client.' },
+      { title: 'Save wardrobe items', description: 'Use the saved-item and wardrobe screens to keep selected products together.' },
+      { title: 'Review scan history', description: 'Open the scan-history and style-recommendation views present in the client source.' },
+      { title: 'Use account and catalog APIs', description: 'The Go service contains account, product-catalog, and review API flows.' },
+    ],
+    output: 'A set of product-discovery and wardrobe screens with related API source; live connections are not confirmed.',
+  },
+  fitspace: {
+    rationale: 'The project brings sports-venue discovery, field schedules, bookings, and management flows into web and mobile clients.',
+    intro: 'FitSpace combines venue browsing across clients with a Python service that ranks venue recommendations by geographic distance.',
+    routes: [
+      { title: 'Web and mobile clients', description: 'React and Flutter source include venue, field, booking, review, and venue-management screens.', technologies: ['React', 'Flutter'] },
+      { title: 'Venue recommendation service', description: 'A Python/Flask service fetches venue data and calculates geographic distance.', technologies: ['Python', 'Flask', 'geopy'] },
+    ],
+    convergence: 'Venue suggestions lead into detail and schedule screens, then into booking-related client flows.',
+    steps: [
+      { title: 'Find venues and fields', description: 'Browse nearby or recommended venues across the web and mobile clients.' },
+      { title: 'Review schedules and details', description: 'Inspect venue information and field availability.' },
+      { title: 'Continue to booking screens', description: 'Create or review bookings and view the payment-confirmation screens included in the clients.' },
+      { title: 'Manage venue information', description: 'Use the venue-management and review flows included in the client source.' },
+    ],
+    output: 'A cross-platform venue-discovery and booking journey; the source record does not establish a live release.',
+  },
+  stocarbon: {
+    rationale: 'The project models carbon-plot setup and review through separate seller and verifier workflows.',
+    intro: 'StoCarbon groups plot management, verification queues, and related records in a Flutter application.',
+    routes: [
+      { title: 'Seller workspace', description: 'Manage plots and the zones associated with them.' },
+      { title: 'Verifier workspace', description: 'Review plots through verification-queue screens.' },
+    ],
+    convergence: 'Seller and verifier work is connected through plot, region, team, and transaction records.',
+    steps: [
+      { title: 'Create and manage plots', description: 'Use the seller flow to create carbon plots and organize their zones.' },
+      { title: 'Review verification queue', description: 'Use the verifier flow to inspect plots submitted for review.' },
+      { title: 'Review related records', description: 'Browse region, team, and transaction-history views.' },
+    ],
+    output: 'Seller and verifier screens for plot management, verification review, and related records.',
+  },
+  'music-information-retrieval-ta': {
+    rationale: 'The study addresses the lack of a frame-level chord-recognition baseline for Indonesian pop. Sparse annotations, class imbalance, and vocals or percussion in the mix make chord extraction difficult and can cause larger sequence models to overfit.',
+    intro: 'A curated chord dataset supplies the reference labels. The audio pipeline transforms each known chord segment into a sequence of harmonic features for classification.',
+    dataset: {
+      title: 'Curated Indonesian pop corpus',
+      summary: 'A manually annotated corpus spanning Indonesian pop song sections. Each segment maps to a chord root and triad quality: 12 pitch classes × major/minor = 24 classes.',
+      stats: [
+        { value: '50', label: 'songs' },
+        { value: '~3.2 h', label: 'audio' },
+        { value: '4,561', label: 'chord segments' },
+        { value: '24', label: 'major/minor triads' },
+      ],
+      note: 'Tracks were selected around one stable tonal center, excluding significant key modulations. The model receives ground-truth segment boundaries, so it classifies chords in known segments rather than detecting chord changes. Audio files and annotation rows are not attached to this page.',
+    },
+    routes: [
+      { title: 'Reference labels', description: 'Chord and timing annotations are cleaned, mapped to each song section, and aligned to the audio timeline.', technologies: ['Python', 'Chord labels', 'Time alignment'] },
+      { title: 'Audio inputs', description: 'Raw recordings and Demucs-separated stems are prepared as alternative model inputs, including no-vocal and additive instrument mixes.', technologies: ['Demucs', 'librosa'] },
+    ],
+    convergence: 'Aligned chord labels provide ground truth for features extracted from each audio configuration; the resulting sequences feed the chord classifier.',
+    steps: [
+      { title: 'Collect and normalize chord labels', description: 'Collect chord sheets, analyze key and harmonic context, clean chord spellings, and map annotations to sections such as intro, verse, pre-chorus, chorus, interlude, bridge, and outro.', reason: 'Consistent section and chord labels create a reference set across the song structures represented in Indonesian pop.', technologies: ['Python', 'Chord data'] },
+      { title: 'Build the time-aligned ground truth', description: 'Clean chord timestamps and merge them with the section-mapped chord sequence. Each annotated segment is paired with its corresponding audio interval.', reason: 'The research isolates chord classification from boundary detection by supplying the ground-truth segment boundaries during training and evaluation.', technologies: ['Time alignment'] },
+      { title: 'Separate instrumental mixtures', description: 'Use pretrained Demucs to split recordings into vocals, drums, bass, and other stems. Compare raw audio with no-vocal, individual-instrument, and additive guitar, piano, and bass inputs.', reason: 'The ablation tests whether reducing vocal interference and emphasizing harmonic instruments improves chord features.', technologies: ['Demucs'] },
+      { title: 'Suppress transients and extract features', description: 'Apply HPSS to retain the harmonic component, then compute Constant-Q Chromagram and MFCC features. Pool the median and standard deviation over each known chord segment, producing 24-dimensional chroma and 26-dimensional MFCC vectors.', reason: 'Median pooling reduces the effect of brief outliers; chroma represents pitch classes, while MFCC provides a comparison based on spectral timbre.', technologies: ['HPSS', 'CQT', 'librosa', 'Chromagram', 'MFCC'] },
+      { title: 'Train the sequence classifier', description: 'Feed chromagram sequences to a two-layer unidirectional LSTM with 128 hidden units per layer and 0.3 dropout. Train with AdamW and Focal Loss (γ = 2) to focus learning on harder, under-represented chord classes.', reason: 'Experiments found higher-capacity BiLSTM and Transformer models prone to overfitting on the small corpus, so the final model keeps sequential context with a more constrained architecture.', technologies: ['PyTorch', 'LSTM', 'AdamW', 'Focal Loss'] },
+      { title: 'Compare and evaluate', description: 'Run ablations across feature sets, model families, and stem combinations with shuffled 5-fold KFold cross-validation over whole-song sequences. Each fold trains on 40 songs and validates on 10; compare validation accuracy with mir_eval’s majmin chord-quality metric.', reason: 'Keeping each song within one fold avoids placing chord segments from the same track in both training and validation. The best input differs by metric: guitar+piano leads in mean validation accuracy, while guitar+piano+bass leads in majmin chord quality.', technologies: ['5-fold KFold', 'mir_eval'] },
+    ],
+    output: 'A low-resource baseline for classifying major/minor triad chords in known audio segments. It supports harmonic-function analysis in tonal context but does not predict Roman numerals or locate chord boundaries.',
+  },
+  'e-wise': {
+    rationale: 'E-Wise aims to reduce electronic waste by bringing disposal guidance, collection-point discovery, pickup requests, and reward tracking into one mobile experience.',
+    intro: 'The app connects e-waste education and e-bank discovery with a pickup and WisePoint journey.',
+    routes: [
+      { title: 'Learn and find an e-bank', description: 'Read e-waste information, search collection points, and use location to surface nearby e-banks.', technologies: ['FlutterMap', 'Geolocator', 'Cloud Firestore'] },
+      { title: 'Request a pickup', description: 'Provide waste size, pickup address, schedule, and notes for an e-waste handoff.', technologies: ['Cloud Firestore'] },
+      { title: 'WisePoint and support', description: 'Review point balances and history, continue through cash or e-wallet redemption, or contact an admin through chat.', technologies: ['Firebase Authentication', 'Cloud Firestore'] },
+    ],
+    convergence: 'Education, location data, and pickup details help users move from learning about disposal to arranging a handoff and reviewing related points.',
+    steps: [
+      { title: 'Learn about e-waste', description: 'Browse educational content about electronic waste and responsible disposal.' },
+      { title: 'Find a collection point', description: 'Search e-banks and use the device location to identify nearby options.' },
+      { title: 'Prepare a pickup request', description: 'Enter waste size, location, schedule, and notes; the app associates the request with an e-bank.' },
+      { title: 'Follow the handoff and points', description: 'Review pickup status, point balance, history, and redemption options.' },
+    ],
+    output: 'An e-waste journey that connects education, collection discovery, pickup requests, status views, and WisePoint tracking.',
+  },
+  'chat-app': {
+    rationale: 'This early project used a familiar chat app as a practical way to learn Flutter mobile development.',
+    intro: 'A small conversation experience provided the project structure for practicing Flutter.',
+    routes: [{ title: 'Conversation', description: 'Open a chat in the Flutter application.' }],
+    convergence: 'The chat experience gives the learning project a concrete mobile-app flow to build.',
+    steps: [
+      { title: 'Open a conversation', description: 'Choose a chat thread in the application.' },
+      { title: 'Compose a message', description: 'Write and send a message through the chat flow.' },
+      { title: 'Review the conversation', description: 'Return to the thread to read its messages.' },
+    ],
+    output: 'A small Flutter chat app built as a hands-on mobile development exercise.',
+  },
+  'expense-tracker': {
+    rationale: 'This early project used daily expense tracking as a practical way to learn Flutter app development.',
+    intro: 'The learning exercise paired basic expense entry with a simple review flow.',
+    routes: [{ title: 'Daily expense', description: 'Start with an expense to add to the personal record.' }],
+    convergence: 'Recorded expenses become the data used in the review screen.',
+    steps: [
+      { title: 'Record an expense', description: 'Add a daily expense to the app.' },
+      { title: 'Review expense records', description: 'Return to the app to review the expenses that have been recorded.' },
+    ],
+    output: 'A small Flutter expense app built as a hands-on learning exercise.',
+  },
+  'meals-app': {
+    rationale: 'This early project used recipe discovery and meal planning as a practical way to learn Flutter app development.',
+    intro: 'The learning exercise centered on discovering recipes and organizing selected meals into a plan.',
+    routes: [{ title: 'Recipe discovery', description: 'Browse recipes available in the app.' }],
+    convergence: 'Selected recipes become the basis for a meal plan.',
+    steps: [
+      { title: 'Discover recipes', description: 'Browse the recipe collection.' },
+      { title: 'Choose meals', description: 'Select recipes to include in a plan.' },
+      { title: 'Review the meal plan', description: 'See the chosen recipes together in the plan.' },
+    ],
+    output: 'A small Flutter meals app built as a hands-on learning exercise.',
+  },
+  'quiz-app': {
+    rationale: 'This early project used a simple quiz experience as a practical way to learn Flutter app development.',
+    intro: 'The learning exercise follows a focused quiz session from start to finish.',
+    routes: [{ title: 'Quiz session', description: 'Start a quiz in the Flutter application.' }],
+    convergence: 'A quiz session presents the questions for the user to answer.',
+    steps: [
+      { title: 'Start a quiz', description: 'Open a quiz session.' },
+      { title: 'Answer questions', description: 'Work through the questions in the quiz.' },
+      { title: 'Finish the session', description: 'Complete the current quiz flow.' },
+    ],
+    output: 'A small Flutter quiz app built as a hands-on learning exercise.',
+  },
+  'role-dice-app': {
+    rationale: 'This early project used a role-playing dice roller as a compact way to learn Flutter app development.',
+    intro: 'The learning exercise centers on requesting a simulated roll and viewing its result.',
+    routes: [{ title: 'Dice roll', description: 'Start from the dice-rolling action in the app.' }],
+    convergence: 'The roll action produces a result to use during a role-playing session.',
+    steps: [
+      { title: 'Roll the dice', description: 'Ask the app to simulate a dice roll.' },
+      { title: 'Read the result', description: 'Use the displayed value in the role-playing game.' },
+    ],
+    output: 'A small Flutter dice-rolling app built as a hands-on learning exercise.',
+  },
+};
