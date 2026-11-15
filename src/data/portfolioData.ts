@@ -141,6 +141,22 @@ export interface PersonalInfo {
   profileImage: string;
 }
 
+export interface EducationRecord {
+  institution: string;
+  qualification: string;
+  location: string;
+  timeline: string;
+  details: string[];
+}
+
+export interface AwardRecord {
+  title: string;
+  distinction: string;
+  project: string;
+  date: string;
+  href?: string;
+}
+
 export interface PortfolioContent {
   personalInfo: PersonalInfo;
   projects: Project[];
@@ -158,6 +174,61 @@ export const personalInfo: PersonalInfo = {
   linkedin: 'https://www.linkedin.com/in/brian-anashari-099744151/',
   profileImage,
 };
+
+export const educationRecords: EducationRecord[] = [
+  {
+    institution: 'Apple Developer Academy @ Infinite Learning',
+    qualification: 'Learner',
+    location: 'Batam, Indonesia',
+    timeline: 'Mar 2026 – Present',
+    details: [
+      'Applied Challenge-Based Learning to investigate user needs and develop practical solutions.',
+      'Used Apple Human Interface Guidelines, product research, and usability testing to guide iOS interface decisions.',
+      'Built native iOS features with Swift, SwiftUI, and Apple frameworks through hands-on Academy work.',
+    ],
+  },
+  {
+    institution: 'Telkom University',
+    qualification: 'Bachelor of Computer Science',
+    location: 'Bandung, Indonesia',
+    timeline: 'Sep 2022 – Aug 2026',
+    details: [
+      'Major in Informatics',
+      'GPA: 3.95/4.00',
+      'Relevant coursework: Algorithms and Programming; Data Structures; Object-Oriented Programming; Platform-Based Application Development; Machine Learning',
+    ],
+  },
+];
+
+export const awardRecords: AwardRecord[] = [
+  {
+    title: 'Data Slayer 3.0',
+    distinction: '4th in the preliminary round out of 163 teams; reached the Top 4 in the final',
+    project: 'Team belikopidulu · Spatiotemporal Drowsiness Detection',
+    date: 'Dec 2025',
+    href: '/projects/spatiotemporal-drowsiness-detection',
+  },
+  {
+    title: 'IEEE YESIST12 2025 Grand Finale',
+    distinction: 'Maker Fair Track Finalist',
+    project: 'StoCarbon',
+    date: 'Aug 2025',
+    href: '/projects/stocarbon',
+  },
+  {
+    title: 'IEEE YESIST12 2025 Grand Finale',
+    distinction: 'Innovation Challenge Track Finalist',
+    project: 'Koomu Glove',
+    date: 'Aug 2025',
+  },
+  {
+    title: 'IEEE YESIST12 2024 Grand Finale',
+    distinction: 'Maker Fair Track Finalist',
+    project: 'E-Wise',
+    date: 'Sep 2024',
+    href: '/projects/e-wise',
+  },
+];
 
 const projectRecords: Project[] = [
   {
