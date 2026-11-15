@@ -2,6 +2,7 @@ import { Link } from 'react-router-dom';
 import ActionLink from '../components/ActionLink';
 import SectionHeading from '../components/SectionHeading';
 import { usePortfolioContent } from '../context/usePortfolioContent';
+import { awardRecords, educationRecords } from '../data/portfolioData';
 import { resolvePortfolioImage } from '../lib/resolvePortfolioImage';
 
 export default function About() {
@@ -26,6 +27,45 @@ export default function About() {
         </div>
       </div>
     </header>
+    <div className="nova-about-records">
+      <section aria-label="Education">
+        <SectionHeading title="Education" />
+        <ul className="nova-about-record-list nova-about-education-list">
+          {educationRecords.map((record) => <li key={record.institution}>
+            <div className="nova-about-record-heading">
+              <div>
+                <h3>{record.institution}</h3>
+                <p className="nova-about-record-subtitle">{record.qualification}</p>
+              </div>
+              <div className="nova-about-record-meta">
+                <span>{record.location}</span>
+                <time>{record.timeline}</time>
+              </div>
+            </div>
+            <ul className="nova-about-record-details">
+              {record.details.map((detail) => <li key={detail}>{detail}</li>)}
+            </ul>
+          </li>)}
+        </ul>
+      </section>
+      <section aria-label="Awards and recognition">
+        <SectionHeading title="Awards & Recognition" />
+        <ul className="nova-about-record-list nova-about-award-list">
+          {awardRecords.map((award) => <li key={`${award.title}-${award.project}`}>
+            <div className="nova-about-record-heading">
+              <div>
+                <h3>{award.title}</h3>
+                <p className="nova-about-record-subtitle">{award.distinction}</p>
+                <p className="nova-about-record-project">{award.href
+                  ? <Link to={award.href}>{award.project}</Link>
+                  : award.project}</p>
+              </div>
+              <time className="nova-about-record-meta">{award.date}</time>
+            </div>
+          </li>)}
+        </ul>
+      </section>
+    </div>
     {skillCategories.length > 0 && <section id="skills" className="nova-about-skills" tabIndex={-1} aria-label="Skills and evidence">
       <SectionHeading title="Skills and evidence"><p>Open a project or experience to see where each skill was used.</p></SectionHeading>
       <div className="nova-skill-grid">
