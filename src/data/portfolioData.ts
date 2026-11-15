@@ -27,6 +27,7 @@ import mabrurPrayerDetailImage from '../assets/images/projects/mabrur/prayer-det
 import stoCarbonVerifierImage from '../assets/images/projects/stocarbon/verifier-dashboard.webp';
 import stoCarbonSplashImage from '../assets/images/projects/stocarbon/splash.webp';
 import stoCarbonZoneCreationImage from '../assets/images/projects/stocarbon/zone-creation.jpg';
+import faceLockEnrollmentImage from '../assets/images/projects/face-lock/face-enrollment.png';
 import { supplementaryProjectWorkflows } from './projectWorkflows';
 
 export type ProjectCategory = 'iOS Development' | 'Flutter Development' | 'AI / ML Engineering' | 'Backend Engineering' | 'Software Engineering';
@@ -432,6 +433,9 @@ const projectRecords: Project[] = [
       'Built the Python face-recognition service using InsightFace and ArcFace for face detection and embedding-based verification.',
       'Implemented the Go/Gin API and MySQL-backed access-log and user-management flows, including WebSocket and Firebase Cloud Messaging support.',
       'Developed the Flutter monitoring client and React dashboard for access activity, authorization, and alert-related views.',
+    ],
+    gallery: [
+      { src: faceLockEnrollmentImage, alt: 'Face Lock face-enrollment screen showing an on-screen camera preview and guidance for positioning a face before capture.', title: 'Face enrollment', caption: 'The enrollment flow guides a user to position their face clearly before capture for access verification.', frame: 'phone', frameStyle: 'android' },
     ],
     links: [
       { label: 'Face recognition service', href: 'https://github.com/brianashari18/face_lock_ai', kind: 'github' },
