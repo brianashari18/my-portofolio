@@ -29,6 +29,38 @@ import faceLockLogDetailImage from '../assets/images/projects/face-lock/log-deta
 import faceLockDashboardImage from '../assets/images/projects/face-lock/dashboard-redacted.png';
 import { supplementaryProjectWorkflows } from './projectWorkflows';
 
+/** Locally bundled screenshots that have been reviewed for the portfolio galleries. */
+export const portfolioProjectImageAssets: Record<string, string> = {
+  'role-dice/roll-dice-intro.webp': roleDiceIntroImage,
+  'quiz-app/quiz-intro.png': quizIntroImage,
+  'quiz-app/quiz-question.png': quizQuestionImage,
+  'chat-app/login.png': chatAppLoginImage,
+  'expense-tracker/overview.webp': expenseTrackerOverviewImage,
+  'meals-app/categories.webp': mealsCategoriesImage,
+  'meals-app/recipe-list.webp': mealsRecipeListImage,
+  'meals-app/recipe-detail.webp': mealsRecipeDetailImage,
+  'e-wise/home-dashboard.jpg': eWiseHomeImage,
+  'e-wise/wise-points.webp': eWisePointsImage,
+  'e-wise/splash.png': eWiseSplashImage,
+  'e-wise/map-order-status.webp': eWiseMapImage,
+  'fitspace/venue-discovery.png': fitSpaceDiscoveryImage,
+  'fitspace/booking-schedule.png': fitSpaceScheduleImage,
+  'fitspace/splash.png': fitSpaceSplashImage,
+  'flicknfit/wardrobe-outfit.webp': flickNFitWardrobeImage,
+  'flicknfit/splash.webp': flickNFitSplashImage,
+  'mabrur/login.webp': mabrurLoginImage,
+  'mabrur/prayer-home.webp': mabrurPrayerHomeImage,
+  'mabrur/prayer-list.webp': mabrurPrayerListImage,
+  'mabrur/prayer-detail.webp': mabrurPrayerDetailImage,
+  'stocarbon/verifier-dashboard.webp': stoCarbonVerifierImage,
+  'stocarbon/zone-creation.jpg': stoCarbonZoneCreationImage,
+  'stocarbon/splash.webp': stoCarbonSplashImage,
+  'face-lock/face-enrollment.png': faceLockEnrollmentImage,
+  'face-lock/access-logs-redacted.png': faceLockAccessLogsImage,
+  'face-lock/log-detail-redacted.png': faceLockLogDetailImage,
+  'face-lock/dashboard-redacted.png': faceLockDashboardImage,
+};
+
 const publicProjectImage = (path: string) => `${import.meta.env.BASE_URL}project-gallery/${path}`;
 const publicStorageImage = (project: string, filename: string) =>
   `https://fqrzioigybkocckhbcwv.supabase.co/storage/v1/object/public/portfolio-images/projects/${project}/${filename}`;
@@ -42,7 +74,7 @@ export interface ProjectGalleryImage {
   title?: string;
   caption?: string;
   /** Optional presentation frame used in project covers and gallery previews. */
-  frame?: 'phone' | 'laptop' | 'none';
+  frame?: 'phone' | 'laptop' | 'browser' | 'none';
   /** Older readers can still render a generic phone frame. */
   frameStyle?: 'ios' | 'android';
 }
@@ -277,7 +309,7 @@ const projectRecords: Project[] = [
     id: 'foamy', slug: 'foamy', title: 'Foamy (MySkin)', tagline: 'Product scanning, ingredient details, and skin tracking',
     description: 'An iOS skincare companion that reads product labels with camera-based OCR, brings product and ingredient information together, and keeps comparisons and skin-progress notes in one place. If direct product lookup cannot resolve scanned text, the connected API can try a DeepSeek LLM fallback.',
     categories: ['iOS Development'], platforms: ['iOS'], technologies: ['SwiftUI', 'SwiftData', 'AVFoundation', 'Vision', 'URLSession', 'Combine', 'REST API', 'DeepSeek (server-side fallback)'],
-    role: 'iOS Developer', timeline: 'Jul 2026 – Aug 2026', location: 'Batam, Indonesia', featured: true,
+    role: 'iOS Developer', timeline: 'Jul 2026 – Aug 2026', location: 'Batam, Indonesia', featured: false,
     problem: 'Comparing skincare products can mean jumping between product labels, ingredient references, and personal progress notes. Foamy brings product lookup and skincare journaling into one iOS app.',
     solution: 'Users can scan a product label or search manually, inspect available product and ingredient details, compare products, and record routine notes and progress photos. The connected API tries direct product search first and documents a DeepSeek LLM fallback for queries it cannot resolve.',
     features: ['Camera capture and Vision OCR for product labels', 'Product search with direct lookup and conditional DeepSeek fallback', 'Product dossiers with available ingredient, price, review, and brand information', 'Ingredient search and detail lookup', 'Product comparison history', 'Routine notes and skin-progress photos'],
@@ -335,7 +367,7 @@ const projectRecords: Project[] = [
     description: 'An iOS app for short guided movement breaks, with timed sessions and Live Activity support.',
     categories: ['iOS Development'], platforms: ['iOS'],
     technologies: ['SwiftUI', 'ActivityKit', 'WidgetKit'],
-    role: 'iOS Developer', timeline: 'Mar 2026', location: 'Batam, Indonesia', featured: true,
+    role: 'iOS Developer', timeline: 'Mar 2026', location: 'Batam, Indonesia', featured: false,
     problem: 'Desk workers and students may spend long stretches seated and find it difficult to build a consistent movement habit.',
     solution: 'Step Up pairs guided stretch plans with timed sessions. The active timer can appear in a Live Activity and a home-screen widget.',
     features: ['Guided stretch plans and movement steps', 'Timed activity sessions', 'Live Activity and WidgetKit support'],
@@ -349,10 +381,10 @@ const projectRecords: Project[] = [
     technologies: ['Python', 'FastAPI', 'LangChain', 'Hugging Face Embeddings', 'FAISS', 'SearXNG', 'Crawl4AI', 'Playwright', 'React', 'Vite', 'TypeScript', 'Server-Sent Events'],
     thumbnail: publicProjectImage('ppt-generator/create-presentation.webp'),
     gallery: [
-      { src: publicProjectImage('ppt-generator/create-presentation.webp'), alt: 'SlideGen AI presentation setup screen with a prompt and template choices', title: 'Set up a presentation', caption: 'Choose a prompt and a visual template to begin generating a deck.', frame: 'laptop' },
-      { src: publicProjectImage('ppt-generator/presentation-editor.webp'), alt: 'SlideGen AI presentation editor showing a generated slide preview and editing controls', title: 'Preview and edit slides', caption: 'Review the generated presentation and adjust its slides before export.', frame: 'laptop' },
+      { src: publicProjectImage('ppt-generator/create-presentation.webp'), alt: 'SlideGen AI presentation setup screen with a prompt and template choices', title: 'Set up a presentation', caption: 'Choose a prompt and a visual template to begin generating a deck.', frame: 'browser' },
+      { src: publicProjectImage('ppt-generator/presentation-editor.webp'), alt: 'SlideGen AI presentation editor showing a generated slide preview and editing controls', title: 'Preview and edit slides', caption: 'Review the generated presentation and adjust its slides before export.', frame: 'browser' },
     ],
-    role: 'AI Engineer · Telkom Indonesia', timeline: 'Dec 2025 – Jan 2026', location: 'Jakarta, Indonesia', featured: false,
+    role: 'AI Engineer · Telkom Indonesia', timeline: 'Dec 2025 – Jan 2026', location: 'Jakarta, Indonesia', featured: true,
     problem: 'Creating a research-backed deck means finding useful evidence, deciding how it supports the story, and turning that story into slides people can review. When research and slide writing happen in separate tools, context can get lost between those steps and the generated deck is harder to inspect as it takes shape.',
     solution: 'The backend prepares generation context through two paths. Its RAG API accepts source text, splits it into 700-character chunks with a 70-character overlap, embeds the chunks, and stores them in an in-memory FAISS index. It then retrieves the 10 passages most similar to the combined prompt and topic. A separate web-research path searches with SearXNG and extracts page content with Crawl4AI and Playwright. The React interface uses the unified generation endpoint for web research: it presents an outline first, streams slides as they are generated, and lets users preview and edit the result before exporting HTML or PowerPoint.',
     features: ['Split source text into overlapping chunks, embed it, and retrieve the 10 closest passages with FAISS', 'Discover web sources through SearXNG and extract page content with Crawl4AI and Playwright', 'Create a presentation outline before generating slide content', 'Stream the outline and completed slides to the interface over Server-Sent Events', 'Choose from four slide design templates and review or edit the presentation', 'Export the result as PowerPoint or editable HTML'],
@@ -377,10 +409,6 @@ const projectRecords: Project[] = [
       'Implemented the FastAPI backend and its source-text RAG path, including overlapping text chunks, Hugging Face embeddings, and FAISS similarity retrieval.',
       'Built the web research path with SearXNG, Crawl4AI, and Playwright, and the outline-first slide-generation workflow.',
       'Developed the React and TypeScript interface for templates, Server-Sent Events progress, slide preview and editing, and HTML or PowerPoint export.',
-    ],
-    links: [
-      { label: 'Backend source (private)', href: 'https://github.com/brianashari18/ppt-generator', kind: 'github' },
-      { label: 'Frontend source (private)', href: 'https://github.com/brianashari18/ppt-generator-frontend', kind: 'github' },
     ],
   },
   {
@@ -414,7 +442,6 @@ const projectRecords: Project[] = [
       'Built the template-mapping stage to place normalized question content into a consistent Excel output.',
       'Handled embedded-image reinsertion and cross-reference preservation in the formatted workbook.',
     ],
-    links: [{ label: 'GitHub repository', href: 'https://github.com/brianashari18/document-formatting', kind: 'github' }],
   },
   {
     id: 'ifrs-document-checker', slug: 'ifrs-document-checker', title: 'IFRS DocumentChecker', tagline: 'From contract documents to structured IFRS 15 data',
@@ -453,7 +480,7 @@ const projectRecords: Project[] = [
     description: 'Face Lock combines face-based verification with access records and monitoring clients across a Python recognition service, Go API, Flutter app, and React dashboard.',
     categories: ['AI / ML Engineering', 'Backend Engineering', 'Flutter Development', 'Software Engineering'], platforms: ['Web', 'Mobile'],
     technologies: ['InsightFace', 'ArcFace', 'Python', 'Go', 'Gin', 'MySQL', 'Flutter', 'React'],
-    role: 'AI Engineer · Full-stack Developer', timeline: 'Sep 2025 – Dec 2025', location: 'Bandung, Indonesia', featured: false,
+    role: 'AI Engineer · Full-stack Developer', timeline: 'Sep 2025 – Dec 2025', location: 'Bandung, Indonesia', featured: true,
     solution: 'The recognition service compares face embeddings for access verification. Separate Go, Flutter, and React repositories cover API access, mobile monitoring, and web-based authorization and dashboards.',
     features: ['Face detection and embedding-based verification', 'Access logs and user-management flows', 'Mobile access monitoring and notification views', 'Web dashboard for authorization and access activity', 'Backend event and notification flows'],
     architecture: { summary: 'A Python recognition service uses InsightFace/ArcFace for face detection and embeddings. A Go/Gin API with MySQL handles user and access-log data; WebSocket and Firebase Cloud Messaging support event and notification flows for the Flutter client and React dashboard.' },
@@ -466,7 +493,7 @@ const projectRecords: Project[] = [
       { src: faceLockEnrollmentImage, alt: 'Face Lock face-enrollment screen showing an on-screen camera preview and guidance for positioning a face before capture.', title: 'Face enrollment', caption: 'The enrollment flow guides a user to position their face clearly before capture for access verification.', frame: 'phone', frameStyle: 'android' },
       { src: faceLockAccessLogsImage, alt: 'Face Lock access-log list showing access outcomes with personal names and exact timestamps blurred.', title: 'Access log list', caption: 'The list view shows access outcomes; person-specific names and exact timestamps are blurred for privacy.', frame: 'phone', frameStyle: 'android' },
       { src: faceLockLogDetailImage, alt: 'Face Lock access-log detail showing an authorization result and facial-recognition method, with identifying fields blurred.', title: 'Access log detail', caption: 'A single record detail view keeps the verification result visible while person-specific metadata is blurred.', frame: 'phone', frameStyle: 'android' },
-      { src: faceLockDashboardImage, alt: 'Face Lock access dashboard with aggregate statistics and charts; names and individual timestamps are blurred.', title: 'Access dashboard', caption: 'The dashboard summarizes access status and aggregate activity; personal names and individual timestamps are blurred.', frame: 'laptop' },
+      { src: faceLockDashboardImage, alt: 'Face Lock access dashboard with aggregate statistics and charts; names and individual timestamps are blurred.', title: 'Access dashboard', caption: 'The dashboard summarizes access status and aggregate activity; personal names and individual timestamps are blurred.', frame: 'browser' },
     ],
     links: [
       { label: 'Face recognition service', href: 'https://github.com/brianashari18/face_lock_ai', kind: 'github' },
@@ -544,7 +571,6 @@ const projectRecords: Project[] = [
       'Built the verifier review-queue screens and plot review flow.',
       'Implemented supporting region, team, and transaction-history views.',
     ],
-    links: [{ label: 'GitHub repository', href: 'https://github.com/brianashari18/stocarbon_mobile_app', kind: 'github' }],
   },
   {
     id: 'music-information-retrieval-ta', slug: 'music-information-retrieval-ta', title: 'Final Thesis',
@@ -593,7 +619,7 @@ const projectRecords: Project[] = [
     tagline: 'Data Slayer 2025 · Preliminary 12th of 163 · Final 4th',
     description: 'A team computer-vision entry for Data Slayer 3.0, classifying one-second in-car video sequences as drowsy or non-drowsy. Team belikopidulu placed 12th out of 163 teams in the preliminary round and placed 4th in the final.',
     categories: ['AI / ML Engineering'], platforms: ['Kaggle'],
-    technologies: ['VideoMAE', 'BiLSTM'], role: 'AI/ML team collaborator', timeline: 'Nov 2025 – Dec 2025', location: 'Jakarta, Indonesia', featured: false,
+    technologies: ['VideoMAE', 'BiLSTM'], role: 'AI/ML team collaborator', timeline: 'Nov 2025 – Dec 2025', location: 'Kaggle · Online', featured: false,
     problem: 'Data Slayer 3.0 challenged teams to classify one-second in-car clips as drowsy or non-drowsy. The training set covered 15 subjects, with eight videos per subject across front and side camera views. Drowsiness examples showed microsleep or yawning; non-drowsiness examples showed focus or talking. The task was evaluated with Macro F1.',
     solution: 'The team stabilized region crops with a Union Bounding Box to limit frame-to-frame crop jitter, then sampled 16 frames from each input clip for a VideoMAE + BiLSTM approach. Candidate models used augmentation and staged fine-tuning, were compared with five-fold evaluation, and were combined for inference with horizontal-flip test-time augmentation.',
     features: [

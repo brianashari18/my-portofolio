@@ -21,7 +21,17 @@ export default function Home() {
   const { professional: professionalExperiences } = groupExperiences(experiences);
   const featured = sortProjectsByTimelineNewestFirst(projects.filter((project) => project.featured));
   const illustrated = featured.filter((project) => getProjectCover(project));
-  const showcase = [...illustrated, ...featured.filter((project) => !illustrated.includes(project))].slice(0, 2);
+  const mobileLead = illustrated.find((project) => project.categories.includes('iOS Development'));
+  const crossFocusLead = illustrated.find((project) => project !== mobileLead
+    && !project.categories.includes('iOS Development')
+    && project.categories.some((category) => category === 'AI / ML Engineering' || category === 'Backend Engineering'));
+  const showcase: typeof featured = [];
+  if (mobileLead) showcase.push(mobileLead);
+  if (crossFocusLead && !showcase.includes(crossFocusLead)) showcase.push(crossFocusLead);
+  for (const project of [...illustrated, ...featured]) {
+    if (!showcase.includes(project)) showcase.push(project);
+  }
+  showcase.splice(2);
   const otherFeatured = featured.filter((project) => !showcase.includes(project));
   const portrait = resolvePortfolioImage(personalInfo.profileImage);
   const title = personalInfo.title.match(/^(.+?) (specializing in .+)$/);

@@ -3,11 +3,12 @@ import type { MouseEvent, ReactNode } from 'react';
 import { Link, useParams, useSearchParams } from 'react-router-dom';
 import ProjectImageDialog from '../components/ProjectImageDialog';
 import ProjectArtwork from '../components/ProjectArtwork';
+import ProjectDetailCover from '../components/ProjectDetailCover';
 import ProjectWorkflowMap from '../components/ProjectWorkflowMap';
 import { usePortfolioContent } from '../context/usePortfolioContent';
 import { defaultPortfolioContent } from '../data/portfolioData';
-import type { Project, ProjectGalleryImage } from '../data/portfolioData';
-import { getDefaultProjectImageFrame, getProjectGalleryImage, resolvePortfolioImage } from '../lib/resolvePortfolioImage';
+import type { Project } from '../data/portfolioData';
+import { getProjectGalleryImages, resolvePortfolioImage } from '../lib/resolvePortfolioImage';
 import NotFound from './NotFound';
 
 interface StorySection {
@@ -39,23 +40,8 @@ export default function ProjectDetail() {
 function ProjectCase({ project, search, previous, next }: { project: Project; search: string; previous?: Project; next?: Project }) {
   const [imageIndex, setImageIndex] = useState<number | null>(null);
   const imageTrigger = useRef<HTMLButtonElement | null>(null);
-  const gallery = new Map<string, ProjectGalleryImage>();
-  for (const image of project.gallery ?? []) {
-    const src = resolvePortfolioImage(image.src);
-    if (src && !gallery.has(src)) gallery.set(src, getProjectGalleryImage(project, image, src));
-  }
-  const defaultFrame = getDefaultProjectImageFrame(project.platforms);
-  for (const source of [project.heroImage, project.thumbnail]) {
-    const src = resolvePortfolioImage(source);
-    if (src && !gallery.has(src)) gallery.set(src, { src, alt: `${project.title} project preview`, ...defaultFrame });
-  }
-  const images = [...gallery.values()].map((image, index) => ({
-    ...image,
-    title: image.title?.trim() || `Screen ${String(index + 1).padStart(2, '0')}`,
-  }));
-  const coverSource = resolvePortfolioImage(project.thumbnail) ?? resolvePortfolioImage(project.heroImage) ?? images[0]?.src;
-  const heroIndex = images.findIndex(({ src }) => src === coverSource);
-  const hero = heroIndex >= 0 ? images[heroIndex] : undefined;
+  const images = getProjectGalleryImages(project);
+  const coverImageCount = Math.min(5, images.length);
   const diagram = resolvePortfolioImage(project.architecture?.diagram);
   const bundledWorkflow = defaultPortfolioContent.projects.find((item) => item.id === project.id)?.workflow;
   const workflow = project.workflow
@@ -63,7 +49,7 @@ function ProjectCase({ project, search, previous, next }: { project: Project; se
     : bundledWorkflow;
   const sections: StorySection[] = [];
 
-  const rationale = project.problem?.trim() ? project.problem : workflow?.rationale;
+  const rationale = workflow?.rationale && workflow.rationale !== project.problem ? workflow.rationale : undefined;
   if (rationale) sections.push({ id: 'challenge', title: 'Why this project exists', content: <p>{rationale}</p> });
   if (project.solution) sections.push({ id: 'approach', title: 'The approach', content: <p>{project.solution}</p> });
   if ((project.role && project.role !== 'College project') || project.contributions?.length) sections.push({
@@ -77,15 +63,13 @@ function ProjectCase({ project, search, previous, next }: { project: Project; se
     id: 'workflow', title: 'How it works', wide: true,
     content: <ProjectWorkflowMap workflow={workflow} />,
   });
-  if (project.features?.length) sections.push({
-    id: 'features', title: 'What it does',
-    content: <ul className="nova-feature-list">{project.features.map((feature) => <li key={feature}>{feature}</li>)}</ul>,
-  });
-  if (images.length > 1) sections.push({
+  if (images.length > coverImageCount) sections.push({
     id: 'gallery',
     title: 'Product walkthrough',
     content: <div className="nova-case-gallery__grid">
-      {images.map((image, index) => index === heroIndex ? null : <figure key={image.src}>
+      {images.slice(coverImageCount).map((image, offset) => {
+        const index = offset + coverImageCount;
+        return <figure key={image.src}>
         <button className="nova-case-gallery__button" type="button" aria-haspopup="dialog" aria-label={`Open screen ${index + 1} of ${images.length}: ${image.title}`} onClick={(event) => openImage(index, event)}>
           <span className="nova-case-gallery__preview" data-gallery-tone={project.galleryTone}>
             <span className="nova-case-gallery__sequence">Screen {String(index + 1).padStart(2, '0')}</span>
@@ -96,7 +80,8 @@ function ProjectCase({ project, search, previous, next }: { project: Project; se
           </span>
         </button>
         {image.caption && <figcaption>{image.caption}</figcaption>}
-      </figure>)}
+      </figure>;
+      })}
     </div>,
   });
   if (project.architecture && (project.architecture.summary || diagram)) sections.push({
@@ -133,37 +118,7 @@ function ProjectCase({ project, search, previous, next }: { project: Project; se
       <Link to={{ pathname: '/projects', search }}>← {search ? 'Filtered projects' : 'All projects'}</Link>
       <span aria-hidden="true">/</span><span aria-current="page">{project.title}</span>
     </nav>
-    <header className="nova-case__intro" data-nova-enter-sequence>
-      <p className="nova-kicker">{project.categories.join(' · ')}</p>
-      <h1>{project.title}<span className="nova-period" aria-hidden="true">.</span></h1>
-      <p>{project.tagline}</p>
-    </header>
-    <dl className="nova-case__facts">
-      {project.platforms.length > 0 && <div><dt>Platform</dt><dd>{project.platforms.join(' · ')}</dd></div>}
-      {project.role && <div><dt>{project.role === 'College project' || project.role === 'Course project' ? 'Project context' : 'Role'}</dt><dd>{project.role}</dd></div>}
-      {project.timeline && <div><dt>Timeline</dt><dd>{project.timeline}</dd></div>}
-      {project.location && <div><dt>Location</dt><dd>{project.location}</dd></div>}
-      {project.status && <div><dt>Status</dt><dd>{project.status}</dd></div>}
-      {!!project.technologies.length && <div><dt>Tools</dt><dd>{project.technologies.slice(0, 3).join(' · ')}</dd></div>}
-    </dl>
-
-    <section className={`nova-case-stage nova-case-stage--${project.slug}${hero ? '' : ' nova-case-stage--text'}`} data-gallery-tone={project.galleryTone} aria-labelledby="project-overview">
-      <div className="nova-case-stage__copy">
-        <h2 id="project-overview">Overview</h2>
-        <p>{project.description}</p>
-      </div>
-      {hero && <figure className="nova-case-stage__image">
-        <button className="nova-case-image-button" type="button" aria-haspopup="dialog" aria-label={`Open cover, screen ${heroIndex + 1} of ${images.length}: ${hero.title}`} onClick={(event) => openImage(heroIndex, event)}>
-          <ProjectArtwork image={hero} loading="eager" />
-          <span className="nova-case-image-button__action">View image <span aria-hidden="true">↗</span></span>
-        </button>
-        {(images.length > 1 || hero.title || hero.caption) && <figcaption>
-          {images.length > 1 && <span className="nova-case-stage__sequence">Cover · Screen {String(heroIndex + 1).padStart(2, '0')} of {String(images.length).padStart(2, '0')}</span>}
-          {hero.title && <strong>{hero.title}</strong>}
-          {hero.caption && <span>{hero.caption}</span>}
-        </figcaption>}
-      </figure>}
-    </section>
+    <ProjectDetailCover project={project} images={images} onOpen={openImage} />
 
     {sections.length > 0 && <div className="nova-case__story">
       {sections.length > 1 && <nav className="nova-case__contents" aria-label="In this case study">

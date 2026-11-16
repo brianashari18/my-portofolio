@@ -71,7 +71,7 @@ function isGalleryImage(value: unknown): value is ProjectGalleryImage {
   return isRecord(value) && isString(value.src) && isString(value.alt) &&
     (!('title' in value) || isString(value.title)) &&
     (!('caption' in value) || isString(value.caption)) &&
-    (!('frame' in value) || value.frame === 'phone' || value.frame === 'laptop' || value.frame === 'none') &&
+    (!('frame' in value) || value.frame === 'phone' || value.frame === 'laptop' || value.frame === 'browser' || value.frame === 'none') &&
     (!('frameStyle' in value) || value.frameStyle === 'ios' || value.frameStyle === 'android');
 }
 

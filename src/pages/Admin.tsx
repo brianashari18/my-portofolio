@@ -882,7 +882,8 @@ function ProjectGalleryEditor({ projectTitle, platforms, folder, images, coverSo
                 <option value="phone">Neutral phone frame</option>
                 <option value="ios">iOS frame</option>
                 <option value="android">Android frame</option>
-                <option value="laptop">Laptop / web frame</option>
+                <option value="browser">Browser frame</option>
+                <option value="laptop">Laptop frame</option>
               </select>
               <small>Applies wherever this screenshot appears, including the cover, walkthrough, and project card.</small>
             </label>
