@@ -14,12 +14,9 @@ import eWiseMapImage from '../assets/images/projects/e-wise/map-order-status.web
 import fitSpaceDiscoveryImage from '../assets/images/projects/fitspace/venue-discovery.png';
 import fitSpaceScheduleImage from '../assets/images/projects/fitspace/booking-schedule.png';
 import fitSpaceSplashImage from '../assets/images/projects/fitspace/splash.png';
+import fitSpaceVenueDetailImage from '../assets/images/projects/fitspace/venue-detail.webp';
 import flickNFitWardrobeImage from '../assets/images/projects/flicknfit/wardrobe-outfit.webp';
-import flickNFitProductDetailsImage from '../assets/images/projects/flicknfit/product-details.webp';
 import flickNFitSplashImage from '../assets/images/projects/flicknfit/splash.webp';
-import mabrurAccountImage from '../assets/images/projects/mabrur/account.webp';
-import mabrurGroupMeetingImage from '../assets/images/projects/mabrur/group-meeting.webp';
-import mabrurJoinMeetingImage from '../assets/images/projects/mabrur/join-meeting.jpeg';
 import mabrurLoginImage from '../assets/images/projects/mabrur/login.webp';
 import mabrurPrayerHomeImage from '../assets/images/projects/mabrur/prayer-home.webp';
 import mabrurPrayerListImage from '../assets/images/projects/mabrur/prayer-list.webp';
@@ -32,6 +29,10 @@ import faceLockAccessLogsImage from '../assets/images/projects/face-lock/access-
 import faceLockLogDetailImage from '../assets/images/projects/face-lock/log-detail-redacted.png';
 import faceLockDashboardImage from '../assets/images/projects/face-lock/dashboard-redacted.png';
 import { supplementaryProjectWorkflows } from './projectWorkflows';
+
+const publicProjectImage = (path: string) => `${import.meta.env.BASE_URL}project-gallery/${path}`;
+const publicStorageImage = (project: string, filename: string) =>
+  `https://fqrzioigybkocckhbcwv.supabase.co/storage/v1/object/public/portfolio-images/projects/${project}/${filename}`;
 
 export type ProjectCategory = 'iOS Development' | 'Flutter Development' | 'AI / ML Engineering' | 'Backend Engineering' | 'Software Engineering';
 export type GalleryTone = 'paper' | 'blush' | 'surface' | 'sage' | 'ink';
@@ -241,6 +242,13 @@ const projectRecords: Project[] = [
     categories: ['iOS Development', 'AI / ML Engineering', 'Backend Engineering'], platforms: ['iOS'],
     technologies: ['SwiftUI', 'SwiftData', 'Core ML', 'Foundation Models', 'Speech', 'AVFoundation', 'Go', 'FastAPI', 'Qdrant', 'Ollama', 'bge-m3', 'Docker'],
     role: 'iOS Developer · AI Engineer · Backend', timeline: '2026', featured: true,
+    thumbnail: publicStorageImage('sprout', '365c3e04-80d3-4336-b694-aa66ead17917.jpg'),
+    gallery: [
+      { src: publicStorageImage('sprout', '365c3e04-80d3-4336-b694-aa66ead17917.jpg'), alt: 'Sprout journaling screen with a guided writing prompt.', title: 'Guided journal prompt', caption: 'A guided prompt gives the user a starting point for daily self-reflection. The sample entry is dummy data.', frame: 'phone', frameStyle: 'ios' },
+      { src: publicStorageImage('sprout', 'b4bd82cf-ed81-482e-91be-3e1e22d00196.jpg'), alt: 'Sprout journal screen showing two sample entries for the selected day.', title: 'Daily journal entries', caption: 'Entries appear as cards in the journal view; the text shown is dummy data.', frame: 'phone', frameStyle: 'ios' },
+      { src: publicStorageImage('sprout', '3e3cd685-847c-4f4e-aa89-bb42c7cd4f24.jpg'), alt: 'Sprout emotion check-in with selectable emotion labels.', title: 'Emotion check-in', caption: 'The check-in lets a user choose up to three emotions; the example values are dummy data.', frame: 'phone', frameStyle: 'ios' },
+      { src: publicStorageImage('sprout', '21e52cab-9f79-4982-8800-c882daecd612.jpg'), alt: 'Sprout two-week emotion summary grouping sample entries by possible triggers.', title: 'Emotion summary', caption: 'A summary groups dummy entries by emotion and possible trigger for reflection.', frame: 'phone', frameStyle: 'ios' },
+    ],
     problem: 'People who journal for self-reflection may stop when faced with a blank page or struggle to name their emotions precisely. Without structured feedback across entries, it can be difficult to recognize longer-term emotional patterns and recurring triggers.',
     solution: 'The iOS app combines guided prompts and user-selected emotion labels with local valence suggestions. Weekly summaries use a separate Go gateway and FastAPI worker with Qdrant retrieval; a distinct Apple Foundation Models path can generate reflective feedback when available.',
     features: ['Guided journal prompts', 'User-selected emotion and intensity', 'Core ML valence suggestion with lexical fallback', 'Weekly summary and retrieval workflow', 'Availability-gated Apple Foundation Models feedback'],
@@ -300,6 +308,14 @@ const projectRecords: Project[] = [
     categories: ['iOS Development'], platforms: ['iOS'],
     technologies: ['SwiftUI', 'Observation', 'Foundation'],
     role: 'iOS Developer', timeline: '2026', featured: true,
+    thumbnail: publicStorageImage('muncakin', 'bd9f6e17-18d8-451a-85ba-61dc1639a6b3.jpg'),
+    gallery: [
+      { src: publicStorageImage('muncakin', 'bd9f6e17-18d8-451a-85ba-61dc1639a6b3.jpg'), alt: 'Muncakin trip packing checklist with grouped gear items for a mountain hike.', title: 'Trip packing checklist', caption: 'The checklist groups trip gear and highlights items that still need attention. Sample trip values are dummy data.', frame: 'phone', frameStyle: 'ios' },
+      { src: publicStorageImage('muncakin', '07e869c4-448a-449d-91e5-21468e39078d.jpg'), alt: 'Muncakin onboarding screen introducing the hiking trip planner.', title: 'Welcome to Muncakin', caption: 'The onboarding introduces the app as a place to plan and organize a hiking trip.', frame: 'phone', frameStyle: 'ios' },
+      { src: publicStorageImage('muncakin', 'cf7206a2-834e-4d55-8679-5e86e5d3740f.jpg'), alt: 'Muncakin onboarding screen listing trip planning and packing features.', title: 'Trip planning and gear', caption: 'An overview introduces planning and checklist capabilities before a user starts.', frame: 'phone', frameStyle: 'ios' },
+      { src: publicStorageImage('muncakin', '709642fe-0054-4f4f-bc16-072ecc4822d5.jpg'), alt: 'Muncakin trip setup screen with an itinerary for a planned hike.', title: 'Trip setup and itinerary', caption: 'Trip details help tailor the packing list; all displayed trip values are dummy data.', frame: 'phone', frameStyle: 'ios' },
+      { src: publicStorageImage('muncakin', '92e9c3fc-929f-43c8-9634-98c873f45aa8.jpg'), alt: 'Muncakin packing checklist showing completion status for trip gear.', title: 'Packing progress', caption: 'A progress view helps hikers review what is ready and what remains to pack. Sample values are dummy data.', frame: 'phone', frameStyle: 'ios' },
+    ],
     problem: 'Generic packing lists do not account for different mountain trips, leaving preparation scattered and easy to overlook.',
     solution: 'Muncakin loads a gear catalog and selects standard or mountain-conditional items for a trip. The generated list can be edited and grouped by function or gear zone.',
     features: ['Trip setup with dates and group size', 'Gear checklist adapted to mountain type and trip duration', 'Functional or zone-based checklist grouping', 'Packed-state, add, edit, and remove actions'],
@@ -327,6 +343,11 @@ const projectRecords: Project[] = [
     description: 'A backend RAG path retrieves relevant passages from provided text, while a separate web-research path gathers external sources. An outline-first workflow turns that context into a structured, editable presentation.',
     categories: ['AI / ML Engineering', 'Backend Engineering', 'Software Engineering'], platforms: ['Web'],
     technologies: ['Python', 'FastAPI', 'LangChain', 'Hugging Face Embeddings', 'FAISS', 'SearXNG', 'Crawl4AI', 'Playwright', 'React', 'Vite', 'TypeScript', 'Server-Sent Events'],
+    thumbnail: publicProjectImage('ppt-generator/create-presentation.webp'),
+    gallery: [
+      { src: publicProjectImage('ppt-generator/create-presentation.webp'), alt: 'SlideGen AI presentation setup screen with a prompt and template choices', title: 'Set up a presentation', caption: 'Choose a prompt and a visual template to begin generating a deck.', frame: 'laptop' },
+      { src: publicProjectImage('ppt-generator/presentation-editor.webp'), alt: 'SlideGen AI presentation editor showing a generated slide preview and editing controls', title: 'Preview and edit slides', caption: 'Review the generated presentation and adjust its slides before export.', frame: 'laptop' },
+    ],
     role: 'AI Engineer · Telkom Indonesia', featured: false,
     problem: 'Creating a research-backed deck means finding useful evidence, deciding how it supports the story, and turning that story into slides people can review. When research and slide writing happen in separate tools, context can get lost between those steps and the generated deck is harder to inspect as it takes shape.',
     solution: 'The backend prepares generation context through two paths. Its RAG API accepts source text, splits it into 700-character chunks with a 70-character overlap, embeds the chunks, and stores them in an in-memory FAISS index. It then retrieves the 10 passages most similar to the combined prompt and topic. A separate web-research path searches with SearXNG and extracts page content with Crawl4AI and Playwright. The React interface uses the unified generation endpoint for web research: it presents an outline first, streams slides as they are generated, and lets users preview and edit the result before exporting HTML or PowerPoint.',
@@ -458,7 +479,8 @@ const projectRecords: Project[] = [
     role: 'Flutter & Backend Developer', featured: false, thumbnail: flickNFitWardrobeImage,
     gallery: [
       { src: flickNFitWardrobeImage, alt: 'FlickNFit wardrobe screen with a composed outfit and individual clothing items', title: 'Wardrobe outfit', caption: 'A saved outfit assembled from individual clothing items.', frame: 'none' },
-      { src: flickNFitProductDetailsImage, alt: 'FlickNFit product detail screen showing a clothing image, price, rating, and product actions', title: 'Product details', caption: 'Review a fashion item and its details before saving it.', frame: 'phone', frameStyle: 'android' },
+      { src: publicProjectImage('flicknfit/home-redacted.webp'), alt: 'FlickNFit home screen with the profile photo and greeting name obscured', title: 'Home feed', caption: 'Browse fashion recommendations; profile details are blurred for privacy.', frame: 'phone', frameStyle: 'android' },
+      { src: publicProjectImage('flicknfit/product-details-redacted.webp'), alt: 'FlickNFit product detail screen with the seller profile obscured', title: 'Product details', caption: 'Review a fashion item and its details before saving it; seller profile details are blurred.', frame: 'phone', frameStyle: 'android' },
       { src: flickNFitSplashImage, alt: 'FlickNFit app launch screen with its illustrated brand mark', title: 'App launch', caption: 'The opening screen introduces the FlickNFit mobile app.', frame: 'phone', frameStyle: 'android' },
     ],
     solution: 'The mobile source includes screens for product and brand browsing, saved items, scan history, and style recommendations. A separate Go service provides account, catalog, and review APIs; the source also contains sample data, so live connections for every client screen are not established.',
@@ -482,6 +504,7 @@ const projectRecords: Project[] = [
     gallery: [
       { src: fitSpaceDiscoveryImage, alt: 'FitSpace venue discovery screen with sport filters, nearby courts, ratings, and prices', title: 'Venue discovery', caption: 'Browse nearby venues and compare sports, ratings, and starting prices.', frame: 'phone', frameStyle: 'android' },
       { src: fitSpaceScheduleImage, alt: 'FitSpace booking screen with a weekly calendar and hourly court availability', title: 'Booking schedule', caption: 'A calendar and time-slot view for selecting a court booking.', frame: 'none' },
+      { src: fitSpaceVenueDetailImage, alt: 'FitSpace venue detail screen showing a sample venue, address, and contact information', title: 'Venue details', caption: 'A sample venue detail view; the displayed information is dummy data.', frame: 'phone', frameStyle: 'android' },
       { src: fitSpaceSplashImage, alt: 'FitSpace app splash screen with the FitSpace brand mark', title: 'App launch', caption: 'The mobile app launch screen.', frame: 'phone', frameStyle: 'android' },
     ],
     solution: 'The web and mobile clients include venue and field browsing, booking flows, payment confirmation, reviews, and venue-management screens. The Python service fetches venue data and ranks recommendations using geographic distance calculations.',
@@ -662,9 +685,10 @@ const projectRecords: Project[] = [
       { src: mabrurPrayerHomeImage, alt: 'Mabrur home screen with Hajj and Umrah prayer categories and a list of prayer topics', title: 'Prayer home', caption: 'Explore prayer topics from the app’s main screen.', frame: 'phone', frameStyle: 'android' },
       { src: mabrurPrayerListImage, alt: 'Mabrur screen listing prayer guidance for Hajj and Umrah', title: 'Prayer list', caption: 'Browse the collection of prayer guidance.', frame: 'phone', frameStyle: 'android' },
       { src: mabrurPrayerDetailImage, alt: 'Mabrur prayer detail screen displaying the selected prayer and supporting text', title: 'Prayer details', caption: 'Open an individual prayer to read its content.', frame: 'phone', frameStyle: 'android' },
-      { src: mabrurAccountImage, alt: 'Mabrur account screen showing a username and user role', title: 'Account', caption: 'Review the signed-in account and its role.', frame: 'phone', frameStyle: 'android' },
-      { src: mabrurJoinMeetingImage, alt: 'Mabrur join meeting screen with a sample room ID field', title: 'Join a meeting', caption: 'Enter a room ID to join a group session.', frame: 'phone', frameStyle: 'android' },
-      { src: mabrurGroupMeetingImage, alt: 'Mabrur group meeting screen with participant tiles and controls for chat and prayer', title: 'Group meeting', caption: 'A shared session view with entry points for chat and prayer.', frame: 'phone', frameStyle: 'android' },
+      { src: publicProjectImage('mabrur/login-redacted.webp'), alt: 'Mabrur sign-in screen with the sample user label obscured', title: 'Sign in with sample account', caption: 'A sample sign-in flow; the user label is blurred for privacy.', frame: 'phone', frameStyle: 'android' },
+      { src: publicProjectImage('mabrur/account-redacted.webp'), alt: 'Mabrur account screen with the sample username and role obscured', title: 'Account', caption: 'Review the sample account; user labels are blurred for privacy.', frame: 'phone', frameStyle: 'android' },
+      { src: publicProjectImage('mabrur/join-room-redacted.webp'), alt: 'Mabrur join meeting screen with the sample room ID obscured', title: 'Join a meeting', caption: 'Enter a room ID to join a group session; the sample ID is blurred.', frame: 'phone', frameStyle: 'android' },
+      { src: publicProjectImage('mabrur/video-room-redacted.webp'), alt: 'Mabrur group meeting screen with the sample room ID obscured', title: 'Group meeting', caption: 'A shared session view with chat and prayer controls; the sample room ID is blurred.', frame: 'phone', frameStyle: 'android' },
     ],
     problem: 'The concept brings prayer guidance and group communication into a single Hajj and Umrah companion.',
     solution: 'A mobile app concept centered on prayer guidance, with group tools for pilgrimage coordination.',
