@@ -28,6 +28,9 @@ import stoCarbonVerifierImage from '../assets/images/projects/stocarbon/verifier
 import stoCarbonSplashImage from '../assets/images/projects/stocarbon/splash.webp';
 import stoCarbonZoneCreationImage from '../assets/images/projects/stocarbon/zone-creation.jpg';
 import faceLockEnrollmentImage from '../assets/images/projects/face-lock/face-enrollment.png';
+import faceLockAccessLogsImage from '../assets/images/projects/face-lock/access-logs-redacted.png';
+import faceLockLogDetailImage from '../assets/images/projects/face-lock/log-detail-redacted.png';
+import faceLockDashboardImage from '../assets/images/projects/face-lock/dashboard-redacted.png';
 import { supplementaryProjectWorkflows } from './projectWorkflows';
 
 export type ProjectCategory = 'iOS Development' | 'Flutter Development' | 'AI / ML Engineering' | 'Backend Engineering' | 'Software Engineering';
@@ -436,6 +439,9 @@ const projectRecords: Project[] = [
     ],
     gallery: [
       { src: faceLockEnrollmentImage, alt: 'Face Lock face-enrollment screen showing an on-screen camera preview and guidance for positioning a face before capture.', title: 'Face enrollment', caption: 'The enrollment flow guides a user to position their face clearly before capture for access verification.', frame: 'phone', frameStyle: 'android' },
+      { src: faceLockAccessLogsImage, alt: 'Face Lock access-log list showing access outcomes with personal names and exact timestamps blurred.', title: 'Access log list', caption: 'The list view shows access outcomes; person-specific names and exact timestamps are blurred for privacy.', frame: 'phone', frameStyle: 'android' },
+      { src: faceLockLogDetailImage, alt: 'Face Lock access-log detail showing an authorization result and facial-recognition method, with identifying fields blurred.', title: 'Access log detail', caption: 'A single record detail view keeps the verification result visible while person-specific metadata is blurred.', frame: 'phone', frameStyle: 'android' },
+      { src: faceLockDashboardImage, alt: 'Face Lock access dashboard with aggregate statistics and charts; names and individual timestamps are blurred.', title: 'Access dashboard', caption: 'The dashboard summarizes access status and aggregate activity; personal names and individual timestamps are blurred.', frame: 'laptop' },
     ],
     links: [
       { label: 'Face recognition service', href: 'https://github.com/brianashari18/face_lock_ai', kind: 'github' },
