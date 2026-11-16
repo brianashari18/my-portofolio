@@ -14,7 +14,6 @@ import eWiseMapImage from '../assets/images/projects/e-wise/map-order-status.web
 import fitSpaceDiscoveryImage from '../assets/images/projects/fitspace/venue-discovery.png';
 import fitSpaceScheduleImage from '../assets/images/projects/fitspace/booking-schedule.png';
 import fitSpaceSplashImage from '../assets/images/projects/fitspace/splash.png';
-import fitSpaceVenueDetailImage from '../assets/images/projects/fitspace/venue-detail.webp';
 import flickNFitWardrobeImage from '../assets/images/projects/flicknfit/wardrobe-outfit.webp';
 import flickNFitSplashImage from '../assets/images/projects/flicknfit/splash.webp';
 import mabrurLoginImage from '../assets/images/projects/mabrur/login.webp';
@@ -504,7 +503,7 @@ const projectRecords: Project[] = [
     gallery: [
       { src: fitSpaceDiscoveryImage, alt: 'FitSpace venue discovery screen with sport filters, nearby courts, ratings, and prices', title: 'Venue discovery', caption: 'Browse nearby venues and compare sports, ratings, and starting prices.', frame: 'phone', frameStyle: 'android' },
       { src: fitSpaceScheduleImage, alt: 'FitSpace booking screen with a weekly calendar and hourly court availability', title: 'Booking schedule', caption: 'A calendar and time-slot view for selecting a court booking.', frame: 'none' },
-      { src: fitSpaceVenueDetailImage, alt: 'FitSpace venue detail screen showing a sample venue, address, and contact information', title: 'Venue details', caption: 'A sample venue detail view; the displayed information is dummy data.', frame: 'phone', frameStyle: 'android' },
+      { src: publicProjectImage('fitspace/venue-detail.webp'), alt: 'FitSpace venue detail screen showing a sample venue, address, and contact information', title: 'Venue details', caption: 'A sample venue detail view; the displayed information is dummy data.', frame: 'phone', frameStyle: 'android' },
       { src: fitSpaceSplashImage, alt: 'FitSpace app splash screen with the FitSpace brand mark', title: 'App launch', caption: 'The mobile app launch screen.', frame: 'phone', frameStyle: 'android' },
     ],
     solution: 'The web and mobile clients include venue and field browsing, booking flows, payment confirmation, reviews, and venue-management screens. The Python service fetches venue data and ranks recommendations using geographic distance calculations.',
