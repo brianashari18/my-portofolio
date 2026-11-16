@@ -5,6 +5,7 @@ import ProjectCard from '../components/ProjectCard';
 import SectionHeading from '../components/SectionHeading';
 import { usePortfolioContent } from '../context/usePortfolioContent';
 import type { ProjectCategory } from '../data/portfolioData';
+import { groupExperiences } from '../lib/groupExperiences';
 import { getProjectCover, resolvePortfolioImage } from '../lib/resolvePortfolioImage';
 import { sortProjectsByTimelineNewestFirst } from '../lib/sortProjectsByTimeline';
 
@@ -17,6 +18,7 @@ const workAreas: { category: ProjectCategory; label: string }[] = [
 
 export default function Home() {
   const { content: { experiences, personalInfo, projects, skillCategories } } = usePortfolioContent();
+  const { professional: professionalExperiences } = groupExperiences(experiences);
   const featured = sortProjectsByTimelineNewestFirst(projects.filter((project) => project.featured));
   const illustrated = featured.filter((project) => getProjectCover(project));
   const showcase = [...illustrated, ...featured.filter((project) => !illustrated.includes(project))].slice(0, 2);
@@ -40,9 +42,9 @@ export default function Home() {
             <ActionLink to="/experience" variant="outline" arrow={false}>View experience</ActionLink>
           </div>
         </div>
-        {experiences.length > 0 && <div className="nova-proof" data-nova-enter>
+        {professionalExperiences.length > 0 && <div className="nova-proof" data-nova-enter>
           <span>Experience across</span>
-          <ul>{experiences.slice(0, 3).map((item) => <li key={item.id}>{item.organization}</li>)}</ul>
+          <ul>{professionalExperiences.slice(0, 3).map((item) => <li key={item.id}>{item.organization}</li>)}</ul>
         </div>}
       </div>
       {portrait && <figure className="nova-hero__portrait" data-nova-enter data-nova-media>
@@ -81,14 +83,14 @@ export default function Home() {
       </div>
     </section>}
 
-    {experiences.length > 0 && <section className="nova-section nova-experience-preview" aria-label="Professional experience">
+    {professionalExperiences.length > 0 && <section className="nova-section nova-experience-preview" aria-label="Professional experience">
       <div className="page-shell nova-experience-preview__inner">
         <div data-nova-reveal>
           <h2>Professional experience</h2>
           <Link className="nova-inline-link" to="/experience">View full experience <span aria-hidden="true">→</span></Link>
         </div>
         <div className="nova-experience-accordion" data-nova-sequence="soft">
-          {experiences.map((item, index) => <ExperienceCard key={item.id} item={item} initiallyOpen={index === 0} />)}
+          {professionalExperiences.map((item, index) => <ExperienceCard key={item.id} item={item} initiallyOpen={index === 0} />)}
         </div>
       </div>
     </section>}
