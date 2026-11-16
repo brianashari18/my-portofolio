@@ -57,7 +57,7 @@ function isProject(value: unknown): value is PortfolioContent['projects'][number
   if (![value.id, value.slug, value.title, value.tagline, value.description].every(isString)) return false;
   if (typeof value.featured !== 'boolean') return false;
   if (![value.categories, value.platforms, value.technologies].every(isStringArray)) return false;
-  if (['role', 'timeline', 'status', 'thumbnail', 'heroImage', 'problem', 'solution'].some((key) => key in value && !isString(value[key]))) return false;
+  if (['role', 'timeline', 'location', 'status', 'thumbnail', 'heroImage', 'problem', 'solution'].some((key) => key in value && !isString(value[key]))) return false;
   if (['features', 'engineeringChallenges', 'contributions', 'results', 'reflections'].some((key) => key in value && !isStringArray(value[key]))) return false;
   if ('galleryTone' in value && !['paper', 'blush', 'surface', 'sage', 'ink'].includes(String(value.galleryTone))) return false;
   if ('gallery' in value && (!Array.isArray(value.gallery) || !value.gallery.every(isGalleryImage))) return false;
@@ -91,6 +91,8 @@ function isWorkflowStep(value: unknown): value is ProjectWorkflowStep {
 function isExperience(value: unknown): value is PortfolioContent['experiences'][number] {
   return isRecord(value) &&
     [value.id, value.organization, value.position, value.summary].every(isString) &&
+    (!('timeline' in value) || isString(value.timeline)) &&
+    (!('location' in value) || isString(value.location)) &&
     isStringArray(value.contributions) && isStringArray(value.technologies);
 }
 

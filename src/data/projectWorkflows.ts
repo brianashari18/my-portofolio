@@ -4,19 +4,22 @@ import type { ProjectWorkflow } from './portfolioData';
 export const supplementaryProjectWorkflows: Record<string, ProjectWorkflow> = {
   foamy: {
     rationale: 'Product details and routine observations can be difficult to compare and keep together over time.',
-    intro: 'Foamy connects product-label capture and product lookup with comparison and routine-journaling flows.',
+    intro: 'Foamy supports camera-based product scanning and manual search, then brings product details into comparison and skin-tracking flows.',
     routes: [
-      { title: 'Product label', description: 'Capture a product label so Vision can recognize its text.', technologies: ['Vision'] },
-      { title: 'Product discovery', description: 'Search product and ingredient information through the app’s lookup services.', technologies: ['URLSession'] },
+      { title: 'Camera and OCR', description: 'Capture a product label and extract text on device before sending the query for product resolution.', technologies: ['AVFoundation', 'Vision'] },
+      { title: 'Product resolver', description: 'The API tries its direct INCI product search first, then uses a DeepSeek LLM fallback when that search cannot resolve the query.', technologies: ['REST API', 'DeepSeek'] },
+      { title: 'Manual discovery', description: 'Search products directly or look up individual skincare ingredients.', technologies: ['URLSession'] },
+      { title: 'Product dossier', description: 'Request available product and ingredient information, with saved skin type, sensitivity, and selected concerns included in enriched requests.', technologies: ['SwiftData', 'REST API'] },
     ],
-    convergence: 'Recognized and searched product information can be kept alongside personal product and routine records.',
+    convergence: 'Scanned and manually selected products open the same detail flow; saved products can be compared and kept with local skincare-journal records.',
     steps: [
-      { title: 'Capture and read a label', description: 'Use the camera and Vision text recognition to make label content searchable.' },
-      { title: 'Look up product details', description: 'Resolve a product and retrieve its available ingredient information.' },
-      { title: 'Compare and track products', description: 'Keep products and comparison history in the app’s SwiftData-backed records.' },
-      { title: 'Record a skincare journey', description: 'Add routine notes, milestones, entries, and progress photos.' },
+      { title: 'Capture a product label', description: 'Use the camera to photograph a label, then extract its text with Vision OCR configured for English and Indonesian.', technologies: ['AVFoundation', 'Vision'] },
+      { title: 'Resolve the scanned text', description: 'Search the product catalog first. If the direct lookup misses, the API can use DeepSeek as a fallback; an unresolved query is returned as not found.', reason: 'The LLM is a conditional server-side fallback, not the default path for every product query.', technologies: ['INCI product search', 'DeepSeek'] },
+      { title: 'Review product information', description: 'Fetch the product dossier and available details such as ingredients, price, review data, and brand information. The app can pass the saved skin profile and concern tags with an enriched request.', technologies: ['REST API'] },
+      { title: 'Search and inspect manually', description: 'Browse or search for products without scanning, and open ingredient detail records when needed.' },
+      { title: 'Compare and track', description: 'Keep products and comparison history with local profile, routine, milestone, entry, and progress-photo records.', technologies: ['SwiftData'] },
     ],
-    output: 'Product and ingredient details alongside saved comparisons and skincare-journal records.',
+    output: 'Product and ingredient information for review and comparison, alongside locally stored skincare-journal records.',
   },
   hichef: {
     rationale: 'Intermediate home cooks can struggle to follow online recipes when instructions are complex or cluttered, and manually handling a phone is inconvenient when cooking leaves their hands occupied.',

@@ -118,6 +118,7 @@
 .nova-project__details { padding: 18px 4px 0; }
 .nova-project__meta { display: flex; flex-wrap: wrap; justify-content: space-between; gap: 7px 20px; color: var(--green-dark); font-size: 11px; font-weight: 700; letter-spacing: .1em; text-transform: uppercase; }
 .nova-project__details > p { max-width: 520px; margin: 14px 0 10px; color: var(--muted); font-size: 16px; line-height: 1.5; }
+.nova-project__details > .nova-project__context { margin: -4px 0 8px; color: var(--muted); font-size: 12px; line-height: 1.45; }
 .nova-project__tech { display: flex; flex-wrap: wrap; gap: 7px; margin: 16px 0 0; padding: 0; list-style: none; }
 .nova-project__tech li { padding: 7px 11px; border: 1px solid var(--line); border-radius: 999px; color: var(--muted); font-size: 11px; }
 
@@ -142,6 +143,7 @@
 .nova-experience-accordion__label { display: grid; gap: 5px; }
 .nova-experience-accordion__label strong { font-size: clamp(18px, 2.1vw, 26px); line-height: 1.15; letter-spacing: -.035em; }
 .nova-experience-accordion__label > span { color: var(--muted); font-size: 14px; line-height: 1.35; }
+.nova-experience-accordion__label > .nova-experience-accordion__meta { color: var(--green-dark); font-size: 12px; line-height: 1.4; }
 .nova-experience-accordion__icon { display: grid; width: 36px; height: 36px; flex: none; place-items: center; border: 1px solid var(--line); border-radius: 50%; transition: transform .3s ease, background-color .3s ease; }
 .nova-experience-accordion details[open] .nova-experience-accordion__icon { transform: rotate(45deg); background: var(--blush); }
 .nova-experience-accordion details > div { padding: 0 26px 22px; }

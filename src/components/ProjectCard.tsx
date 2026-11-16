@@ -27,6 +27,7 @@ export default function ProjectCard({ project, variant = 'feature', search = '' 
         <div className="nova-project__meta">{project.platforms.length > 0 && <span>{project.platforms.join(' · ')}</span>}<span>{project.role ?? project.categories[0]}</span></div>
         {variant === 'row' && <h3 id={titleId}>{project.title}</h3>}
         <p>{project.tagline}</p>
+        {(project.timeline || project.location) && <p className="nova-project__context">{[project.timeline, project.location].filter(Boolean).join(' · ')}</p>}
         <ul className="nova-project__tech" aria-label={`${project.title} technologies`}>
           {project.technologies.slice(0, 3).map((technology) => <li key={technology}>{technology}</li>)}
         </ul>

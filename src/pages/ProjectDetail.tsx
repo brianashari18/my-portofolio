@@ -140,7 +140,9 @@ function ProjectCase({ project, search, previous, next }: { project: Project; se
     </header>
     <dl className="nova-case__facts">
       {project.platforms.length > 0 && <div><dt>Platform</dt><dd>{project.platforms.join(' · ')}</dd></div>}
-      {project.role && <div><dt>{project.role === 'College project' ? 'Project context' : 'Role'}</dt><dd>{project.role}</dd></div>}
+      {project.role && <div><dt>{project.role === 'College project' || project.role === 'Course project' ? 'Project context' : 'Role'}</dt><dd>{project.role}</dd></div>}
+      {project.timeline && <div><dt>Timeline</dt><dd>{project.timeline}</dd></div>}
+      {project.location && <div><dt>Location</dt><dd>{project.location}</dd></div>}
       {project.status && <div><dt>Status</dt><dd>{project.status}</dd></div>}
       {!!project.technologies.length && <div><dt>Tools</dt><dd>{project.technologies.slice(0, 3).join(' · ')}</dd></div>}
     </dl>

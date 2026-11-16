@@ -6,6 +6,7 @@ import SectionHeading from '../components/SectionHeading';
 import { usePortfolioContent } from '../context/usePortfolioContent';
 import type { ProjectCategory } from '../data/portfolioData';
 import { getProjectCover, resolvePortfolioImage } from '../lib/resolvePortfolioImage';
+import { sortProjectsByTimelineNewestFirst } from '../lib/sortProjectsByTimeline';
 
 const workAreas: { category: ProjectCategory; label: string }[] = [
   { category: 'iOS Development', label: 'Native iOS' },
@@ -16,7 +17,7 @@ const workAreas: { category: ProjectCategory; label: string }[] = [
 
 export default function Home() {
   const { content: { experiences, personalInfo, projects, skillCategories } } = usePortfolioContent();
-  const featured = projects.filter((project) => project.featured);
+  const featured = sortProjectsByTimelineNewestFirst(projects.filter((project) => project.featured));
   const illustrated = featured.filter((project) => getProjectCover(project));
   const showcase = [...illustrated, ...featured.filter((project) => !illustrated.includes(project))].slice(0, 2);
   const otherFeatured = featured.filter((project) => !showcase.includes(project));

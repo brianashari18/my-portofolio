@@ -93,6 +93,7 @@ export interface Project {
   technologies: string[];
   role?: string;
   timeline?: string;
+  location?: string;
   status?: string;
   featured: boolean;
   thumbnail?: string;
@@ -115,6 +116,8 @@ export interface Experience {
   id: string;
   organization: string;
   position: string;
+  timeline?: string;
+  location?: string;
   summary: string;
   contributions: string[];
   technologies: string[];
@@ -207,7 +210,7 @@ export const educationRecords: EducationRecord[] = [
 export const awardRecords: AwardRecord[] = [
   {
     title: 'Data Slayer 3.0',
-    distinction: '4th in the preliminary round out of 163 teams; reached the Top 4 in the final',
+    distinction: '12th in the preliminary round out of 163 teams; placed 4th in the final',
     project: 'Team belikopidulu · Spatiotemporal Drowsiness Detection',
     date: 'Dec 2025',
     href: '/projects/spatiotemporal-drowsiness-detection',
@@ -240,7 +243,7 @@ const projectRecords: Project[] = [
     description: 'A self-reflection journaling app with writing prompts and emotion check-ins, followed by weekly summaries of emotional patterns and possible triggers.',
     categories: ['iOS Development', 'AI / ML Engineering', 'Backend Engineering'], platforms: ['iOS'],
     technologies: ['SwiftUI', 'SwiftData', 'Core ML', 'Foundation Models', 'Speech', 'AVFoundation', 'Go', 'FastAPI', 'Qdrant', 'Ollama', 'bge-m3', 'Docker'],
-    role: 'iOS Developer · AI Engineer · Backend', timeline: '2026', featured: true,
+    role: 'iOS Developer · AI Engineer · Backend', timeline: 'Aug 2026 – Sep 2026', location: 'Batam, Indonesia', featured: true,
     thumbnail: publicStorageImage('sprout', '365c3e04-80d3-4336-b694-aa66ead17917.jpg'),
     gallery: [
       { src: publicStorageImage('sprout', '365c3e04-80d3-4336-b694-aa66ead17917.jpg'), alt: 'Sprout journaling screen with a guided writing prompt.', title: 'Guided journal prompt', caption: 'A guided prompt gives the user a starting point for daily self-reflection. The sample entry is dummy data.', frame: 'phone', frameStyle: 'ios' },
@@ -271,17 +274,18 @@ const projectRecords: Project[] = [
     },
   },
   {
-    id: 'foamy', slug: 'foamy', title: 'Foamy (MySkin)', tagline: 'Skincare analysis and routine companion',
-    description: 'A skincare companion for people managing facial skin concerns, combining product label scanning and ingredient lookup with product comparisons and progress journaling.',
-    categories: ['iOS Development'], platforms: ['iOS'], technologies: ['SwiftUI', 'SwiftData', 'Vision', 'URLSession', 'Combine'],
-    role: 'iOS Developer', timeline: '2026', featured: true,
-    problem: 'People managing facial skin concerns can find it difficult to compare product information and track skin changes over time, making product choices uncertain and progress hard to review.',
-    solution: 'Foamy uses Vision text recognition to turn product-label photos into searchable text, then brings product and ingredient lookup together with a locally stored skin journal and comparison history.',
-    features: ['Camera capture and product-label OCR', 'Product search and ingredient details', 'Product comparison history', 'Routine and journey notes with progress photos'],
-    architecture: { summary: 'SwiftUI feature flows connect camera capture and Vision OCR to product and ingredient APIs. SwiftData models persist profiles, tracked products, comparisons, skincare journeys, milestones, entries, and progress photos.' },
+    id: 'foamy', slug: 'foamy', title: 'Foamy (MySkin)', tagline: 'Product scanning, ingredient details, and skin tracking',
+    description: 'An iOS skincare companion that reads product labels with camera-based OCR, brings product and ingredient information together, and keeps comparisons and skin-progress notes in one place. If direct product lookup cannot resolve scanned text, the connected API can try a DeepSeek LLM fallback.',
+    categories: ['iOS Development'], platforms: ['iOS'], technologies: ['SwiftUI', 'SwiftData', 'AVFoundation', 'Vision', 'URLSession', 'Combine', 'REST API', 'DeepSeek (server-side fallback)'],
+    role: 'iOS Developer', timeline: 'Jul 2026 – Aug 2026', location: 'Batam, Indonesia', featured: true,
+    problem: 'Comparing skincare products can mean jumping between product labels, ingredient references, and personal progress notes. Foamy brings product lookup and skincare journaling into one iOS app.',
+    solution: 'Users can scan a product label or search manually, inspect available product and ingredient details, compare products, and record routine notes and progress photos. The connected API tries direct product search first and documents a DeepSeek LLM fallback for queries it cannot resolve.',
+    features: ['Camera capture and Vision OCR for product labels', 'Product search with direct lookup and conditional DeepSeek fallback', 'Product dossiers with available ingredient, price, review, and brand information', 'Ingredient search and detail lookup', 'Product comparison history', 'Routine notes and skin-progress photos'],
+    architecture: { summary: 'The SwiftUI app uses AVFoundation for camera capture and Vision to extract label text, then sends product and ingredient requests to a remote REST API. The API uses direct product lookup before a conditional DeepSeek fallback; product detail requests can include skin type, sensitivity, and selected concerns. SwiftData stores profiles, tracked products, comparisons, skincare journeys, milestones, entries, and progress photos locally.' },
     contributions: [
       'Developed the iOS app across product scanning, product information, comparison, and skin-journaling flows.',
-      'Integrated Vision text recognition with product and ingredient lookup APIs.',
+      'Connected camera-based Vision OCR to the product resolver, including its server-side DeepSeek fallback for unmatched scan text.',
+      'Passed saved skin type, sensitivity, and selected concern values with enriched product-detail requests.',
       'Built SwiftData-backed records for profiles, tracked products, comparisons, skincare journeys, entries, and progress photos.',
     ],
   },
@@ -290,7 +294,7 @@ const projectRecords: Project[] = [
     description: 'An iOS cooking assistant that imports online recipes, breaks instructions into smaller steps, and supports voice-guided cooking.',
     categories: ['iOS Development', 'AI / ML Engineering'], platforms: ['iOS'],
     technologies: ['SwiftUI', 'SwiftData', 'Foundation Models', 'NaturalLanguage', 'Speech', 'AVFoundation'],
-    role: 'iOS Developer', timeline: '2026', featured: true,
+    role: 'iOS Developer', timeline: 'May 2026 – Jul 2026', location: 'Batam, Indonesia', featured: true,
     problem: 'Intermediate home cooks can struggle to follow online recipes when instructions are complex or cluttered, and manually handling a phone is inconvenient when cooking leaves their hands occupied.',
     solution: 'HiChef extracts recipe information from webpages, stores recipes locally, and refines instructions into smaller steps. Speech recognition and spoken playback support hands-free navigation while cooking.',
     features: ['Recipe URL import and webpage extraction', 'Structured ingredient and instruction data', 'Instruction breakdown into smaller steps', 'Indonesian speech recognition and text-to-speech controls'],
@@ -299,6 +303,7 @@ const projectRecords: Project[] = [
       'Developed the iOS recipe-import flow to extract recipe content from webpages.',
       'Implemented recipe structuring and instruction breakdown using Apple Foundation Models and NaturalLanguage.',
       'Built local recipe persistence with SwiftData and Indonesian speech-guided controls for hands-free cooking.',
+      'Contributed to HiChef’s development, TestFlight beta testing, and App Store publication.',
     ],
   },
   {
@@ -306,7 +311,7 @@ const projectRecords: Project[] = [
     description: 'A hiking trip planner that generates an editable gear checklist from mountain type, trip duration, and group size.',
     categories: ['iOS Development'], platforms: ['iOS'],
     technologies: ['SwiftUI', 'Observation', 'Foundation'],
-    role: 'iOS Developer', timeline: '2026', featured: true,
+    role: 'iOS Developer', timeline: 'Mar 2026 – May 2026', location: 'Batam, Indonesia', featured: true,
     thumbnail: publicStorageImage('muncakin', 'bd9f6e17-18d8-451a-85ba-61dc1639a6b3.jpg'),
     gallery: [
       { src: publicStorageImage('muncakin', 'bd9f6e17-18d8-451a-85ba-61dc1639a6b3.jpg'), alt: 'Muncakin trip packing checklist with grouped gear items for a mountain hike.', title: 'Trip packing checklist', caption: 'The checklist groups trip gear and highlights items that still need attention. Sample trip values are dummy data.', frame: 'phone', frameStyle: 'ios' },
@@ -330,7 +335,7 @@ const projectRecords: Project[] = [
     description: 'An iOS app for short guided movement breaks, with timed sessions and Live Activity support.',
     categories: ['iOS Development'], platforms: ['iOS'],
     technologies: ['SwiftUI', 'ActivityKit', 'WidgetKit'],
-    role: 'iOS Developer', timeline: '2026', featured: true,
+    role: 'iOS Developer', timeline: 'Mar 2026', location: 'Batam, Indonesia', featured: true,
     problem: 'Desk workers and students may spend long stretches seated and find it difficult to build a consistent movement habit.',
     solution: 'Step Up pairs guided stretch plans with timed sessions. The active timer can appear in a Live Activity and a home-screen widget.',
     features: ['Guided stretch plans and movement steps', 'Timed activity sessions', 'Live Activity and WidgetKit support'],
@@ -347,7 +352,7 @@ const projectRecords: Project[] = [
       { src: publicProjectImage('ppt-generator/create-presentation.webp'), alt: 'SlideGen AI presentation setup screen with a prompt and template choices', title: 'Set up a presentation', caption: 'Choose a prompt and a visual template to begin generating a deck.', frame: 'laptop' },
       { src: publicProjectImage('ppt-generator/presentation-editor.webp'), alt: 'SlideGen AI presentation editor showing a generated slide preview and editing controls', title: 'Preview and edit slides', caption: 'Review the generated presentation and adjust its slides before export.', frame: 'laptop' },
     ],
-    role: 'AI Engineer · Telkom Indonesia', featured: false,
+    role: 'AI Engineer · Telkom Indonesia', timeline: 'Dec 2025 – Jan 2026', location: 'Jakarta, Indonesia', featured: false,
     problem: 'Creating a research-backed deck means finding useful evidence, deciding how it supports the story, and turning that story into slides people can review. When research and slide writing happen in separate tools, context can get lost between those steps and the generated deck is harder to inspect as it takes shape.',
     solution: 'The backend prepares generation context through two paths. Its RAG API accepts source text, splits it into 700-character chunks with a 70-character overlap, embeds the chunks, and stores them in an in-memory FAISS index. It then retrieves the 10 passages most similar to the combined prompt and topic. A separate web-research path searches with SearXNG and extracts page content with Crawl4AI and Playwright. The React interface uses the unified generation endpoint for web research: it presents an outline first, streams slides as they are generated, and lets users preview and edit the result before exporting HTML or PowerPoint.',
     features: ['Split source text into overlapping chunks, embed it, and retrieve the 10 closest passages with FAISS', 'Discover web sources through SearXNG and extract page content with Crawl4AI and Playwright', 'Create a presentation outline before generating slide content', 'Stream the outline and completed slides to the interface over Server-Sent Events', 'Choose from four slide design templates and review or edit the presentation', 'Export the result as PowerPoint or editable HTML'],
@@ -383,7 +388,7 @@ const projectRecords: Project[] = [
     description: 'An Excel automation workflow that standardizes question documents with LLM-assisted processing while keeping embedded images and cross-references in view.',
     categories: ['AI / ML Engineering', 'Software Engineering'], platforms: ['Python · Excel'],
     technologies: ['Python', 'FastAPI', 'Excel processing', 'LLM workflows'],
-    role: 'AI Engineer · Telkom Indonesia', featured: false,
+    role: 'AI Engineer · Telkom Indonesia', timeline: 'Oct 2025 – Nov 2025', location: 'Jakarta, Indonesia', featured: false,
     problem: 'Question spreadsheets can contain inconsistent headers and layouts alongside embedded images and references between questions. Manual cleanup risks losing structure or applying different formatting across a workbook.',
     solution: 'The workflow preprocesses each workbook, detects metadata and headers, then groups question text with enough surrounding context for LLM-assisted normalization. It maps the normalized fields into a target template and handles embedded images and cross-references as part of the workbook output.',
     features: ['Preprocess workbooks and detect metadata and header rows', 'Group question text into context-aware chunks for LLM processing', 'Normalize fields and map them to a target Excel template', 'Handle embedded images during template insertion', 'Detect and preserve cross-references between questions'],
@@ -416,7 +421,7 @@ const projectRecords: Project[] = [
     description: 'An OCR and LLM-assisted document workflow that extracts selected information from PKS and BAST files, then consolidates the results into an Excel workbook for review.',
     categories: ['AI / ML Engineering', 'Backend Engineering', 'Software Engineering'], platforms: ['Web · Excel'],
     technologies: ['OCR', 'Multimodal AI', 'LLM workflows', 'Excel processing'],
-    role: 'AI Engineer · Telkom Indonesia', featured: false,
+    role: 'AI Engineer · Telkom Indonesia', timeline: 'Sep 2025 – Oct 2025', location: 'Jakarta, Indonesia', featured: false,
     problem: 'Preparing IFRS 15 data can require reviewing information spread across long contract and handover documents, then manually transferring it into a consistent spreadsheet. The presentation identifies that manual extraction as slow and vulnerable to missed details.',
     solution: 'The workflow uses OCR to make PDF and image documents searchable, processes extracted text in context-aware chunks, and prompts an LLM to identify selected fields. The extracted information is consolidated and checked in an Excel template for review.',
     features: ['Extract text from PDF and image documents with OCR', 'Process PKS and BAST content in manageable context windows', 'Use LLM prompts to identify selected IFRS 15 information', 'Consolidate and validate extracted fields in an Excel workbook'],
@@ -448,7 +453,7 @@ const projectRecords: Project[] = [
     description: 'Face Lock combines face-based verification with access records and monitoring clients across a Python recognition service, Go API, Flutter app, and React dashboard.',
     categories: ['AI / ML Engineering', 'Backend Engineering', 'Flutter Development', 'Software Engineering'], platforms: ['Web', 'Mobile'],
     technologies: ['InsightFace', 'ArcFace', 'Python', 'Go', 'Gin', 'MySQL', 'Flutter', 'React'],
-    role: 'AI Engineer · Full-stack Developer', featured: false,
+    role: 'AI Engineer · Full-stack Developer', timeline: 'Sep 2025 – Dec 2025', location: 'Bandung, Indonesia', featured: false,
     solution: 'The recognition service compares face embeddings for access verification. Separate Go, Flutter, and React repositories cover API access, mobile monitoring, and web-based authorization and dashboards.',
     features: ['Face detection and embedding-based verification', 'Access logs and user-management flows', 'Mobile access monitoring and notification views', 'Web dashboard for authorization and access activity', 'Backend event and notification flows'],
     architecture: { summary: 'A Python recognition service uses InsightFace/ArcFace for face detection and embeddings. A Go/Gin API with MySQL handles user and access-log data; WebSocket and Firebase Cloud Messaging support event and notification flows for the Flutter client and React dashboard.' },
@@ -475,7 +480,7 @@ const projectRecords: Project[] = [
     description: 'A Flutter mobile client paired with a Go API for product discovery, saved items, and scan-based style features.',
     categories: ['Flutter Development', 'Backend Engineering', 'Software Engineering'], platforms: ['Mobile', 'API'],
     technologies: ['Flutter', 'Dart', 'Go', 'Fiber', 'GORM', 'MySQL', 'Firebase'],
-    role: 'Flutter & Backend Developer', featured: false, thumbnail: flickNFitWardrobeImage,
+    role: 'Flutter & Backend Developer', timeline: 'Feb 2024 – Mar 2026', location: 'Bandung, Indonesia', featured: false, thumbnail: flickNFitWardrobeImage,
     gallery: [
       { src: flickNFitWardrobeImage, alt: 'FlickNFit wardrobe screen with a composed outfit and individual clothing items', title: 'Wardrobe outfit', caption: 'A saved outfit assembled from individual clothing items.', frame: 'none' },
       { src: publicProjectImage('flicknfit/home-redacted.webp'), alt: 'FlickNFit home screen with the profile photo and greeting name obscured', title: 'Home feed', caption: 'Browse fashion recommendations; profile details are blurred for privacy.', frame: 'phone', frameStyle: 'android' },
@@ -499,7 +504,7 @@ const projectRecords: Project[] = [
     description: 'A web and Flutter mobile project for finding sports venues, viewing available fields, and managing bookings, with a Python service for venue recommendations.',
     categories: ['Flutter Development', 'Backend Engineering', 'Software Engineering'], platforms: ['Web', 'Mobile'],
     technologies: ['React', 'JavaScript', 'Flutter', 'Dart', 'Python', 'Flask', 'geopy', 'Firebase', 'Maps'],
-    role: 'Web, Mobile & Backend Developer', featured: false, thumbnail: fitSpaceDiscoveryImage,
+    role: 'Web, Mobile & Backend Developer', timeline: 'Jan 2025 – Jul 2025', location: 'Bandung, Indonesia', featured: false, thumbnail: fitSpaceDiscoveryImage,
     gallery: [
       { src: fitSpaceDiscoveryImage, alt: 'FitSpace venue discovery screen with sport filters, nearby courts, ratings, and prices', title: 'Venue discovery', caption: 'Browse nearby venues and compare sports, ratings, and starting prices.', frame: 'phone', frameStyle: 'android' },
       { src: fitSpaceScheduleImage, alt: 'FitSpace booking screen with a weekly calendar and hourly court availability', title: 'Booking schedule', caption: 'A calendar and time-slot view for selecting a court booking.', frame: 'none' },
@@ -525,7 +530,7 @@ const projectRecords: Project[] = [
     description: 'A Flutter app with seller and verifier flows for creating carbon plots, managing zones, and reviewing related transactions.',
     categories: ['Flutter Development', 'Software Engineering'], platforms: ['Mobile'],
     technologies: ['Flutter', 'Dart', 'Firebase Authentication', 'Google Sign-In', 'fl_chart'],
-    role: 'Flutter Developer', featured: false, thumbnail: stoCarbonVerifierImage,
+    role: 'Flutter Developer', timeline: 'Mar 2025 – Aug 2025', location: 'Jakarta, Indonesia', featured: false, thumbnail: stoCarbonVerifierImage,
     gallery: [
       { src: stoCarbonVerifierImage, alt: 'StoCarbon verifier dashboard showing plot review counts and a monthly performance chart', title: 'Verifier dashboard', caption: 'A summary screen for pending, approved, and rejected plot reviews.', frame: 'phone', frameStyle: 'android' },
       { src: stoCarbonZoneCreationImage, alt: 'StoCarbon form for creating a zone with fields for zone name, address, coordinates, and region', title: 'Create a zone', caption: 'A form for entering zone details before adding it to the app.', frame: 'phone', frameStyle: 'android' },
@@ -547,7 +552,7 @@ const projectRecords: Project[] = [
     description: 'A Music Information Retrieval study on chord extraction from Indonesian pop audio. The model predicts one of 24 major/minor triad classes for each known, aligned segment; it does not detect chord boundaries or directly predict Roman-numeral functions.',
     categories: ['AI / ML Engineering', 'Software Engineering'], platforms: ['Python', 'Jupyter Notebook'],
     technologies: ['Python', 'PyTorch', 'librosa', 'Demucs', 'HPSS', 'MFCC', 'Chromagram', 'RNN', 'GRU', 'LSTM', 'BiLSTM', 'Transformer'],
-    role: 'Researcher · ML Engineer', featured: false,
+    role: 'Researcher · ML Engineer', timeline: 'Jan 2025 – Jul 2026', location: 'Bandung & Jakarta, Indonesia', featured: false,
     problem: 'The study addresses a research gap identified in its paper: Indonesian pop lacked a frame-level chord-recognition baseline, while a small annotated dataset made the task vulnerable to class imbalance, vocal and percussion noise, and overfitting in high-capacity models.',
     solution: 'I built a data-centric Automatic Chord Extraction pipeline around a curated, manually annotated corpus of 50 Indonesian pop songs (about 3.2 hours and 4,561 labeled segments). It aligns chord labels with audio, tests Demucs stem separation and Harmonic-Percussive Source Separation (HPSS), pools temporal features, and compares audio representations and sequence models. The final classifier uses chromagram sequences with a unidirectional LSTM to predict 24 major/minor triad classes within provided segment boundaries.',
     features: [
@@ -585,10 +590,10 @@ const projectRecords: Project[] = [
   },
   {
     id: 'spatiotemporal-drowsiness-detection', slug: 'spatiotemporal-drowsiness-detection', title: 'Spatiotemporal Drowsiness Detection',
-    tagline: 'Data Slayer 2025 · Preliminary 4th of 163 · Final Top 4',
-    description: 'A team computer-vision entry for Data Slayer 3.0, classifying one-second in-car video sequences as drowsy or non-drowsy. Team belikopidulu placed 4th out of 163 teams in the preliminary round and reached the top 4 in the final.',
+    tagline: 'Data Slayer 2025 · Preliminary 12th of 163 · Final 4th',
+    description: 'A team computer-vision entry for Data Slayer 3.0, classifying one-second in-car video sequences as drowsy or non-drowsy. Team belikopidulu placed 12th out of 163 teams in the preliminary round and placed 4th in the final.',
     categories: ['AI / ML Engineering'], platforms: ['Kaggle'],
-    technologies: ['VideoMAE', 'BiLSTM'], role: 'AI/ML team collaborator', timeline: '2025', featured: false,
+    technologies: ['VideoMAE', 'BiLSTM'], role: 'AI/ML team collaborator', timeline: 'Nov 2025 – Dec 2025', location: 'Jakarta, Indonesia', featured: false,
     problem: 'Data Slayer 3.0 challenged teams to classify one-second in-car clips as drowsy or non-drowsy. The training set covered 15 subjects, with eight videos per subject across front and side camera views. Drowsiness examples showed microsleep or yawning; non-drowsiness examples showed focus or talking. The task was evaluated with Macro F1.',
     solution: 'The team stabilized region crops with a Union Bounding Box to limit frame-to-frame crop jitter, then sampled 16 frames from each input clip for a VideoMAE + BiLSTM approach. Candidate models used augmentation and staged fine-tuning, were compared with five-fold evaluation, and were combined for inference with horizontal-flip test-time augmentation.',
     features: [
@@ -634,8 +639,8 @@ const projectRecords: Project[] = [
       'Frame-to-frame crop jitter risked teaching the model position changes rather than drowsiness patterns.',
     ],
     results: [
-      'Team belikopidulu placed 4th out of 163 teams in the Data Slayer 3.0 preliminary round.',
-      'The team reached the top 4 in the Data Slayer 2025 final.',
+      'Team belikopidulu placed 12th out of 163 teams in the Data Slayer 3.0 preliminary round.',
+      'The team placed 4th in the Data Slayer 2025 final.',
       'The presentation reports a 91.66% mean F1 across five validation folds (range 0.7913–1.0000). This is the model’s cross-validation result, not its Kaggle leaderboard score.',
     ],
     links: [
@@ -648,7 +653,7 @@ const projectRecords: Project[] = [
     description: 'A Flutter app for learning about responsible e-waste disposal, finding nearby e-bank collection points, requesting pickups, and managing reward points.',
     categories: ['Flutter Development', 'Software Engineering'], platforms: ['Android', 'iOS'],
     technologies: ['Flutter', 'Dart', 'Firebase Authentication', 'Cloud Firestore', 'FlutterMap', 'Geolocator'],
-    role: 'Flutter Developer', featured: false, thumbnail: eWiseHomeImage,
+    role: 'Flutter Developer', timeline: 'Apr 2024 – Sep 2024', location: 'Jakarta & Bandung, Indonesia', featured: false, thumbnail: eWiseHomeImage,
     gallery: [
       { src: eWiseHomeImage, alt: 'E-Wise home screen with e-waste information, pickup, e-Bank, and WisePoint shortcuts', title: 'Home and services', caption: 'Entry points for e-waste education, collection, nearby e-banks, and points.', frame: 'phone', frameStyle: 'android' },
       { src: eWisePointsImage, alt: 'E-Wise WisePoint screen with a points balance, redeem and add actions, and an activity chart', title: 'WisePoint', caption: 'A points overview with redemption and activity information.', frame: 'phone', frameStyle: 'android' },
@@ -677,7 +682,8 @@ const projectRecords: Project[] = [
     id: 'mabrur-hajj-umrah', slug: 'mabrur-hajj-umrah', title: 'Mabrur Hajj & Umrah App',
     tagline: 'Prayer guidance and group tools for a pilgrimage companion',
     description: 'A mobile companion app concept for Hajj and Umrah, with prayer guidance and group communication.',
-    categories: ['Software Engineering'], platforms: ['Mobile'], technologies: [], featured: false,
+    categories: ['Software Engineering'], platforms: ['Mobile'], technologies: [],
+    role: 'Mobile Developer · Community Service Program', timeline: 'Dec 2024 – Apr 2025', location: 'Bandung, Indonesia', featured: false,
     thumbnail: mabrurPrayerHomeImage,
     gallery: [
       { src: mabrurLoginImage, alt: 'Mabrur sign-in screen with email and password fields', title: 'Sign in', caption: 'Entry point for accessing the Hajj and Umrah companion.', frame: 'phone', frameStyle: 'android' },
@@ -695,9 +701,9 @@ const projectRecords: Project[] = [
   },
   {
     id: 'chat-app', slug: 'chat-app', title: 'Chat App', tagline: 'An early Flutter project built through a chat app',
-    description: 'An early Flutter learning project exploring mobile app development through a chat experience.',
+    description: 'A learning project from Flutter & Dart - The Complete Guide (Udemy, Jan–Sep 2024), exploring mobile development through a chat experience.',
     categories: ['Flutter Development', 'Software Engineering'], platforms: ['Android', 'iOS'],
-    technologies: ['Flutter', 'Dart'], role: 'Flutter Developer', featured: false, thumbnail: chatAppLoginImage,
+    technologies: ['Flutter', 'Dart'], role: 'Course project', timeline: 'Jan 2024 – Feb 2024', location: 'Jakarta, Indonesia', featured: false, thumbnail: chatAppLoginImage,
     gallery: [
       { src: chatAppLoginImage, alt: 'Chat App sign-in screen with email and password fields', title: 'Login screen', caption: 'The supplied screen shows the sign-in entry point; this image set does not include a message thread.', frame: 'phone', frameStyle: 'android' },
     ],
@@ -708,9 +714,9 @@ const projectRecords: Project[] = [
   },
   {
     id: 'expense-tracker', slug: 'expense-tracker', title: 'Expense Tracker', tagline: 'Learning Flutter through daily expense tracking',
-    description: 'A Flutter learning project built around recording and reviewing daily expenses.',
+    description: 'A learning project from Flutter & Dart - The Complete Guide (Udemy, Jan–Sep 2024), built around recording and reviewing daily expenses.',
     categories: ['Flutter Development', 'Software Engineering'], platforms: ['Android', 'iOS'],
-    technologies: ['Flutter', 'Dart'], role: 'Flutter Developer', featured: false, thumbnail: expenseTrackerOverviewImage,
+    technologies: ['Flutter', 'Dart'], role: 'Course project', timeline: 'Feb 2024 – Mar 2024', location: 'Jakarta, Indonesia', featured: false, thumbnail: expenseTrackerOverviewImage,
     gallery: [
       { src: expenseTrackerOverviewImage, alt: 'Expense Tracker screen showing sample entries for a Flutter course, cinema, and hiking', title: 'Expense list', caption: 'A sample list demonstrates how the app records and reviews daily spending.', frame: 'phone', frameStyle: 'android' },
     ],
@@ -722,9 +728,9 @@ const projectRecords: Project[] = [
   },
   {
     id: 'meals-app', slug: 'meals-app', title: 'Meals App', tagline: 'Learning Flutter through recipes and meal planning',
-    description: 'A Flutter learning project for discovering recipes and organizing meal plans.',
+    description: 'A learning project from Flutter & Dart - The Complete Guide (Udemy, Jan–Sep 2024), focused on discovering recipes and organizing meal plans.',
     categories: ['Flutter Development', 'Software Engineering'], platforms: ['Android', 'iOS'],
-    technologies: ['Flutter', 'Dart'], role: 'Flutter Developer', featured: false, thumbnail: mealsCategoriesImage,
+    technologies: ['Flutter', 'Dart'], role: 'Course project', timeline: 'Mar 2024 – Apr 2024', location: 'Jakarta, Indonesia', featured: false, thumbnail: mealsCategoriesImage,
     gallery: [
       { src: mealsCategoriesImage, alt: 'Meals App category screen with cuisine and meal category cards', title: 'Recipe categories', caption: 'Explore recipe categories as part of a Flutter learning project.', frame: 'phone', frameStyle: 'android' },
       { src: mealsRecipeListImage, alt: 'Meals App recipe list displaying pasta and other sample dishes', title: 'Recipe collection', caption: 'Browse a list of dishes before opening an individual recipe.', frame: 'phone', frameStyle: 'android' },
@@ -738,9 +744,9 @@ const projectRecords: Project[] = [
   },
   {
     id: 'quiz-app', slug: 'quiz-app', title: 'Quiz App', tagline: 'Learning Flutter through a quiz app',
-    description: 'A Flutter learning project built around a simple quiz experience.',
+    description: 'A learning project from Flutter & Dart - The Complete Guide (Udemy, Jan–Sep 2024), built around a simple quiz experience.',
     categories: ['Flutter Development', 'Software Engineering'], platforms: ['Android', 'iOS'],
-    technologies: ['Flutter', 'Dart'], role: 'Flutter Developer', featured: false, thumbnail: quizIntroImage,
+    technologies: ['Flutter', 'Dart'], role: 'Course project', timeline: 'Apr 2024 – May 2024', location: 'Jakarta, Indonesia', featured: false, thumbnail: quizIntroImage,
     gallery: [
       { src: quizIntroImage, alt: 'Quiz App welcome screen with a Start Quiz button', title: 'Quiz introduction', caption: 'A welcome screen for starting a quiz.', frame: 'phone', frameStyle: 'android' },
       { src: quizQuestionImage, alt: 'Quiz App multiple-choice question about the building blocks of Flutter UI', title: 'Answer a question', caption: 'A multiple-choice question screen.', frame: 'phone', frameStyle: 'android' },
@@ -753,9 +759,9 @@ const projectRecords: Project[] = [
   },
   {
     id: 'role-dice-app', slug: 'role-dice-app', title: 'Role Dice App', tagline: 'Learning Flutter through a role-playing dice roller',
-    description: 'A Flutter learning project that simulates dice rolls for role-playing games.',
+    description: 'A learning project from Flutter & Dart - The Complete Guide (Udemy, Jan–Sep 2024), simulating dice rolls for role-playing games.',
     categories: ['Flutter Development', 'Software Engineering'], platforms: ['Android', 'iOS'],
-    technologies: ['Flutter', 'Dart'], role: 'Flutter Developer', featured: false, thumbnail: roleDiceIntroImage,
+    technologies: ['Flutter', 'Dart'], role: 'Course project', timeline: 'May 2024 – Jun 2024', location: 'Jakarta, Indonesia', featured: false, thumbnail: roleDiceIntroImage,
     gallery: [
       { src: roleDiceIntroImage, alt: 'Role Dice App opening screen with a yellow two-dot die', title: 'Dice roller', caption: 'The opening screen of a small Flutter dice-rolling learning project.', frame: 'phone', frameStyle: 'android' },
     ],
@@ -774,22 +780,46 @@ export const projects: Project[] = projectRecords.map((project) => {
 
 export const experiences: Experience[] = [
   {
-    id: 'apple-developer-academy', organization: 'Apple Developer Academy', position: 'iOS Development',
+    id: 'apple-developer-academy', organization: 'Apple Developer Academy @ Infinite Learning', position: 'iOS Developer', timeline: 'Mar 2026 – Present', location: 'Batam, Indonesia',
     summary: 'Collaborative end-to-end application development focused on native iOS.',
     contributions: ['Built iOS applications with Swift, SwiftUI, and UIKit', 'Worked through end-to-end application development in a collaborative setting'],
     technologies: ['Swift', 'SwiftUI', 'UIKit'],
   },
   {
-    id: 'telkom-indonesia', organization: 'Telkom Indonesia', position: 'AI Engineering Intern',
+    id: 'telkom-indonesia', organization: 'Telkom Indonesia', position: 'AI Engineer Intern', timeline: 'Sep 2025 – Jan 2026', location: 'Jakarta, Indonesia',
     summary: 'Worked on AI engineering workflows involving document translation and presentation generation.',
     contributions: ['Worked with OCR and LLM-powered document translation', 'Contributed to RAG-based presentation generation', 'Worked across AI workflows and data processing'],
     technologies: ['OCR', 'LLMs', 'RAG', 'Data processing'],
   },
   {
-    id: 'lensa', organization: 'Lensa', position: 'System Administration, Database Programming & ERP Customization',
-    summary: 'Experience spanning system administration, database programming, and ERP customization.',
+    id: 'lensa', organization: 'Lensa Software', position: 'Systems Administrator & Database Programmer Intern', timeline: 'Jul 2025 – Sep 2025', location: 'Jakarta, Indonesia',
+    summary: 'Internship spanning system administration, database programming, and ERP customization.',
     contributions: ['System administration', 'Database programming', 'ERP customization'],
     technologies: ['Databases', 'ERP'],
+  },
+  {
+    id: 'community-service-program', organization: 'Community Service Program', position: 'Mobile Developer', timeline: 'Dec 2024 – Apr 2025', location: 'Bandung, Indonesia',
+    summary: 'Mobile development for the Mabrur Hajj & Umrah app as part of a community service program.',
+    contributions: ['Developed the Mabrur Hajj & Umrah mobile app.'],
+    technologies: [],
+  },
+  {
+    id: 'flicknfit-startup', organization: 'Startup FlickNFit', position: 'Mobile Developer', timeline: 'Feb 2024 – Mar 2026', location: 'Bandung, Indonesia',
+    summary: 'Mobile developer at Startup FlickNFit.',
+    contributions: [],
+    technologies: [],
+  },
+  {
+    id: 'teaching-assistant', organization: 'Telkom University', position: 'Teaching Assistant', timeline: 'Sep 2023 – Jul 2025', location: 'Bandung, Indonesia',
+    summary: 'Teaching Assistant at Telkom University.',
+    contributions: [],
+    technologies: [],
+  },
+  {
+    id: 'practicum-assistant', organization: 'Telkom University', position: 'Practicum Assistant', timeline: 'Sep 2023 – Jul 2025', location: 'Bandung, Indonesia',
+    summary: 'Practicum Assistant at Telkom University.',
+    contributions: [],
+    technologies: [],
   },
 ];
 

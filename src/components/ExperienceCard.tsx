@@ -7,12 +7,14 @@ export default function ExperienceCard({ item, detailed = false, initiallyOpen =
   initiallyOpen?: boolean;
 }) {
   const id = `experience-${item.id}`;
+  const hasDetails = Boolean(item.timeline || item.location);
 
   return <details id={detailed ? id : undefined} tabIndex={detailed ? -1 : undefined} open={initiallyOpen}>
     <summary>
       <span className="nova-experience-accordion__label">
         <strong>{item.organization}</strong>
         <span>{item.position}</span>
+        {hasDetails && <span className="nova-experience-accordion__meta">{[item.timeline, item.location].filter(Boolean).join(' · ')}</span>}
       </span>
       <span className="nova-experience-accordion__icon" aria-hidden="true">+</span>
     </summary>

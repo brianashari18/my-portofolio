@@ -550,7 +550,7 @@ function RecordList({ label, items, selectedId, onSelect, onAdd, addLabel }: {
 
 interface ProjectForm {
   id: string; slug: string; title: string; tagline: string; description: string;
-  categories: string; platforms: string; technologies: string; role: string; timeline: string; status: string;
+  categories: string; platforms: string; technologies: string; role: string; timeline: string; location: string; status: string;
   featured: boolean; galleryTone: GalleryTone | '';
   problem: string; solution: string; features: string; architectureSummary: string; architectureDiagram: string; architectureCaption: string;
   engineeringChallenges: string; contributions: string; results: string; reflections: string; links: string;
@@ -579,7 +579,7 @@ function projectToForm(project?: Project): ProjectForm {
   return {
     id: project?.id ?? '', slug: project?.slug ?? '', title: project?.title ?? '', tagline: project?.tagline ?? '', description: project?.description ?? '',
     categories: project?.categories.join('\n') ?? '', platforms: project?.platforms.join('\n') ?? '', technologies: project?.technologies.join('\n') ?? '',
-    role: project?.role ?? '', timeline: project?.timeline ?? '', status: project?.status ?? '', featured: project?.featured ?? false,
+    role: project?.role ?? '', timeline: project?.timeline ?? '', location: project?.location ?? '', status: project?.status ?? '', featured: project?.featured ?? false,
     galleryTone: project?.galleryTone ?? '',
     problem: project?.problem?.trim() ? project.problem : project?.workflow?.rationale ?? fallbackProject?.problem ?? fallbackProject?.workflow?.rationale ?? '',
     solution: project?.solution ?? '', features: project?.features?.join('\n') ?? '',
@@ -639,7 +639,7 @@ function ProjectEditor({ project, onApply, onDelete }: { project?: Project; onAp
     const nextProject: Project = {
       id: form.id.trim(), slug: form.slug.trim(), title: form.title.trim(), tagline: form.tagline.trim(), description: form.description.trim(),
       categories, platforms: parseLines(form.platforms), technologies: parseLines(form.technologies), featured: form.featured,
-      ...(form.role.trim() ? { role: form.role.trim() } : {}), ...(form.timeline.trim() ? { timeline: form.timeline.trim() } : {}), ...(form.status.trim() ? { status: form.status.trim() } : {}),
+      ...(form.role.trim() ? { role: form.role.trim() } : {}), ...(form.timeline.trim() ? { timeline: form.timeline.trim() } : {}), ...(form.location.trim() ? { location: form.location.trim() } : {}), ...(form.status.trim() ? { status: form.status.trim() } : {}),
       ...(selectedCover ? { thumbnail: selectedCover, heroImage: selectedCover } : {}), ...(form.galleryTone ? { galleryTone: form.galleryTone } : {}), ...(galleryImages.length ? { gallery: galleryImages } : {}),
       ...(form.problem.trim() ? { problem: form.problem.trim() } : {}), ...(form.solution.trim() ? { solution: form.solution.trim() } : {}),
       ...(parseLines(form.features).length ? { features: parseLines(form.features) } : {}), ...(architecture ? { architecture } : {}),
@@ -664,8 +664,9 @@ function ProjectEditor({ project, onApply, onDelete }: { project?: Project; onAp
       <TextField label="Categories · one per line" multiline value={form.categories} onChange={(value) => setField('categories', value)} required hint="Examples: iOS Development, AI / ML Engineering" />
       <TextField label="Platforms · one per line" multiline value={form.platforms} onChange={(value) => setField('platforms', value)} required />
       <TextField className="admin-field--wide" label="Technologies · one per line" multiline value={form.technologies} onChange={(value) => setField('technologies', value)} />
-      <TextField label="Role" value={form.role} onChange={(value) => setField('role', value)} hint="Your role in this project, not the project type or team context." />
+      <TextField label="Role / project context" value={form.role} onChange={(value) => setField('role', value)} hint="Your role, or context such as a course project." />
       <TextField label="Timeline" value={form.timeline} onChange={(value) => setField('timeline', value)} />
+      <TextField label="Location" value={form.location} onChange={(value) => setField('location', value)} />
       <TextField label="Status" value={form.status} onChange={(value) => setField('status', value)} hint="For example: Prototype, In progress." />
       <label className="admin-checkbox"><input type="checkbox" checked={form.featured} onChange={(event) => setField('featured', event.target.checked)} /><span>Show in selected work</span></label>
       <TextField className="admin-field--wide" label="Why this project exists" multiline value={form.problem} onChange={(value) => setField('problem', value)} hint="Describe the problem, need, or research question that motivated the project." />
@@ -895,11 +896,11 @@ function ProjectGalleryEditor({ projectTitle, platforms, folder, images, coverSo
   </fieldset>;
 }
 
-interface ExperienceForm { id: string; organization: string; position: string; summary: string; contributions: string; technologies: string }
+interface ExperienceForm { id: string; organization: string; position: string; timeline: string; location: string; summary: string; contributions: string; technologies: string }
 
 function ExperienceEditor({ experience, onApply, onDelete }: { experience?: Experience; onApply: (experience: Experience, isExisting: boolean) => string | null; onDelete?: () => void }) {
   const [form, setForm] = useState<ExperienceForm>(() => ({
-    id: experience?.id ?? '', organization: experience?.organization ?? '', position: experience?.position ?? '', summary: experience?.summary ?? '',
+    id: experience?.id ?? '', organization: experience?.organization ?? '', position: experience?.position ?? '', timeline: experience?.timeline ?? '', location: experience?.location ?? '', summary: experience?.summary ?? '',
     contributions: experience?.contributions.join('\n') ?? '', technologies: experience?.technologies.join('\n') ?? '',
   }));
   const [message, setMessage] = useState('');
@@ -908,7 +909,13 @@ function ExperienceEditor({ experience, onApply, onDelete }: { experience?: Expe
 
   function handleSubmit(event: FormEvent<HTMLFormElement>) {
     event.preventDefault();
-    const error = onApply({ ...form, id: form.id.trim(), organization: form.organization.trim(), position: form.position.trim(), summary: form.summary.trim(), contributions: parseLines(form.contributions), technologies: parseLines(form.technologies) }, Boolean(experience));
+    const timeline = form.timeline.trim();
+    const location = form.location.trim();
+    const error = onApply({
+      id: form.id.trim(), organization: form.organization.trim(), position: form.position.trim(), summary: form.summary.trim(),
+      ...(timeline ? { timeline } : {}), ...(location ? { location } : {}),
+      contributions: parseLines(form.contributions), technologies: parseLines(form.technologies),
+    }, Boolean(experience));
     setMessage(error ?? 'Applied to draft. Save & publish to make it public.');
   }
 
@@ -919,6 +926,8 @@ function ExperienceEditor({ experience, onApply, onDelete }: { experience?: Expe
       <TextField label="Experience ID" value={form.id} onChange={(value) => setField('id', value)} required readOnly={Boolean(experience)} hint="Stable ID used by skill evidence links." />
       <TextField label="Organization" value={form.organization} onChange={(value) => setField('organization', value)} required />
       <TextField className="admin-field--wide" label="Position" value={form.position} onChange={(value) => setField('position', value)} required />
+      <TextField label="Timeline" value={form.timeline} onChange={(value) => setField('timeline', value)} />
+      <TextField label="Location" value={form.location} onChange={(value) => setField('location', value)} />
       <TextField className="admin-field--wide" label="Summary" multiline value={form.summary} onChange={(value) => setField('summary', value)} required />
       <TextField label="Contributions · one per line" multiline value={form.contributions} onChange={(value) => setField('contributions', value)} />
       <TextField label="Technologies · one per line" multiline value={form.technologies} onChange={(value) => setField('technologies', value)} />

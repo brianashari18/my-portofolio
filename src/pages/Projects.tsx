@@ -2,6 +2,7 @@ import { useSearchParams } from 'react-router-dom';
 import ProjectCard from '../components/ProjectCard';
 import PageIntro from '../components/PageIntro';
 import { usePortfolioContent } from '../context/usePortfolioContent';
+import { sortProjectsByTimelineNewestFirst } from '../lib/sortProjectsByTimeline';
 
 export default function Projects() {
   const { content: { projects } } = usePortfolioContent();
@@ -9,7 +10,7 @@ export default function Projects() {
   const categories = Array.from(new Set(projects.flatMap((project) => project.categories)));
   const activeCategory = categories.find((category) => category === searchParams.get('category'));
   const matching = activeCategory ? projects.filter((project) => project.categories.includes(activeCategory)) : projects;
-  const featured = matching.filter((project) => project.featured);
+  const featured = sortProjectsByTimelineNewestFirst(matching.filter((project) => project.featured));
   const additional = matching.filter((project) => !project.featured);
   const projectSearch = activeCategory ? new URLSearchParams({ category: activeCategory }).toString() : '';
 
