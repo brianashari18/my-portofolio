@@ -19,7 +19,13 @@
 .nova-theme-toggle:hover { border-color: var(--copper); background: var(--paper-deep); }
 .nova-theme-toggle svg { width: 17px; height: 17px; fill: none; stroke: currentColor; stroke-linecap: round; stroke-linejoin: round; stroke-width: 1.7; }
 .nova-menu-toggle { display: none; align-items: center; gap: 10px; min-height: 44px; padding: 0; border: 0; background: transparent; font-size: 14px; font-weight: 700; cursor: pointer; }
-.nova-menu-toggle__icon { font-size: 25px; font-weight: 400; line-height: 1; }
+.nova-menu-toggle__icon { position: relative; display: grid; width: 22px; height: 22px; place-items: center; }
+.nova-menu-toggle__icon > span { position: absolute; display: block; width: 20px; height: 2px; border-radius: 2px; background: currentColor; transition: transform .24s cubic-bezier(.2,.75,.25,1), opacity .16s ease; }
+.nova-menu-toggle__icon > span:first-child { transform: translateY(-6px); }
+.nova-menu-toggle__icon > span:last-child { transform: translateY(6px); }
+.nova-menu-toggle__icon.is-open > span:first-child { transform: rotate(45deg); }
+.nova-menu-toggle__icon.is-open > span:nth-child(2) { opacity: 0; transform: scaleX(.35); }
+.nova-menu-toggle__icon.is-open > span:last-child { transform: rotate(-45deg); }
 .nova-mobile-nav { display: none; }
 
 /* Shared links and buttons */
@@ -157,6 +163,11 @@
 .nova-related-records { display: flex; flex-wrap: wrap; gap: 8px; margin: 0; padding: 0; list-style: none; }
 .nova-related-records a { display: grid; align-content: center; gap: 3px; min-height: 40px; padding: 8px 12px; border: 1px solid var(--line); border-radius: 999px; color: var(--ink); font-size: 13px; line-height: 1.35; text-decoration: none; transition: border-color .2s, background-color .2s; }
 .nova-related-records a:hover, .nova-related-records a:focus-visible { border-color: var(--green-dark); background: var(--paper-deep); }
+.nova-related-records--projects { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 0 28px; }
+.nova-related-records--projects a { display: flex; align-items: center; justify-content: space-between; gap: 14px; min-width: 0; min-height: 44px; padding: 9px 2px; border: 0; border-bottom: 1px solid var(--line); border-radius: 0; background: transparent; font-size: 14px; transition: color .2s, border-color .2s; }
+.nova-related-records--projects a:hover, .nova-related-records--projects a:focus-visible { border-color: var(--copper); background: transparent; color: var(--copper); }
+.nova-related-records--projects a span { flex: none; color: var(--copper); font-size: 17px; transition: transform .2s ease; }
+.nova-related-records--projects a:hover span, .nova-related-records--projects a:focus-visible span { transform: translate(2px, -2px); }
 .nova-related-records--experience a { min-width: min(100%, 260px); border-radius: 12px; }
 .nova-related-records--experience strong { color: var(--ink); font-size: 14px; }
 .nova-related-records--experience span { color: var(--muted); font-size: 11px; }
@@ -394,8 +405,8 @@ html:has(.nova-image-dialog[open]) { overflow: hidden; }
   .nova-menu-toggle { display: inline-flex; }
   .nova-mobile-nav { position: absolute; inset: 100% 0 auto; display: flex; flex-direction: column; width: min(1440px, 100%); max-height: 0; margin-inline: auto; padding-inline: max(18px, 4vw); overflow: hidden; background: var(--paper); opacity: 0; visibility: hidden; transition: max-height .35s ease, opacity .25s ease, visibility .25s ease; }
   .nova-header.is-open .nova-mobile-nav { max-height: min(390px, calc(100dvh - 64px)); overflow-y: auto; overscroll-behavior: contain; padding-block: 8px 20px; opacity: 1; visibility: visible; box-shadow: 0 25px 40px rgba(22,22,22,.12); }
-  .nova-mobile-nav__link { display: grid; grid-template-columns: 1fr 28px; flex: none; align-items: center; gap: 14px; min-height: 70px; border-top: 1px solid var(--line); font-size: 26px; font-weight: 700; letter-spacing: -.04em; }
-  .nova-mobile-nav__link span:last-child { justify-self: end; font-size: 22px; font-weight: 400; }
+  .nova-mobile-nav__link { display: grid; grid-template-columns: 1fr 28px; flex: none; align-items: center; gap: 14px; min-height: 58px; border-top: 1px solid var(--line); font-size: clamp(18px, 2.7vw, 21px); font-weight: 700; letter-spacing: -.035em; }
+  .nova-mobile-nav__link span:last-child { justify-self: end; font-size: 18px; font-weight: 400; }
   .nova-mobile-nav__link.is-active { color: var(--green-dark); }
 }
 
@@ -443,6 +454,7 @@ html:has(.nova-image-dialog[open]) { overflow: hidden; }
 
 @media (max-width: 650px) {
   .page-shell { width: calc(100% - 36px); }
+  .nova-related-records--projects { grid-template-columns: minmax(0, 1fr); }
   .nova-experience-group__heading { gap: 12px; margin-bottom: 16px; }
   .nova-experience-group__heading h2 { font-size: clamp(24px, 7vw, 32px); }
   .nova-brand { font-size: 13px; }
@@ -530,6 +542,7 @@ html:has(.nova-image-dialog[open]) { overflow: hidden; }
 }
 
 @media (prefers-reduced-motion: reduce) {
+  .nova-menu-toggle__icon > span { transition: none; }
   .nova-button:hover, .nova-project__link:is(:hover, :focus-visible) img, .nova-inline-link:hover span { transform: none; }
   .nova-project__link:is(:hover, :focus-visible) .nova-project__arrow-track > span:first-child { transform: none; }
   .nova-project__link:is(:hover, :focus-visible) .nova-project__arrow-track > span:last-child { transform: translate(-160%, 160%); }

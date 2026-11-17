@@ -61,7 +61,10 @@ export default function Header() {
         <ActionLink to="/contact" className="nova-header__contact" arrow={false}>Contact</ActionLink>
         <ThemeToggle />
         <button ref={menuToggle} className="nova-menu-toggle" type="button" aria-expanded={menuOpen} aria-controls="mobile-navigation" aria-label={menuOpen ? 'Close navigation' : 'Open navigation'} onClick={() => setMenuOpen((open) => !open)}>
-          <span>{menuOpen ? 'Close' : 'Menu'}</span><span className="nova-menu-toggle__icon" aria-hidden="true">{menuOpen ? '×' : '+'}</span>
+          <span>{menuOpen ? 'Close' : 'Menu'}</span>
+          <span className={`nova-menu-toggle__icon${menuOpen ? ' is-open' : ''}`} aria-hidden="true">
+            <span /><span /><span />
+          </span>
         </button>
       </div>
     </div>
