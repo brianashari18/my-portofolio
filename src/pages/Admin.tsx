@@ -317,6 +317,7 @@ export default function Admin() {
       ...current,
       projects: isExisting ? current.projects.map((item) => item.id === project.id ? project : item) : [...current.projects, project],
     }));
+    if (!isExisting) setSelectedProjectId(project.id);
     return null;
   }
 
@@ -332,13 +333,23 @@ export default function Admin() {
     setSelectedProjectId(null);
   }
 
-  function applyExperience(experience: Experience, isExisting: boolean): string | null {
+  function applyExperience(experience: Experience, isExisting: boolean, linkedProjectIds: string[]): string | null {
     const duplicate = draft.experiences.some((item) => item.id === experience.id);
     if (duplicate && !isExisting) return 'That experience ID is already in use.';
+    const linkedProjects = new Set(linkedProjectIds);
     updateDraft((current) => ({
       ...current,
       experiences: isExisting ? current.experiences.map((item) => item.id === experience.id ? experience : item) : [...current.experiences, experience],
+      projects: current.projects.map((project) => {
+        const experienceIds = (project.experienceIds ?? []).filter((id) => id !== experience.id);
+        if (linkedProjects.has(project.id)) experienceIds.push(experience.id);
+        const currentIds = project.experienceIds ?? [];
+        return experienceIds.length === currentIds.length && experienceIds.every((id, index) => id === currentIds[index])
+          ? project
+          : { ...project, experienceIds };
+      }),
     }));
+    if (!isExisting) setSelectedExperienceId(experience.id);
     return null;
   }
 
@@ -346,6 +357,10 @@ export default function Admin() {
     updateDraft((current) => ({
       ...current,
       experiences: current.experiences.filter((experience) => experience.id !== id),
+      projects: current.projects.map((project) => {
+        if (!project.experienceIds?.includes(id)) return project;
+        return { ...project, experienceIds: project.experienceIds.filter((experienceId) => experienceId !== id) };
+      }),
       skillCategories: current.skillCategories.map((category) => ({
         ...category,
         skills: category.skills.map((skill) => ({ ...skill, evidenceIds: skill.evidenceIds.filter((evidenceId) => evidenceId !== id) })),
@@ -407,7 +422,7 @@ export default function Admin() {
           <div className="admin-panel__heading"><p className="eyebrow">Case studies</p><h2>Projects</h2><p>Add, edit, and remove the projects shown on the public work pages.</p></div>
           <div className="admin-record-layout">
             <RecordList label="Projects" items={draft.projects.map((project) => ({ id: project.id, title: project.title, meta: project.categories.join(' · ') }))} selectedId={selectedProjectId} onSelect={setSelectedProjectId} onAdd={() => setSelectedProjectId(null)} addLabel="Add project" />
-            <ProjectEditor key={`${selectedProject?.id ?? 'new-project'}-${editorRevision}`} project={selectedProject} onApply={applyProject} onDelete={selectedProject ? () => removeProject(selectedProject.id) : undefined} />
+            <ProjectEditor key={`${selectedProject?.id ?? 'new-project'}-${editorRevision}`} project={selectedProject} experiences={draft.experiences} onApply={applyProject} onDelete={selectedProject ? () => removeProject(selectedProject.id) : undefined} />
           </div>
         </section>
 
@@ -415,7 +430,7 @@ export default function Admin() {
           <div className="admin-panel__heading"><p className="eyebrow">Professional background</p><h2>Experience</h2><p>Keep role descriptions and contributions specific to verified experience.</p></div>
           <div className="admin-record-layout">
             <RecordList label="Roles" items={draft.experiences.map((item) => ({ id: item.id, title: item.organization, meta: item.position }))} selectedId={selectedExperienceId} onSelect={setSelectedExperienceId} onAdd={() => setSelectedExperienceId(null)} addLabel="Add experience" />
-            <ExperienceEditor key={`${selectedExperience?.id ?? 'new-experience'}-${editorRevision}`} experience={selectedExperience} onApply={applyExperience} onDelete={selectedExperience ? () => removeExperience(selectedExperience.id) : undefined} />
+            <ExperienceEditor key={`${selectedExperience?.id ?? 'new-experience'}-${editorRevision}`} experience={selectedExperience} projects={draft.projects} onApply={applyExperience} onDelete={selectedExperience ? () => removeExperience(selectedExperience.id) : undefined} />
           </div>
         </section>
 
@@ -559,9 +574,36 @@ function RecordList({ label, items, selectedId, onSelect, onAdd, addLabel }: {
   </aside>;
 }
 
+function RelationshipSelector({ label, items, selectedIds, onChange, emptyMessage }: {
+  label: string;
+  items: { id: string; title: string; meta: string }[];
+  selectedIds: string[];
+  onChange: (ids: string[]) => void;
+  emptyMessage: string;
+}) {
+  return <fieldset className="admin-relationships admin-field--wide">
+    <legend>{label}</legend>
+    <p>Manage this link here or from the related record. The connection stays in sync both ways.</p>
+    {items.length > 0 ? <details>
+      <summary>{selectedIds.length ? `${selectedIds.length} linked` : 'No records linked'}</summary>
+      <div className="admin-relationships__options">
+        {items.map((item) => <label className="admin-relationships__option" key={item.id}>
+          <input type="checkbox" checked={selectedIds.includes(item.id)} onChange={(event) => {
+            onChange(event.target.checked
+              ? [...selectedIds, item.id]
+              : selectedIds.filter((id) => id !== item.id));
+          }} />
+          <span><strong>{item.title}</strong><small>{item.meta || item.id}</small></span>
+        </label>)}
+      </div>
+    </details> : <small>{emptyMessage}</small>}
+  </fieldset>;
+}
+
 interface ProjectForm {
   id: string; slug: string; title: string; tagline: string; description: string;
   categories: string; platforms: string; technologies: string; role: string; timeline: string; location: string; status: string;
+  experienceIds: string;
   featured: boolean; galleryTone: GalleryTone | '';
   problem: string; solution: string; features: string; architectureSummary: string; architectureDiagram: string; architectureCaption: string;
   engineeringChallenges: string; contributions: string; results: string; reflections: string; links: string;
@@ -590,7 +632,7 @@ function projectToForm(project?: Project): ProjectForm {
   return {
     id: project?.id ?? '', slug: project?.slug ?? '', title: project?.title ?? '', tagline: project?.tagline ?? '', description: project?.description ?? '',
     categories: project?.categories.join('\n') ?? '', platforms: project?.platforms.join('\n') ?? '', technologies: project?.technologies.join('\n') ?? '',
-    role: project?.role ?? '', timeline: project?.timeline ?? '', location: project?.location ?? '', status: project?.status ?? '', featured: project?.featured ?? false,
+    role: project?.role ?? '', timeline: project?.timeline ?? '', location: project?.location ?? '', status: project?.status ?? '', experienceIds: project?.experienceIds?.join('\n') ?? '', featured: project?.featured ?? false,
     galleryTone: project?.galleryTone ?? '',
     problem: project?.problem?.trim() ? project.problem : project?.workflow?.rationale ?? fallbackProject?.problem ?? fallbackProject?.workflow?.rationale ?? '',
     solution: project?.solution ?? '', features: project?.features?.join('\n') ?? '',
@@ -601,13 +643,26 @@ function projectToForm(project?: Project): ProjectForm {
   };
 }
 
-function ProjectEditor({ project, onApply, onDelete }: { project?: Project; onApply: (project: Project, isExisting: boolean) => string | null; onDelete?: () => void }) {
+function ProjectEditor({ project, experiences, onApply, onDelete }: { project?: Project; experiences: Experience[]; onApply: (project: Project, isExisting: boolean) => string | null; onDelete?: () => void }) {
   const [form, setForm] = useState(() => projectToForm(project));
   const [gallery, setGallery] = useState(() => projectGalleryFrom(project));
   const [coverSource, setCoverSource] = useState(() => project?.thumbnail ?? project?.heroImage ?? projectGalleryFrom(project)[0]?.src ?? '');
   const [isUploadingImages, setIsUploadingImages] = useState(false);
   const [message, setMessage] = useState('');
   const [deletePrompt, setDeletePrompt] = useState(false);
+  const experienceOptionsKey = experiences.map((experience) => experience.id).join('|');
+  const hasProjectExperienceIds = Array.isArray(project?.experienceIds);
+  const projectExperienceIdsKey = project?.experienceIds?.join('|') ?? '';
+
+  useEffect(() => {
+    const validIds = new Set(experienceOptionsKey ? experienceOptionsKey.split('|') : []);
+    setForm((current) => ({
+      ...current,
+      experienceIds: hasProjectExperienceIds
+        ? projectExperienceIdsKey ? projectExperienceIdsKey.split('|').join('\n') : ''
+        : parseLines(current.experienceIds).filter((id) => validIds.has(id)).join('\n'),
+    }));
+  }, [experienceOptionsKey, hasProjectExperienceIds, projectExperienceIdsKey]);
 
   function setField<K extends keyof ProjectForm>(key: K, value: ProjectForm[K]) {
     setForm((current) => ({ ...current, [key]: value }));
@@ -649,7 +704,7 @@ function ProjectEditor({ project, onApply, onDelete }: { project?: Project; onAp
     const links = linkRows.map(([label, href, kind]) => ({ label, href, kind: (['github', 'demo', 'video', 'other'].includes(kind) ? kind : 'other') as 'github' | 'demo' | 'video' | 'other' }));
     const nextProject: Project = {
       id: form.id.trim(), slug: form.slug.trim(), title: form.title.trim(), tagline: form.tagline.trim(), description: form.description.trim(),
-      categories, platforms: parseLines(form.platforms), technologies: parseLines(form.technologies), featured: form.featured,
+      categories, platforms: parseLines(form.platforms), technologies: parseLines(form.technologies), experienceIds: parseLines(form.experienceIds), featured: form.featured,
       ...(form.role.trim() ? { role: form.role.trim() } : {}), ...(form.timeline.trim() ? { timeline: form.timeline.trim() } : {}), ...(form.location.trim() ? { location: form.location.trim() } : {}), ...(form.status.trim() ? { status: form.status.trim() } : {}),
       ...(selectedCover ? { thumbnail: selectedCover, heroImage: selectedCover } : {}), ...(form.galleryTone ? { galleryTone: form.galleryTone } : {}), ...(galleryImages.length ? { gallery: galleryImages } : {}),
       ...(form.problem.trim() ? { problem: form.problem.trim() } : {}), ...(form.solution.trim() ? { solution: form.solution.trim() } : {}),
@@ -679,6 +734,13 @@ function ProjectEditor({ project, onApply, onDelete }: { project?: Project; onAp
       <TextField label="Timeline" value={form.timeline} onChange={(value) => setField('timeline', value)} />
       <TextField label="Location" value={form.location} onChange={(value) => setField('location', value)} />
       <TextField label="Status" value={form.status} onChange={(value) => setField('status', value)} hint="For example: Prototype, In progress." />
+      <RelationshipSelector
+        label="Related experience"
+        items={experiences.map((item) => ({ id: item.id, title: item.organization, meta: item.position }))}
+        selectedIds={parseLines(form.experienceIds)}
+        onChange={(ids) => setField('experienceIds', ids.join('\n'))}
+        emptyMessage="Add an experience record before linking it to this project."
+      />
       <label className="admin-checkbox"><input type="checkbox" checked={form.featured} onChange={(event) => setField('featured', event.target.checked)} /><span>Show in selected work</span></label>
       <TextField className="admin-field--wide" label="Why this project exists" multiline value={form.problem} onChange={(value) => setField('problem', value)} hint="Describe the problem, need, or research question that motivated the project." />
       <TextField className="admin-field--wide" label="Approach" multiline value={form.solution} onChange={(value) => setField('solution', value)} />
@@ -907,15 +969,21 @@ function ProjectGalleryEditor({ projectTitle, platforms, folder, images, coverSo
   </fieldset>;
 }
 
-interface ExperienceForm { id: string; organization: string; position: string; timeline: string; location: string; summary: string; contributions: string; technologies: string }
+interface ExperienceForm { id: string; organization: string; position: string; timeline: string; location: string; summary: string; contributions: string; technologies: string; projectIds: string }
 
-function ExperienceEditor({ experience, onApply, onDelete }: { experience?: Experience; onApply: (experience: Experience, isExisting: boolean) => string | null; onDelete?: () => void }) {
+function ExperienceEditor({ experience, projects, onApply, onDelete }: { experience?: Experience; projects: Project[]; onApply: (experience: Experience, isExisting: boolean, linkedProjectIds: string[]) => string | null; onDelete?: () => void }) {
   const [form, setForm] = useState<ExperienceForm>(() => ({
     id: experience?.id ?? '', organization: experience?.organization ?? '', position: experience?.position ?? '', timeline: experience?.timeline ?? '', location: experience?.location ?? '', summary: experience?.summary ?? '',
     contributions: experience?.contributions.join('\n') ?? '', technologies: experience?.technologies.join('\n') ?? '',
+    projectIds: projects.filter((project) => project.experienceIds?.includes(experience?.id ?? '')).map((project) => project.id).join('\n'),
   }));
   const [message, setMessage] = useState('');
   const [deletePrompt, setDeletePrompt] = useState(false);
+  const linkedProjectIds = projects.filter((project) => project.experienceIds?.includes(experience?.id ?? '')).map((project) => project.id);
+  const linkedProjectIdsKey = linkedProjectIds.join('|');
+  useEffect(() => {
+    setForm((current) => ({ ...current, projectIds: linkedProjectIdsKey ? linkedProjectIdsKey.split('|').join('\n') : '' }));
+  }, [linkedProjectIdsKey]);
   function setField<K extends keyof ExperienceForm>(key: K, value: ExperienceForm[K]) { setForm((current) => ({ ...current, [key]: value })); }
 
   function handleSubmit(event: FormEvent<HTMLFormElement>) {
@@ -926,7 +994,7 @@ function ExperienceEditor({ experience, onApply, onDelete }: { experience?: Expe
       id: form.id.trim(), organization: form.organization.trim(), position: form.position.trim(), summary: form.summary.trim(),
       ...(timeline ? { timeline } : {}), ...(location ? { location } : {}),
       contributions: parseLines(form.contributions), technologies: parseLines(form.technologies),
-    }, Boolean(experience));
+    }, Boolean(experience), parseLines(form.projectIds));
     setMessage(error ?? 'Applied to draft. Save & publish to make it public.');
   }
 
@@ -942,6 +1010,13 @@ function ExperienceEditor({ experience, onApply, onDelete }: { experience?: Expe
       <TextField className="admin-field--wide" label="Summary" multiline value={form.summary} onChange={(value) => setField('summary', value)} required />
       <TextField label="Contributions · one per line" multiline value={form.contributions} onChange={(value) => setField('contributions', value)} />
       <TextField label="Technologies · one per line" multiline value={form.technologies} onChange={(value) => setField('technologies', value)} />
+      <RelationshipSelector
+        label="Related projects"
+        items={projects.map((project) => ({ id: project.id, title: project.title, meta: project.timeline ?? project.categories.join(' · ') }))}
+        selectedIds={parseLines(form.projectIds)}
+        onChange={(ids) => setField('projectIds', ids.join('\n'))}
+        emptyMessage="Add a project record before linking it to this experience."
+      />
     </div>
     {message && <p className={`admin-inline-message${message.startsWith('Applied') ? '' : ' is-error'}`} role={message.startsWith('Applied') ? 'status' : 'alert'}>{message}</p>}
     <div className="admin-form-actions"><button className="button button--dark" type="submit">Apply to draft</button></div>
@@ -1068,6 +1143,8 @@ function validateContent(content: PortfolioContent): string | null {
   const experienceIds = content.experiences.map((experience) => experience.id.trim());
   if (experienceIds.some((id) => !/^[a-z0-9]+(?:-[a-z0-9]+)*$/.test(id)) || new Set(experienceIds).size !== experienceIds.length) return 'Every experience needs a unique lowercase ID (letters, numbers, and hyphens).';
   if (content.experiences.some((experience) => !experience.organization.trim() || !experience.position.trim() || !experience.summary.trim())) return 'Each experience needs an organization, position, and summary.';
+  const experienceIdSet = new Set(experienceIds);
+  if (content.projects.some((project) => project.experienceIds && (new Set(project.experienceIds).size !== project.experienceIds.length || project.experienceIds.some((id) => !experienceIdSet.has(id))))) return 'Review related experiences; one or more project links point to a missing or duplicate experience.';
 
   const categories = content.skillCategories.map((category) => category.name.trim().toLowerCase());
   if (categories.some((name) => !name) || new Set(categories).size !== categories.length) return 'Skill categories must have unique names.';

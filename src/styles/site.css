@@ -152,6 +152,14 @@
 .nova-experience-accordion details[open] .nova-experience-accordion__icon { transform: rotate(45deg); background: var(--blush); }
 .nova-experience-accordion details > div { padding: 0 26px 22px; }
 .nova-experience-accordion details p { max-width: 67ch; margin: 0 0 6px; color: var(--muted); line-height: 1.6; }
+.nova-related-projects { margin-top: 16px; }
+.nova-related-projects__label { margin: 0 0 8px !important; color: var(--green-dark) !important; font-size: 10px; font-weight: 700; letter-spacing: .1em; text-transform: uppercase; }
+.nova-related-records { display: flex; flex-wrap: wrap; gap: 8px; margin: 0; padding: 0; list-style: none; }
+.nova-related-records a { display: grid; align-content: center; gap: 3px; min-height: 40px; padding: 8px 12px; border: 1px solid var(--line); border-radius: 999px; color: var(--ink); font-size: 13px; line-height: 1.35; text-decoration: none; transition: border-color .2s, background-color .2s; }
+.nova-related-records a:hover, .nova-related-records a:focus-visible { border-color: var(--green-dark); background: var(--paper-deep); }
+.nova-related-records--experience a { min-width: min(100%, 260px); border-radius: 12px; }
+.nova-related-records--experience strong { color: var(--ink); font-size: 14px; }
+.nova-related-records--experience span { color: var(--muted); font-size: 11px; }
 .nova-experience-accordion--full .nova-story-list { margin-block: 16px; color: var(--muted); }
 .nova-experience-accordion--full .nova-technology-list { margin-top: 18px; }
 

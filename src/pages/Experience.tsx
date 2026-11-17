@@ -5,7 +5,7 @@ import { usePortfolioContent } from '../context/usePortfolioContent';
 import { groupExperiences } from '../lib/groupExperiences';
 
 export default function Experience() {
-  const { content: { experiences } } = usePortfolioContent();
+  const { content: { experiences, projects } } = usePortfolioContent();
   const { hash } = useLocation();
   const selected = experiences.find((item) => hash === `#experience-${item.id}`) ?? experiences[0];
   const groups = groupExperiences(experiences);
@@ -23,7 +23,7 @@ export default function Experience() {
           <span>{items.length} {items.length === 1 ? 'role' : 'roles'}</span>
         </header>
         <div className="nova-experience-accordion nova-experience-accordion--full" aria-label={title} data-nova-sequence="soft">
-          {items.map((item) => <ExperienceCard key={`${item.id}:${selected?.id === item.id}`} item={item} initiallyOpen={selected?.id === item.id} detailed />)}
+          {items.map((item) => <ExperienceCard key={`${item.id}:${selected?.id === item.id}`} item={item} projects={projects.filter((project) => project.experienceIds?.includes(item.id))} initiallyOpen={selected?.id === item.id} detailed />)}
         </div>
       </section>)}
     </div>

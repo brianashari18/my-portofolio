@@ -117,6 +117,8 @@ export interface ProjectWorkflow {
 export interface Project {
   id: string;
   slug: string;
+  /** Experience records this project belongs to. Kept on the project as the canonical relation. */
+  experienceIds?: string[];
   title: string;
   tagline: string;
   description: string;
@@ -275,7 +277,7 @@ const projectRecords: Project[] = [
     description: 'A self-reflection journaling app with writing prompts and emotion check-ins, followed by weekly summaries of emotional patterns and possible triggers.',
     categories: ['iOS Development', 'AI / ML Engineering', 'Backend Engineering'], platforms: ['iOS'],
     technologies: ['SwiftUI', 'SwiftData', 'Core ML', 'Swift', 'Foundation Models', 'Speech', 'AVFoundation', 'PencilKit', 'Go', 'Fiber', 'FastAPI', 'Qdrant', 'Ollama', 'bge-m3', 'Docker'],
-    role: 'iOS Developer · AI Engineer · Backend', timeline: 'Aug 2026 – Sep 2026', location: 'Batam, Indonesia', featured: true,
+    role: 'iOS Developer · AI Engineer · Backend', timeline: 'Aug 2026 – Sep 2026', location: 'Batam, Indonesia', experienceIds: ['apple-developer-academy'], featured: true,
     thumbnail: publicStorageImage('sprout', '365c3e04-80d3-4336-b694-aa66ead17917.jpg'),
     gallery: [
       { src: publicStorageImage('sprout', '365c3e04-80d3-4336-b694-aa66ead17917.jpg'), alt: 'Sprout journaling screen with a guided writing prompt.', title: 'Guided journal prompt', caption: 'A guided prompt gives the user a starting point for daily self-reflection. The sample entry is dummy data.', frame: 'phone', frameStyle: 'ios' },
@@ -309,7 +311,7 @@ const projectRecords: Project[] = [
     id: 'foamy', slug: 'foamy', title: 'Foamy (MySkin)', tagline: 'Product scanning, ingredient details, and skin tracking',
     description: 'An iOS skincare companion that reads product labels with camera-based OCR, brings product and ingredient information together, and keeps comparisons and skin-progress notes in one place. If direct product lookup cannot resolve scanned text, the connected API can try a DeepSeek LLM fallback.',
     categories: ['iOS Development'], platforms: ['iOS'], technologies: ['SwiftUI', 'SwiftData', 'AVFoundation', 'Swift', 'Vision', 'PhotosUI', 'URLSession', 'Combine', 'REST API', 'DeepSeek (server-side fallback)'],
-    role: 'iOS Developer', timeline: 'Jul 2026 – Aug 2026', location: 'Batam, Indonesia', featured: false,
+    role: 'iOS Developer', timeline: 'Jul 2026 – Aug 2026', location: 'Batam, Indonesia', experienceIds: ['apple-developer-academy'], featured: false,
     problem: 'Comparing skincare products can mean jumping between product labels, ingredient references, and personal progress notes. Foamy brings product lookup and skincare journaling into one iOS app.',
     solution: 'Users can scan a product label or search manually, inspect available product and ingredient details, compare products, and record routine notes and progress photos. The connected API tries direct product search first and documents a DeepSeek LLM fallback for queries it cannot resolve.',
     features: ['Camera capture and Vision OCR for product labels', 'Product search with direct lookup and conditional DeepSeek fallback', 'Product dossiers with available ingredient, price, review, and brand information', 'Ingredient search and detail lookup', 'Product comparison history', 'Routine notes and skin-progress photos'],
@@ -326,7 +328,7 @@ const projectRecords: Project[] = [
     description: 'An iOS cooking assistant that imports online recipes, breaks instructions into smaller steps, and supports voice-guided cooking.',
     categories: ['iOS Development', 'AI / ML Engineering'], platforms: ['iOS'],
     technologies: ['SwiftUI', 'SwiftData', 'Foundation Models', 'Swift', 'NaturalLanguage', 'Speech', 'AVFoundation', 'WebKit', 'Translation'],
-    role: 'iOS Developer', timeline: 'May 2026 – Jul 2026', location: 'Batam, Indonesia', featured: true,
+    role: 'iOS Developer', timeline: 'May 2026 – Jul 2026', location: 'Batam, Indonesia', experienceIds: ['apple-developer-academy'], featured: true,
     problem: 'Intermediate home cooks can struggle to follow online recipes when instructions are complex or cluttered, and manually handling a phone is inconvenient when cooking leaves their hands occupied.',
     solution: 'HiChef extracts recipe information from webpages, stores recipes locally, and refines instructions into smaller steps. Speech recognition and spoken playback support hands-free navigation while cooking.',
     features: ['Recipe URL import and webpage extraction', 'Structured ingredient and instruction data', 'Instruction breakdown into smaller steps', 'Indonesian speech recognition and text-to-speech controls'],
@@ -343,7 +345,7 @@ const projectRecords: Project[] = [
     description: 'A hiking trip planner that generates an editable gear checklist from mountain type, trip duration, and group size.',
     categories: ['iOS Development'], platforms: ['iOS'],
     technologies: ['SwiftUI', 'Observation', 'Foundation', 'Swift', 'DotLottie'],
-    role: 'iOS Developer', timeline: 'Mar 2026 – May 2026', location: 'Batam, Indonesia', featured: true,
+    role: 'iOS Developer', timeline: 'Mar 2026 – May 2026', location: 'Batam, Indonesia', experienceIds: ['apple-developer-academy'], featured: true,
     thumbnail: publicStorageImage('muncakin', 'bd9f6e17-18d8-451a-85ba-61dc1639a6b3.jpg'),
     gallery: [
       { src: publicStorageImage('muncakin', 'bd9f6e17-18d8-451a-85ba-61dc1639a6b3.jpg'), alt: 'Muncakin trip packing checklist with grouped gear items for a mountain hike.', title: 'Trip packing checklist', caption: 'The checklist groups trip gear and highlights items that still need attention. Sample trip values are dummy data.', frame: 'phone', frameStyle: 'ios' },
@@ -367,7 +369,7 @@ const projectRecords: Project[] = [
     description: 'An iOS app for short guided movement breaks, with timed sessions and Live Activity support.',
     categories: ['iOS Development'], platforms: ['iOS'],
     technologies: ['SwiftUI', 'ActivityKit', 'WidgetKit', 'Swift', 'SwiftData', 'Firebase Authentication', 'Cloud Firestore', 'App Intents', 'UserNotifications', 'Charts'],
-    role: 'iOS Developer', timeline: 'Mar 2026', location: 'Batam, Indonesia', featured: false,
+    role: 'iOS Developer', timeline: 'Mar 2026', location: 'Batam, Indonesia', experienceIds: ['apple-developer-academy'], featured: false,
     problem: 'Desk workers and students may spend long stretches seated and find it difficult to build a consistent movement habit.',
     solution: 'Step Up pairs guided stretch plans with timed sessions. The active timer can appear in a Live Activity and a home-screen widget.',
     features: ['Guided stretch plans and movement steps', 'Timed activity sessions', 'Live Activity and WidgetKit support'],
@@ -384,7 +386,7 @@ const projectRecords: Project[] = [
       { src: publicProjectImage('ppt-generator/create-presentation.webp'), alt: 'SlideGen AI presentation setup screen with a prompt and template choices', title: 'Set up a presentation', caption: 'Choose a prompt and a visual template to begin generating a deck.', frame: 'laptop' },
       { src: publicProjectImage('ppt-generator/presentation-editor.webp'), alt: 'SlideGen AI presentation editor showing a generated slide preview and editing controls', title: 'Preview and edit slides', caption: 'Review the generated presentation and adjust its slides before export.', frame: 'laptop' },
     ],
-    role: 'AI Engineer · Telkom Indonesia', timeline: 'Dec 2025 – Jan 2026', location: 'Jakarta, Indonesia', featured: true,
+    role: 'AI Engineer · Telkom Indonesia', timeline: 'Dec 2025 – Jan 2026', location: 'Jakarta, Indonesia', experienceIds: ['telkom-indonesia'], featured: true,
     problem: 'Creating a research-backed deck means finding useful evidence, deciding how it supports the story, and turning that story into slides people can review. When research and slide writing happen in separate tools, context can get lost between those steps and the generated deck is harder to inspect as it takes shape.',
     solution: 'The backend prepares generation context through two paths. Its RAG API accepts source text, splits it into 700-character chunks with a 70-character overlap, embeds the chunks, and stores them in an in-memory FAISS index. It then retrieves the 10 passages most similar to the combined prompt and topic. A separate web-research path searches with SearXNG and extracts page content with Crawl4AI and Playwright. The React interface uses the unified generation endpoint for web research: it presents an outline first, streams slides as they are generated, and lets users preview and edit the result before exporting HTML or PowerPoint.',
     features: ['Split source text into overlapping chunks, embed it, and retrieve the 10 closest passages with FAISS', 'Discover web sources through SearXNG and extract page content with Crawl4AI and Playwright', 'Create a presentation outline before generating slide content', 'Stream the outline and completed slides to the interface over Server-Sent Events', 'Choose from four slide design templates and review or edit the presentation', 'Export the result as PowerPoint or editable HTML'],
@@ -416,7 +418,7 @@ const projectRecords: Project[] = [
     description: 'An Excel automation workflow that standardizes question documents with LLM-assisted processing while keeping embedded images and cross-references in view.',
     categories: ['AI / ML Engineering', 'Software Engineering'], platforms: ['Python · Excel'],
     technologies: ['Python', 'Pandas', 'OpenPyXL', 'HTTPX', 'Telkom LLM'],
-    role: 'AI Engineer · Telkom Indonesia', timeline: 'Oct 2025 – Nov 2025', location: 'Jakarta, Indonesia', featured: false,
+    role: 'AI Engineer · Telkom Indonesia', timeline: 'Oct 2025 – Nov 2025', location: 'Jakarta, Indonesia', experienceIds: ['telkom-indonesia'], featured: false,
     problem: 'Question spreadsheets can contain inconsistent headers and layouts alongside embedded images and references between questions. Manual cleanup risks losing structure or applying different formatting across a workbook.',
     solution: 'The workflow preprocesses each workbook, detects metadata and headers, then groups question text with enough surrounding context for LLM-assisted normalization. It maps the normalized fields into a target template and handles embedded images and cross-references as part of the workbook output.',
     features: ['Preprocess workbooks and detect metadata and header rows', 'Group question text into context-aware chunks for LLM processing', 'Normalize fields and map them to a target Excel template', 'Handle embedded images during template insertion', 'Detect and preserve cross-references between questions'],
@@ -448,7 +450,7 @@ const projectRecords: Project[] = [
     description: 'An OCR and LLM-assisted document workflow that extracts selected information from PKS and BAST files, then consolidates the results into an Excel workbook for review.',
     categories: ['AI / ML Engineering', 'Backend Engineering', 'Software Engineering'], platforms: ['Web · Excel'],
     technologies: ['OCR', 'Multimodal AI', 'LLM workflows', 'Excel processing'],
-    role: 'AI Engineer · Telkom Indonesia', timeline: 'Sep 2025 – Oct 2025', location: 'Jakarta, Indonesia', featured: false,
+    role: 'AI Engineer · Telkom Indonesia', timeline: 'Sep 2025 – Oct 2025', location: 'Jakarta, Indonesia', experienceIds: ['telkom-indonesia'], featured: false,
     problem: 'Preparing IFRS 15 data can require reviewing information spread across long contract and handover documents, then manually transferring it into a consistent spreadsheet. The presentation identifies that manual extraction as slow and vulnerable to missed details.',
     solution: 'The workflow uses OCR to make PDF and image documents searchable, processes extracted text in context-aware chunks, and prompts an LLM to identify selected fields. The extracted information is consolidated and checked in an Excel template for review.',
     features: ['Extract text from PDF and image documents with OCR', 'Process PKS and BAST content in manageable context windows', 'Use LLM prompts to identify selected IFRS 15 information', 'Consolidate and validate extracted fields in an Excel workbook'],
@@ -507,7 +509,7 @@ const projectRecords: Project[] = [
     description: 'A Flutter mobile client paired with a Go API for product discovery, saved items, and scan-based style features.',
     categories: ['Flutter Development', 'Backend Engineering', 'Software Engineering'], platforms: ['Mobile', 'API'],
     technologies: ['Flutter', 'Dart', 'Go', 'Fiber', 'GORM', 'MySQL', 'Firebase', 'Supabase Storage', 'JWT', 'Swagger'],
-    role: 'Flutter & Backend Developer', timeline: 'Feb 2024 – Mar 2026', location: 'Bandung, Indonesia', featured: false, thumbnail: flickNFitWardrobeImage,
+    role: 'Flutter & Backend Developer', timeline: 'Feb 2024 – Mar 2026', location: 'Bandung, Indonesia', experienceIds: ['flicknfit-startup'], featured: false, thumbnail: flickNFitWardrobeImage,
     gallery: [
       { src: flickNFitWardrobeImage, alt: 'FlickNFit wardrobe screen with a composed outfit and individual clothing items', title: 'Wardrobe outfit', caption: 'A saved outfit assembled from individual clothing items.', frame: 'none' },
       { src: publicProjectImage('flicknfit/home-redacted.webp'), alt: 'FlickNFit home screen with the profile photo and greeting name obscured', title: 'Home feed', caption: 'Browse fashion recommendations; profile details are blurred for privacy.', frame: 'phone', frameStyle: 'android' },
@@ -710,7 +712,7 @@ const projectRecords: Project[] = [
     description: 'A mobile companion app concept for Hajj and Umrah, with prayer guidance and group communication.',
     categories: ['Software Engineering'], platforms: ['Mobile', 'API'],
     technologies: ['Flutter', 'Dart', 'PHP', 'Laravel', 'Node.js', 'JavaScript', 'Express', 'Prisma', 'MySQL', 'Joi', 'bcrypt', 'Winston', 'Jest', 'Supertest'],
-    role: 'Mobile Developer · Community Service Program', timeline: 'Dec 2024 – Apr 2025', location: 'Bandung, Indonesia', featured: false,
+    role: 'Mobile Developer · Community Service Program', timeline: 'Dec 2024 – Apr 2025', location: 'Bandung, Indonesia', experienceIds: ['community-service-program'], featured: false,
     thumbnail: mabrurPrayerHomeImage,
     gallery: [
       { src: mabrurLoginImage, alt: 'Mabrur sign-in screen with email and password fields', title: 'Sign in', caption: 'Entry point for accessing the Hajj and Umrah companion.', frame: 'phone', frameStyle: 'android' },

@@ -39,6 +39,9 @@ export function mergeReviewedProjectUpdates(content: PortfolioContent): Portfoli
     if (!reviewed) return project;
 
     let updated = project;
+    if (!Array.isArray(project.experienceIds) && reviewed.experienceIds?.length) {
+      updated = { ...updated, experienceIds: reviewed.experienceIds };
+    }
     if (previous?.some((list) => isSameList(project.technologies, list))) {
       updated = { ...updated, technologies: reviewed.technologies };
     }

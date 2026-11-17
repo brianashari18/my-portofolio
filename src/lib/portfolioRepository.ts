@@ -57,6 +57,7 @@ function isProject(value: unknown): value is PortfolioContent['projects'][number
   if (![value.id, value.slug, value.title, value.tagline, value.description].every(isString)) return false;
   if (typeof value.featured !== 'boolean') return false;
   if (![value.categories, value.platforms, value.technologies].every(isStringArray)) return false;
+  if ('experienceIds' in value && !isStringArray(value.experienceIds)) return false;
   if (['role', 'timeline', 'location', 'status', 'thumbnail', 'heroImage', 'problem', 'solution'].some((key) => key in value && !isString(value[key]))) return false;
   if (['features', 'engineeringChallenges', 'contributions', 'results', 'reflections'].some((key) => key in value && !isStringArray(value[key]))) return false;
   if ('galleryTone' in value && !['paper', 'blush', 'surface', 'sage', 'ink'].includes(String(value.galleryTone))) return false;

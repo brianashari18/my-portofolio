@@ -100,7 +100,7 @@ export default function Home() {
           <Link className="nova-inline-link" to="/experience">View full experience <span aria-hidden="true">→</span></Link>
         </div>
         <div className="nova-experience-accordion" data-nova-sequence="soft">
-          {professionalExperiences.map((item, index) => <ExperienceCard key={item.id} item={item} initiallyOpen={index === 0} />)}
+          {professionalExperiences.map((item, index) => <ExperienceCard key={item.id} item={item} projects={projects.filter((project) => project.experienceIds?.includes(item.id))} initiallyOpen={index === 0} />)}
         </div>
       </div>
     </section>}

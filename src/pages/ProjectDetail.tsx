@@ -7,7 +7,7 @@ import ProjectDetailCover from '../components/ProjectDetailCover';
 import ProjectWorkflowMap from '../components/ProjectWorkflowMap';
 import { usePortfolioContent } from '../context/usePortfolioContent';
 import { defaultPortfolioContent } from '../data/portfolioData';
-import type { Project } from '../data/portfolioData';
+import type { Experience, Project } from '../data/portfolioData';
 import { getProjectPresentationImages, resolvePortfolioImage } from '../lib/resolvePortfolioImage';
 import NotFound from './NotFound';
 
@@ -22,7 +22,7 @@ interface StorySection {
 export default function ProjectDetail() {
   const { slug } = useParams();
   const [searchParams] = useSearchParams();
-  const { content: { projects } } = usePortfolioContent();
+  const { content: { projects, experiences } } = usePortfolioContent();
   const project = projects.find((item) => item.slug === slug);
   if (!project) return <NotFound />;
 
@@ -33,11 +33,13 @@ export default function ProjectDetail() {
   const previous = sequence[(index - 1 + sequence.length) % sequence.length];
   const next = sequence[(index + 1) % sequence.length];
 
-  return <ProjectCase key={project.slug} project={project} search={search}
+  const relatedExperiences = experiences.filter((experience) => project.experienceIds?.includes(experience.id));
+
+  return <ProjectCase key={project.slug} project={project} relatedExperiences={relatedExperiences} search={search}
     previous={sequence.length > 1 ? previous : undefined} next={sequence.length > 1 ? next : undefined} />;
 }
 
-function ProjectCase({ project, search, previous, next }: { project: Project; search: string; previous?: Project; next?: Project }) {
+function ProjectCase({ project, relatedExperiences, search, previous, next }: { project: Project; relatedExperiences: Experience[]; search: string; previous?: Project; next?: Project }) {
   const [imageIndex, setImageIndex] = useState<number | null>(null);
   const imageTrigger = useRef<HTMLButtonElement | null>(null);
   const { images, coverImages } = getProjectPresentationImages(project);
@@ -57,6 +59,16 @@ function ProjectCase({ project, search, previous, next }: { project: Project; se
       {project.role && project.role !== 'College project' && <p className="nova-case-role">{project.role}</p>}
       {project.contributions?.length ? <ul className="nova-story-list">{project.contributions.map((item) => <li key={item}>{item}</li>)}</ul> : null}
     </>,
+  });
+  if (relatedExperiences.length > 0) sections.push({
+    id: 'related-experience',
+    title: relatedExperiences.length === 1 ? 'Related experience' : 'Related experiences',
+    content: <ul className="nova-related-records nova-related-records--experience">{relatedExperiences.map((experience) => <li key={experience.id}>
+      <Link to={`/experience#experience-${experience.id}`}>
+        <strong>{experience.organization}</strong>
+        <span>{experience.position}{experience.timeline ? ` · ${experience.timeline}` : ''}</span>
+      </Link>
+    </li>)}</ul>,
   });
   if (workflow) sections.push({
     id: 'workflow', title: 'How it works', wide: true,

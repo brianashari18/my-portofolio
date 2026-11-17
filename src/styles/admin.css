@@ -59,6 +59,17 @@
 .admin-editor__heading h3 { margin: 0; font: 600 21px var(--serif); letter-spacing: -.03em; }
 .admin-checkbox { display: flex; align-items: center; gap: 9px; align-self: center; min-height: 44px; color: var(--muted); font-size: 12px; }
 .admin-checkbox input { width: 16px; height: 16px; accent-color: var(--green-dark); }
+.admin-relationships { display: grid; min-width: 0; gap: 10px; margin: 0; padding: 14px; border: 1px solid var(--line); background: var(--admin-card); }
+.admin-relationships legend { padding-inline: 7px; color: var(--ink); font-size: 12px; font-weight: 700; }
+.admin-relationships > p { margin: 0; color: var(--muted); font-size: 10px; line-height: 1.5; }
+.admin-relationships > small { color: var(--muted); font-size: 10px; line-height: 1.5; }
+.admin-relationships details > summary { width: fit-content; min-height: 36px; padding: 8px 12px; border: 1px solid var(--line); color: var(--green-dark); font-size: 11px; font-weight: 600; cursor: pointer; }
+.admin-relationships__options { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 220px), 1fr)); gap: 8px; margin-top: 12px; }
+.admin-relationships__option { display: flex; align-items: flex-start; gap: 9px; min-width: 0; min-height: 48px; padding: 10px; border: 1px solid var(--line); background: var(--admin-surface); cursor: pointer; }
+.admin-relationships__option input { width: 16px; height: 16px; flex: none; margin: 2px 0 0; accent-color: var(--green-dark); }
+.admin-relationships__option > span { display: grid; min-width: 0; gap: 4px; }
+.admin-relationships__option strong { font-size: 11px; line-height: 1.35; }
+.admin-relationships__option small { color: var(--muted); font-size: 9px; line-height: 1.4; }
 .admin-delete-button, .admin-confirm button { border: 0; background: transparent; color: var(--admin-danger); font-size: 11px; text-decoration: underline; text-underline-offset: 3px; cursor: pointer; }
 .admin-confirm { display: flex; flex-wrap: wrap; align-items: center; gap: 15px; padding: 12px; background: var(--admin-error-bg); color: var(--admin-confirm-text); font-size: 11px; }
 .admin-inline-message { margin: -4px 0 0; color: var(--admin-notice); font-size: 11px; }
