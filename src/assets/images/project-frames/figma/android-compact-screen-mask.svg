@@ -1,0 +1,9 @@
+<svg width="1236" height="2751" viewBox="0 0 1236 2751" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <mask id="android-compact-screen" mask-type="luminance">
+      <rect width="1236" height="2751" rx="90" fill="white" />
+      <circle cx="618" cy="75" r="40" fill="black" />
+    </mask>
+  </defs>
+  <rect width="1236" height="2751" fill="white" mask="url(#android-compact-screen)" />
+</svg>

@@ -8,7 +8,7 @@ import ProjectWorkflowMap from '../components/ProjectWorkflowMap';
 import { usePortfolioContent } from '../context/usePortfolioContent';
 import { defaultPortfolioContent } from '../data/portfolioData';
 import type { Project } from '../data/portfolioData';
-import { getProjectGalleryImages, resolvePortfolioImage } from '../lib/resolvePortfolioImage';
+import { getProjectPresentationImages, resolvePortfolioImage } from '../lib/resolvePortfolioImage';
 import NotFound from './NotFound';
 
 interface StorySection {
@@ -40,8 +40,7 @@ export default function ProjectDetail() {
 function ProjectCase({ project, search, previous, next }: { project: Project; search: string; previous?: Project; next?: Project }) {
   const [imageIndex, setImageIndex] = useState<number | null>(null);
   const imageTrigger = useRef<HTMLButtonElement | null>(null);
-  const images = getProjectGalleryImages(project);
-  const coverImageCount = Math.min(5, images.length);
+  const { images, coverImageCount } = getProjectPresentationImages(project);
   const diagram = resolvePortfolioImage(project.architecture?.diagram);
   const bundledWorkflow = defaultPortfolioContent.projects.find((item) => item.id === project.id)?.workflow;
   const workflow = project.workflow
@@ -118,7 +117,7 @@ function ProjectCase({ project, search, previous, next }: { project: Project; se
       <Link to={{ pathname: '/projects', search }}>← {search ? 'Filtered projects' : 'All projects'}</Link>
       <span aria-hidden="true">/</span><span aria-current="page">{project.title}</span>
     </nav>
-    <ProjectDetailCover project={project} images={images} onOpen={openImage} />
+    <ProjectDetailCover project={project} images={images.slice(0, coverImageCount)} onOpen={openImage} />
 
     {sections.length > 0 && <div className="nova-case__story">
       {sections.length > 1 && <nav className="nova-case__contents" aria-label="In this case study">

@@ -271,7 +271,7 @@
 .nova-case-gallery__preview img { width: 100%; height: 100%; min-height: 0; object-fit: contain; }
 .nova-case-gallery__sequence { position: absolute; z-index: 2; top: 10px; left: 10px; padding: 5px 8px; border: 1px solid color-mix(in srgb, var(--line) 75%, transparent); border-radius: 999px; background: color-mix(in srgb, var(--paper) 88%, transparent); color: var(--ink); font-size: 10px; font-weight: 700; letter-spacing: .06em; line-height: 1; text-transform: uppercase; backdrop-filter: blur(8px); }
 .nova-case-gallery__preview > .nova-device-frame { width: auto; height: 100%; max-height: 100%; min-height: 0; }
-.nova-case-gallery__preview > .nova-laptop-frame { width: auto; height: 100%; max-width: 100%; }
+.nova-case-gallery__preview > .nova-laptop-frame { width: 100%; height: auto; max-height: 100%; }
 .nova-case-gallery__preview > .nova-browser-frame { width: 100%; max-height: 100%; }
 .nova-case-gallery__button:is(:hover, :focus-visible) .nova-case-gallery__preview { border-color: var(--green-dark); }
 .nova-case-gallery__label { display: flex; align-items: center; justify-content: space-between; gap: 8px; min-height: 44px; color: var(--ink); font-size: 15px; font-weight: 700; line-height: 1.3; overflow-wrap: anywhere; }
@@ -529,23 +529,22 @@ html:has(.nova-image-dialog[open]) { overflow: hidden; }
   .nova-button:hover .nova-button__label span:last-child { opacity: 0; transform: translateY(115%); }
 }
 
-/* Optional device frames for project screenshots. */
+/* Figma device shells with live screenshot masks. */
 .nova-device-frame {
   position: relative;
   display: block;
   box-sizing: border-box;
   width: min(100%, 268px);
   aspect-ratio: 268 / 464;
-  border: 1px solid #565656;
-  border-radius: 13.4% / 7.76%;
-  background: #242424;
   isolation: isolate;
 }
-.nova-device-frame__screen { position: absolute; z-index: 1; inset: 3.45% 2.99%; display: block; overflow: hidden; border: 1px solid var(--line); border-radius: 9.5% / 5.56%; background: var(--paper-deep); }
+.nova-device-frame__body { position: absolute; z-index: 0; inset: 0; width: 100%; height: 100%; max-width: none; pointer-events: none; }
+.nova-device-frame--ios { aspect-ratio: 1310 / 2710; }
+.nova-device-frame--android { aspect-ratio: 1335 / 2841; }
+.nova-device-frame__screen { position: absolute; z-index: 1; display: block; overflow: hidden; background: transparent; }
+.nova-device-frame__screen--ios { inset: 1.62% 3.97%; -webkit-mask-image: url('../assets/images/project-frames/figma/iphone-17-screen-mask.svg'); mask-image: url('../assets/images/project-frames/figma/iphone-17-screen-mask.svg'); -webkit-mask-repeat: no-repeat; mask-repeat: no-repeat; -webkit-mask-size: 100% 100%; mask-size: 100% 100%; mask-mode: alpha; }
+.nova-device-frame__screen--android { inset: 1.58% 4.04% 1.58% 3.37%; -webkit-mask-image: url('../assets/images/project-frames/figma/android-compact-screen-mask.svg'); mask-image: url('../assets/images/project-frames/figma/android-compact-screen-mask.svg'); -webkit-mask-repeat: no-repeat; mask-repeat: no-repeat; -webkit-mask-size: 100% 100%; mask-size: 100% 100%; mask-mode: alpha; }
 .nova-device-frame__screen img { position: relative; inset: auto; display: block; width: 100%; height: 100%; max-width: none; max-height: none; border-radius: 0; object-fit: contain; transition: transform .8s cubic-bezier(.16,1,.3,1); }
-.nova-device-frame__ios-island { position: absolute; z-index: 2; top: 1.94%; left: 50%; width: 17.91%; height: 1.51%; border-radius: 999px; background: #111; transform: translateX(-50%); pointer-events: none; }
-.nova-device-frame__ios-home { position: absolute; z-index: 2; bottom: 1.51%; left: 50%; width: 14.93%; height: .86%; border-radius: 2px; background: #f4f0e9; transform: translateX(-50%); pointer-events: none; }
-.nova-device-frame__android-earpiece { position: absolute; z-index: 2; top: 1.94%; left: 50%; width: 5.97%; aspect-ratio: 16 / 3; border-radius: 999px; background-position: center; background-repeat: no-repeat; background-size: 100% 100%; transform: translateX(-50%); pointer-events: none; }
 .nova-browser-frame { box-sizing: border-box; display: grid; grid-template-rows: 28px minmax(0, 1fr); gap: 4px; width: min(100%, 600px); aspect-ratio: 12 / 7; padding: 7px 7px 12px; overflow: hidden; border: 1px solid #565656; border-radius: 12px; background: #242424; }
 .nova-browser-frame__chrome { display: flex; align-items: center; min-width: 0; padding: 0 10px; border: 1px solid #d7cec3; border-radius: 7px; background: #eee8df; }
 .nova-browser-frame__controls { display: flex; flex: none; gap: 6px; margin-left: 1px; }
@@ -553,19 +552,10 @@ html:has(.nova-image-dialog[open]) { overflow: hidden; }
 .nova-browser-frame__address { flex: 1 1 auto; width: min(430px, 100%); max-width: 430px; height: 14px; margin-left: 15px; border: 1px solid var(--line); border-radius: 7px; background: var(--paper); }
 .nova-browser-frame__screen { display: block; min-height: 0; overflow: hidden; border: 1px solid var(--line); border-radius: 3px; background: var(--paper-deep); }
 .nova-browser-frame__screen img { position: relative; inset: auto; display: block; width: 100%; height: 100%; max-width: none; max-height: none; border-radius: 2px; object-fit: contain; }
-.nova-laptop-frame { display: grid; grid-template-rows: minmax(0, 1fr) 6%; width: min(100%, 620px); aspect-ratio: 1.56; filter: drop-shadow(0 18px 20px rgb(22 22 22 / .2)); }
-.nova-laptop-frame__display { display: grid; grid-template-rows: 9% minmax(0, 1fr); min-height: 0; padding: 1.1%; border: 1px solid #696967; border-bottom-color: #161616; border-radius: 12px 12px 4px 4px; background: #20201f; }
-.nova-laptop-frame__chrome { display: flex; align-items: center; gap: 4%; min-width: 0; padding: 0 3%; border-radius: 7px 7px 0 0; background: #e8e6e2; }
-.nova-laptop-frame__lights { display: flex; flex: none; gap: 4px; }
-.nova-laptop-frame__lights i { width: 6px; height: 6px; border-radius: 50%; background: #b4b1ac; }
-.nova-laptop-frame__lights i:first-child { background: #dc8774; }
-.nova-laptop-frame__lights i:nth-child(2) { background: #dfbd70; }
-.nova-laptop-frame__lights i:nth-child(3) { background: #8cad83; }
-.nova-laptop-frame__address { min-width: 0; width: 64%; padding: 3px 10px; border: 1px solid #d7d4ce; border-radius: 999px; background: #f7f6f3; color: #77746f; font-size: 8px; line-height: 1; text-align: center; }
-.nova-laptop-frame__screen { display: block; min-height: 0; overflow: hidden; background: #fff; }
+.nova-laptop-frame { position: relative; display: block; width: min(100%, 620px); aspect-ratio: 4096 / 2581; isolation: isolate; filter: drop-shadow(0 18px 20px rgb(22 22 22 / .2)); }
+.nova-laptop-frame__body { position: absolute; z-index: 0; inset: 0; display: block; width: 100%; height: 100%; max-width: none; pointer-events: none; }
+.nova-laptop-frame__screen { position: absolute; z-index: 1; inset: 4.88% 11.8% 19.55%; display: block; overflow: hidden; border-radius: .4%; background: #fff; }
 .nova-laptop-frame__screen img { position: relative; inset: auto; display: block; width: 100%; height: 100%; max-width: none; max-height: none; object-fit: contain; }
-.nova-laptop-frame__base { position: relative; display: block; width: 108%; height: 100%; justify-self: center; border: 1px solid #888784; border-top: 0; border-radius: 0 0 48% 48% / 0 0 90% 90%; background: linear-gradient(#d1d0cd, #898986 43%, #c5c4c1 70%, #777673); }
-.nova-laptop-frame__base::after { position: absolute; top: 0; left: 50%; width: 18%; height: 32%; border-radius: 0 0 6px 6px; background: #8d8c89; content: ''; transform: translateX(-50%); }
 .nova-project__media--device { display: grid; place-items: center; padding: 16px 16px 58px; background: var(--surface); }
 .nova-project__media--framed { display: grid; place-items: center; padding: 16px 16px 58px; }
 .nova-project__media--browser { display: grid; place-items: center; padding: 16px 16px 58px; }
@@ -580,7 +570,7 @@ html:has(.nova-image-dialog[open]) { overflow: hidden; }
 .nova-case-stage[data-gallery-tone="sage"], .nova-project__media[data-gallery-tone="sage"], .nova-case-gallery__preview[data-gallery-tone="sage"] { background-color: var(--gallery-sage); }
 .nova-case-stage[data-gallery-tone="ink"], .nova-project__media[data-gallery-tone="ink"], .nova-case-gallery__preview[data-gallery-tone="ink"] { background-color: var(--night); }
 .nova-case-stage__image .nova-device-frame { width: auto; height: var(--cover-height); max-width: 100%; }
-.nova-case-stage__image .nova-laptop-frame { width: min(100%, calc(var(--cover-height) * 1.56)); }
+.nova-case-stage__image .nova-laptop-frame { width: min(100%, calc(var(--cover-height) * 1.587)); }
 .nova-case-stage__image .nova-browser-frame { width: min(100%, 600px); }
 .nova-case-stage[data-gallery-tone="ink"] { color: var(--night-text); }
 .nova-case-stage[data-gallery-tone="ink"] .nova-case-stage__copy h2 { color: var(--copper); }
@@ -600,20 +590,20 @@ html:has(.nova-image-dialog[open]) { overflow: hidden; }
 }
 
 /* Code-rendered project thumbnails, based on the reusable Figma overview. */
-.nova-project__link--feature { position: relative; display: grid; grid-template-columns: minmax(0, .84fr) minmax(0, 1.16fr); min-height: 360px; aspect-ratio: 1.38; overflow: hidden; border: 1px solid var(--line); border-radius: 26px; background: var(--paper-deep); color: var(--ink); transition: border-color .3s ease, box-shadow .4s ease, transform .4s cubic-bezier(.16,1,.3,1); }
+.nova-project__link--feature { position: relative; display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); width: 100%; min-height: 360px; aspect-ratio: 1.38; overflow: hidden; border: 1px solid var(--line); border-radius: 26px; background: var(--paper-deep); color: var(--ink); transition: border-color .3s ease, box-shadow .4s ease, transform .4s cubic-bezier(.16,1,.3,1); }
 .nova-project__link--feature:is(:hover, :focus-visible) { transform: translateY(-4px); border-color: color-mix(in srgb, var(--copper) 55%, var(--line)); box-shadow: 0 22px 50px -34px rgb(22 22 22 / .42); }
-.nova-project__details { display: flex; min-width: 0; flex-direction: column; align-items: flex-start; justify-content: center; padding: clamp(24px, 3.1vw, 46px); }
+.nova-project__details { display: flex; min-width: 0; flex-direction: column; align-items: flex-start; justify-content: center; padding: clamp(22px, 2.2vw, 34px); }
 .nova-project__details--feature { grid-column: 1; grid-row: 1; }
 .nova-project__details--feature { order: 0; gap: 0; }
 .nova-project__eyebrow { color: var(--green-dark); font-size: 10px; font-weight: 700; letter-spacing: .15em; line-height: 1.4; text-transform: uppercase; }
-.nova-project__title { display: block; max-width: 13ch; margin-top: 17px; font-size: clamp(32px, 4.1vw, 64px); font-weight: 700; letter-spacing: -.075em; line-height: .98; overflow-wrap: anywhere; }
+.nova-project__title { display: block; max-width: 13ch; margin-top: 17px; font-size: clamp(28px, 3.2vw, 46px); font-weight: 700; letter-spacing: -.075em; line-height: .98; overflow-wrap: anywhere; }
 .nova-project__tagline { display: block; max-width: 35ch; margin-top: 15px; color: var(--muted); font-size: clamp(14px, 1.25vw, 18px); line-height: 1.45; }
 .nova-project__context { display: flex; flex-wrap: wrap; gap: 6px 15px; margin-top: 22px; color: var(--muted); font-size: 11px; line-height: 1.4; }
 .nova-project__context > span:first-child { color: var(--green-dark); font-weight: 700; letter-spacing: .09em; text-transform: uppercase; }
 .nova-project__context-detail { display: block; margin-top: 4px; color: var(--muted); font-size: 11px; line-height: 1.4; }
 .nova-project__tech { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 16px; }
 .nova-project__tech > span { padding: 6px 9px; border: 1px solid var(--line); border-radius: 999px; color: var(--muted); font-size: 10px; line-height: 1.1; }
-.nova-project__visual { position: relative; z-index: 0; display: grid; grid-column: 2; grid-row: 1; min-width: 0; min-height: 0; align-items: center; overflow: hidden; isolation: isolate; background: #e9ddd0; }
+.nova-project__visual { position: relative; z-index: 0; display: grid; grid-column: 2; grid-row: 1; min-width: 0; min-height: 0; align-items: center; overflow: hidden; isolation: isolate; container-type: inline-size; background: #e9ddd0; }
 .nova-project__visual::before { position: absolute; z-index: -1; top: 12%; right: -9%; width: 90%; aspect-ratio: 1; border-radius: 50%; background: linear-gradient(145deg, #d0a17f, #efd5bc 68%, #f4e9dd); content: ''; transform: rotate(-18deg); transition: transform .8s cubic-bezier(.16,1,.3,1); }
 .nova-project__visual::after { position: absolute; z-index: -1; right: 8%; bottom: 5%; width: 47%; height: 27%; border-radius: 50%; background: rgb(73 50 36 / .12); content: ''; filter: blur(22px); }
 .nova-project__visual-glow { position: absolute; top: -22%; left: -20%; width: 53%; aspect-ratio: 1; border-radius: 50%; background: rgb(255 255 255 / .28); filter: blur(5px); }
@@ -622,12 +612,19 @@ html:has(.nova-image-dialog[open]) { overflow: hidden; }
 .nova-project__screen--primary { z-index: 1; top: 6%; left: 8%; transform: rotate(-7deg); }
 .nova-project__screen--secondary { z-index: 2; top: 14%; left: 45%; transform: rotate(7deg) scale(.88); }
 .nova-project__screen--phone > .nova-device-frame { width: auto; height: 100%; max-width: 100%; filter: drop-shadow(0 16px 22px rgb(27 23 20 / .28)); transform: perspective(900px) rotateY(-4deg) scale(.72); }
+.nova-project__link--feature .nova-project__screen--phone { display: flex; align-items: center; justify-content: center; }
+.nova-project__link--feature .nova-project__screen--phone > .nova-device-frame { width: 100%; height: auto; max-height: 100%; }
 .nova-project__screen--browser > .nova-browser-frame { width: 145%; max-width: 500px; transform: rotate(-2deg); box-shadow: 0 19px 35px rgb(27 23 20 / .18); }
 .nova-project__screen--laptop > .nova-laptop-frame { width: 148%; max-width: 510px; }
 .nova-project__screen--none, .nova-project__screen--raw { width: 54%; height: 75%; padding: 9px; border: 1px solid rgb(255 255 255 / .66); border-radius: 15px; background: rgb(255 253 249 / .8); box-shadow: 0 19px 35px rgb(27 23 20 / .18); backdrop-filter: blur(8px); }
 .nova-project__screen--raw > img, .nova-project__screen--none > img { display: block; width: 100%; height: 100%; border-radius: 8px; object-fit: contain; }
 .nova-project__screen--secondary.nova-project__screen--raw, .nova-project__screen--secondary.nova-project__screen--none { transform: rotate(7deg) scale(.86); }
 .nova-project__visual--single .nova-project__screen--primary { top: 7%; left: 25%; width: 52%; height: 86%; transform: rotate(-3deg); }
+@container (max-width: 300px) {
+  .nova-project__link--feature .nova-project__screen--secondary { display: none; }
+  .nova-project__link--feature .nova-project__screen--primary { top: 7%; left: 15%; width: 70%; height: 86%; transform: rotate(-3deg); }
+  .nova-project__link--feature .nova-project__screen--primary > .nova-device-frame { transform: perspective(900px) rotateY(-4deg) scale(.9); }
+}
 .nova-project__visual-placeholder { box-sizing: border-box; display: grid; width: min(72%, 270px); max-height: 82%; gap: 12px; justify-self: center; padding: clamp(12px, 2vw, 22px); overflow: hidden; border: 1px solid rgb(255 255 255 / .74); border-radius: 18px; background: rgb(255 253 249 / .78); box-shadow: 0 22px 40px rgb(39 31 24 / .1); backdrop-filter: blur(10px); }
 .nova-project__visual-placeholder > span { color: #72513c; font-size: 10px; font-weight: 700; letter-spacing: .12em; line-height: 1.3; text-transform: uppercase; overflow-wrap: anywhere; }
 .nova-project__visual-placeholder strong { display: -webkit-box; overflow: hidden; color: #2b241f; font-size: clamp(17px, 2vw, 25px); letter-spacing: -.05em; line-height: 1.15; overflow-wrap: anywhere; -webkit-box-orient: vertical; -webkit-line-clamp: 3; }
@@ -655,8 +652,10 @@ html:has(.nova-image-dialog[open]) { overflow: hidden; }
 .nova-project--row .nova-project__visual::after { filter: blur(11px); }
 .nova-project--row .nova-project__screen { height: 88%; }
 .nova-project--row .nova-project__screen--primary { left: 10%; }
+.nova-project--row .nova-project__visual--single .nova-project__screen--primary { left: 25%; }
 .nova-project--row .nova-project__screen--secondary { left: 43%; }
 .nova-project--row .nova-project__screen--phone > .nova-device-frame { transform: scale(.62); }
+.nova-project--row .nova-project__visual--single .nova-project__screen--phone > .nova-device-frame { transform: scale(.95); }
 .nova-project--row .nova-project__screen--phone .nova-device-frame__screen img { object-fit: contain; }
 .nova-project--row .nova-project__screen--browser > .nova-browser-frame { width: 155%; grid-template-rows: 16px minmax(0, 1fr); padding: 4px; border-radius: 7px; }
 .nova-project--row .nova-project__screen--browser .nova-browser-frame__chrome { padding-inline: 4px; }
@@ -689,14 +688,14 @@ html:has(.nova-image-dialog[open]) { overflow: hidden; }
 .nova-detail-cover__facts > div { display: grid; gap: 5px; min-width: min(100%, 125px); }
 .nova-detail-cover__facts dt { color: var(--green-dark); font-size: 9px; font-weight: 700; letter-spacing: .12em; text-transform: uppercase; }
 .nova-detail-cover__facts dd { margin: 0; font-size: 12px; font-weight: 600; line-height: 1.4; }
-.nova-detail-cover__screens { display: grid; grid-template-columns: repeat(5, minmax(0, 1fr)); align-items: end; gap: clamp(8px, 1.5vw, 20px); min-width: 0; padding: clamp(16px, 2.5vw, 34px) clamp(8px, 1.3vw, 18px) 14px; overflow: hidden; border-bottom: 1px solid var(--line); }
+.nova-detail-cover__screens { display: grid; grid-auto-rows: max-content; grid-template-columns: repeat(5, minmax(0, 1fr)); align-content: start; align-items: start; gap: clamp(8px, 1.5vw, 20px); min-width: 0; padding: clamp(16px, 2.5vw, 34px) clamp(8px, 1.3vw, 18px) 28px; overflow: visible; border-bottom: 1px solid var(--line); }
 .nova-detail-cover__screens--count-1 { grid-template-columns: minmax(0, 440px); justify-content: center; }
 .nova-detail-cover__screens--count-2 { grid-template-columns: repeat(2, minmax(0, 340px)); justify-content: center; }
 .nova-detail-cover__screens--count-3 { grid-template-columns: repeat(3, minmax(0, 260px)); justify-content: center; }
 .nova-detail-cover__screens--count-4 { grid-template-columns: repeat(4, minmax(0, 1fr)); }
 .nova-detail-cover__screens--count-5 { grid-template-columns: repeat(5, minmax(0, 1fr)); }
 .nova-detail-cover__screen { display: grid; min-width: 0; justify-items: center; gap: 8px; margin: 0; }
-.nova-detail-cover__screen button { position: relative; display: grid; width: 100%; height: clamp(170px, 22vw, 285px); place-items: center; padding: 0; border: 0; background: transparent; cursor: zoom-in; }
+.nova-detail-cover__screen button { position: relative; display: flex; width: 100%; height: clamp(170px, 22vw, 285px); min-height: 0; align-items: center; justify-content: center; padding: 0; overflow: clip; border: 0; background: transparent; cursor: zoom-in; }
 .nova-detail-cover__screens--count-1 .nova-detail-cover__screen button { height: clamp(220px, 28vw, 320px); }
 .nova-detail-cover__screen button:focus-visible { outline-offset: 5px; }
 .nova-detail-cover__screen .nova-device-frame { width: auto; height: 100%; min-width: 0; min-height: 0; max-width: 100%; filter: drop-shadow(0 10px 14px rgb(22 22 22 / .2)); transition: transform .45s cubic-bezier(.16,1,.3,1); }
@@ -706,9 +705,11 @@ html:has(.nova-image-dialog[open]) { overflow: hidden; }
 .nova-detail-cover__screen .nova-browser-frame__controls { gap: 3px; }
 .nova-detail-cover__screen .nova-browser-frame__controls img { width: 6px; height: 6px; }
 .nova-detail-cover__screen .nova-browser-frame__address { height: 8px; margin-left: 6px; }
-.nova-detail-cover__screen .nova-laptop-frame { width: 120%; filter: drop-shadow(0 10px 14px rgb(22 22 22 / .18)); }
+.nova-detail-cover__screen--laptop button { width: 100%; height: auto; min-height: 0; aspect-ratio: 4096 / 2581; align-self: start; }
+.nova-detail-cover__screen .nova-laptop-frame { width: 100%; filter: drop-shadow(0 10px 14px rgb(22 22 22 / .18)); }
 .nova-detail-cover__screen--raw button, .nova-detail-cover__screen--none button { width: 100%; height: clamp(140px, 18vw, 235px); padding: 8px; border: 1px solid color-mix(in srgb, var(--line) 70%, transparent); border-radius: 12px; background: var(--paper); box-shadow: 0 10px 22px rgb(22 22 22 / .11); }
-.nova-detail-cover__screen--raw button > img, .nova-detail-cover__screen--none button > img { display: block; width: 100%; height: 100%; object-fit: contain; }
+.nova-detail-cover__screen--raw button > img, .nova-detail-cover__screen--none button > img { display: block; width: auto; height: auto; max-width: 100%; max-height: 100%; object-fit: contain; }
+.nova-detail-cover--fitspace .nova-detail-cover__screen--none button { height: clamp(170px, 22vw, 285px); padding: 0; border: 0; background: transparent; box-shadow: none; }
 .nova-detail-cover__screen figcaption { max-width: 100%; color: var(--muted); font-size: 10px; line-height: 1.25; text-align: center; text-wrap: balance; }
 .nova-detail-cover__screen-action { position: absolute; right: 5%; bottom: 5%; display: grid; width: 25px; aspect-ratio: 1; place-items: center; border: 1px solid var(--line); border-radius: 50%; background: var(--paper); color: var(--ink); font-size: 13px; opacity: 0; transform: translateY(4px); transition: opacity .2s ease, transform .2s ease; }
 .nova-detail-cover__screen button:hover .nova-detail-cover__screen-action, .nova-detail-cover__screen button:focus-visible .nova-detail-cover__screen-action { opacity: 1; transform: none; }
@@ -725,17 +726,19 @@ html:has(.nova-image-dialog[open]) { overflow: hidden; }
 .nova-detail-cover__technology li { padding: 6px 9px; border: 1px solid var(--line); border-radius: 999px; color: var(--muted); font-size: 10px; line-height: 1.2; }
 
 @media (max-width: 900px) {
-  .nova-project__link--feature { grid-template-columns: minmax(0, .9fr) minmax(0, 1.1fr); min-height: 320px; }
+  .nova-project__link--feature { grid-template-columns: minmax(0, 1.15fr) minmax(0, .85fr); min-height: 320px; }
   .nova-project__details--feature { padding: 25px; }
-  .nova-project__title { font-size: clamp(30px, 4.4vw, 48px); }
+  .nova-project__title { font-size: clamp(28px, 3.2vw, 38px); }
   .nova-detail-cover__top { grid-template-columns: minmax(0, 1fr); align-items: start; gap: 18px; }
   .nova-detail-cover__identity h1 { max-width: 14ch; }
-  .nova-detail-cover__screens { overflow-x: auto; overscroll-behavior-inline: contain; scrollbar-width: thin; }
-  .nova-detail-cover__screens--count-1 { grid-template-columns: minmax(0, 440px); overflow-x: hidden; }
-  .nova-detail-cover__screens--count-2 { grid-template-columns: repeat(2, minmax(130px, 1fr)); }
-  .nova-detail-cover__screens--count-3 { grid-template-columns: repeat(3, minmax(105px, 1fr)); }
-  .nova-detail-cover__screens--count-4 { grid-template-columns: repeat(4, minmax(105px, 1fr)); }
-  .nova-detail-cover__screens--count-5 { grid-template-columns: repeat(5, minmax(105px, 1fr)); }
+  .nova-detail-cover__screens { grid-template-columns: repeat(2, minmax(0, 1fr)); overflow: visible; }
+  .nova-detail-cover__screens--count-1 { grid-template-columns: minmax(0, 440px); }
+  .nova-detail-cover__screens--count-2 { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .nova-detail-cover__screens--count-3, .nova-detail-cover__screens--count-4, .nova-detail-cover__screens--count-5 { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .nova-detail-cover__screens--count-3 .nova-detail-cover__screen:last-child, .nova-detail-cover__screens--count-5 .nova-detail-cover__screen:last-child { grid-column: 1 / -1; }
+  .nova-detail-cover__screen--laptop { grid-column: auto; width: min(100%, 460px); justify-self: center; }
+  .nova-detail-cover__screens--count-2:has(.nova-detail-cover__screen--laptop) { grid-template-columns: minmax(0, 1fr); justify-content: center; }
+  .nova-detail-cover__screens--count-1 .nova-detail-cover__screen--laptop { grid-column: auto; }
 }
 
 @media (max-width: 767px) {
@@ -753,7 +756,7 @@ html:has(.nova-image-dialog[open]) { overflow: hidden; }
   .nova-project__visual--single .nova-project__screen--primary { top: 6%; left: 29%; width: 46%; height: 88%; }
   .nova-project__screen--phone > .nova-device-frame { max-height: 100%; }
   .nova-project__visual-arrow { right: 14px; bottom: 14px; width: 44px; font-size: 21px; }
-  .nova-project--row .nova-project__link--row { grid-template-columns: 105px minmax(0, 1fr) auto; gap: 12px; padding-block: 15px; }
+  .nova-project--row .nova-project__link--row { grid-template-columns: 110px minmax(0, 1fr) auto; gap: 12px; padding-block: 15px; }
   .nova-project--row .nova-project__visual { min-height: 0; border-radius: 12px; }
   .nova-project--row .nova-project__visual { grid-column: 1; grid-row: 1; }
   .nova-project--row .nova-project__details--row { grid-column: 2; grid-row: 1; padding: 0; }
@@ -771,19 +774,20 @@ html:has(.nova-image-dialog[open]) { overflow: hidden; }
   .nova-detail-cover__facts > div { min-width: calc(50% - 20px); }
   .nova-detail-cover__screens { gap: 10px; margin-inline: -18px; padding: 12px 18px 14px; }
   .nova-detail-cover__screens--count-1 { grid-template-columns: minmax(0, 440px); }
-  .nova-detail-cover__screens--count-2 { grid-template-columns: repeat(2, minmax(130px, 1fr)); }
-  .nova-detail-cover__screens--count-3 { grid-template-columns: repeat(3, minmax(105px, 1fr)); }
-  .nova-detail-cover__screens--count-4 { grid-template-columns: repeat(4, minmax(105px, 1fr)); }
-  .nova-detail-cover__screens--count-5 { grid-template-columns: repeat(5, minmax(105px, 1fr)); }
+  .nova-detail-cover__screens--count-2, .nova-detail-cover__screens--count-3, .nova-detail-cover__screens--count-4, .nova-detail-cover__screens--count-5 { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .nova-detail-cover__screen--laptop { grid-column: 1 / -1; }
+  .nova-detail-cover__screens--count-1 .nova-detail-cover__screen--laptop { grid-column: auto; }
   .nova-detail-cover__screen button { height: 195px; }
+  .nova-detail-cover__screen--laptop button { width: 100%; height: auto; }
   .nova-detail-cover__screens--count-1 .nova-detail-cover__screen button { height: 235px; }
   .nova-detail-cover__screen--raw button, .nova-detail-cover__screen--none button { height: 155px; }
+  .nova-detail-cover--fitspace .nova-detail-cover__screen--none button { height: 195px; }
   .nova-detail-cover__bottom { grid-template-columns: minmax(0, 1fr); gap: 18px; }
   .nova-detail-cover__technology { gap: 6px; padding-top: 14px; }
 }
 
 @media (max-width: 390px) {
-  .nova-project--row .nova-project__link--row { grid-template-columns: 86px minmax(0, 1fr) 27px; gap: 9px; }
+  .nova-project--row .nova-project__link--row { grid-template-columns: 104px minmax(0, 1fr) 27px; gap: 9px; }
   .nova-project--row .nova-project__eyebrow { font-size: 8px; }
   .nova-project--row .nova-project__context { font-size: 8px; }
   .nova-project--row .nova-project__context-detail { font-size: 8px; }

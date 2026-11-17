@@ -30,14 +30,18 @@ export function getDefaultProjectImageFrame(platforms: string[]): Pick<ProjectGa
   if (hasIos) return { frame: 'phone', frameStyle: 'ios' };
   if (hasAndroid) return { frame: 'phone', frameStyle: 'android' };
   if (hasMobile) return { frame: 'phone' };
-  if (hasWeb) return { frame: 'browser' };
+  if (hasWeb) return { frame: 'laptop' };
   return { frame: 'none' };
 }
 
 export function getProjectGalleryImage(project: Project, image: ProjectGalleryImage, src = image.src): ProjectGalleryImage {
   const defaultFrame = getDefaultProjectImageFrame(project.platforms);
+  const isFaceLockDashboard = project.slug === 'face-lock' && /dashboard/i.test(`${image.title ?? ''} ${image.alt}`);
+  if (image.frame === 'browser' && (defaultFrame.frame === 'laptop' || isFaceLockDashboard)) {
+    return { ...image, src, frame: 'laptop', frameStyle: undefined };
+  }
   const canUpgradeLegacyPhone = image.frame === 'phone' && image.frameStyle === undefined &&
-    (defaultFrame.frame === 'browser' || defaultFrame.frameStyle !== undefined);
+    (defaultFrame.frame === 'laptop' || defaultFrame.frameStyle !== undefined);
   return image.frame === undefined || canUpgradeLegacyPhone
     ? { ...image, src, ...defaultFrame }
     : { ...image, src };
@@ -62,6 +66,30 @@ export function getProjectGalleryImages(project: Project): Array<ProjectGalleryI
     ...image,
     title: image.title?.trim() || `Screen ${String(index + 1).padStart(2, '0')}`,
   }));
+}
+
+export function getProjectPresentationImages(project: Project) {
+  const images = getProjectGalleryImages(project);
+  const frameKey = (image: ProjectGalleryImage) => `${image.frame ?? 'none'}:${image.frameStyle ?? ''}`;
+  const frameCounts = new Map<string, number>();
+
+  for (const image of images) {
+    const key = frameKey(image);
+    frameCounts.set(key, (frameCounts.get(key) ?? 0) + 1);
+  }
+
+  const dominantFrame = [...frameCounts].reduce<string | undefined>((best, [key, count]) =>
+    count > (best ? frameCounts.get(best) ?? 0 : 0) ? key : best, undefined);
+  const matching = images.filter((image) => frameKey(image) === dominantFrame);
+
+  if (matching.length < 2) {
+    return { images, coverImageCount: Math.min(1, images.length) };
+  }
+
+  return {
+    images: [...matching, ...images.filter((image) => frameKey(image) !== dominantFrame)],
+    coverImageCount: Math.min(5, matching.length),
+  };
 }
 
 export function getProjectCover(project: Project) {

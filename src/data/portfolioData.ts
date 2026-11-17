@@ -75,7 +75,7 @@ export interface ProjectGalleryImage {
   caption?: string;
   /** Optional presentation frame used in project covers and gallery previews. */
   frame?: 'phone' | 'laptop' | 'browser' | 'none';
-  /** Older readers can still render a generic phone frame. */
+  /** Selects the Figma device shell for a mobile screenshot when its OS is known. */
   frameStyle?: 'ios' | 'android';
 }
 
@@ -381,8 +381,8 @@ const projectRecords: Project[] = [
     technologies: ['Python', 'FastAPI', 'LangChain', 'Hugging Face Embeddings', 'FAISS', 'SearXNG', 'Crawl4AI', 'Playwright', 'React', 'Vite', 'TypeScript', 'Server-Sent Events'],
     thumbnail: publicProjectImage('ppt-generator/create-presentation.webp'),
     gallery: [
-      { src: publicProjectImage('ppt-generator/create-presentation.webp'), alt: 'SlideGen AI presentation setup screen with a prompt and template choices', title: 'Set up a presentation', caption: 'Choose a prompt and a visual template to begin generating a deck.', frame: 'browser' },
-      { src: publicProjectImage('ppt-generator/presentation-editor.webp'), alt: 'SlideGen AI presentation editor showing a generated slide preview and editing controls', title: 'Preview and edit slides', caption: 'Review the generated presentation and adjust its slides before export.', frame: 'browser' },
+      { src: publicProjectImage('ppt-generator/create-presentation.webp'), alt: 'SlideGen AI presentation setup screen with a prompt and template choices', title: 'Set up a presentation', caption: 'Choose a prompt and a visual template to begin generating a deck.', frame: 'laptop' },
+      { src: publicProjectImage('ppt-generator/presentation-editor.webp'), alt: 'SlideGen AI presentation editor showing a generated slide preview and editing controls', title: 'Preview and edit slides', caption: 'Review the generated presentation and adjust its slides before export.', frame: 'laptop' },
     ],
     role: 'AI Engineer · Telkom Indonesia', timeline: 'Dec 2025 – Jan 2026', location: 'Jakarta, Indonesia', featured: true,
     problem: 'Creating a research-backed deck means finding useful evidence, deciding how it supports the story, and turning that story into slides people can review. When research and slide writing happen in separate tools, context can get lost between those steps and the generated deck is harder to inspect as it takes shape.',
@@ -493,7 +493,7 @@ const projectRecords: Project[] = [
       { src: faceLockEnrollmentImage, alt: 'Face Lock face-enrollment screen showing an on-screen camera preview and guidance for positioning a face before capture.', title: 'Face enrollment', caption: 'The enrollment flow guides a user to position their face clearly before capture for access verification.', frame: 'phone', frameStyle: 'android' },
       { src: faceLockAccessLogsImage, alt: 'Face Lock access-log list showing access outcomes with personal names and exact timestamps blurred.', title: 'Access log list', caption: 'The list view shows access outcomes; person-specific names and exact timestamps are blurred for privacy.', frame: 'phone', frameStyle: 'android' },
       { src: faceLockLogDetailImage, alt: 'Face Lock access-log detail showing an authorization result and facial-recognition method, with identifying fields blurred.', title: 'Access log detail', caption: 'A single record detail view keeps the verification result visible while person-specific metadata is blurred.', frame: 'phone', frameStyle: 'android' },
-      { src: faceLockDashboardImage, alt: 'Face Lock access dashboard with aggregate statistics and charts; names and individual timestamps are blurred.', title: 'Access dashboard', caption: 'The dashboard summarizes access status and aggregate activity; personal names and individual timestamps are blurred.', frame: 'browser' },
+      { src: faceLockDashboardImage, alt: 'Face Lock access dashboard with aggregate statistics and charts; names and individual timestamps are blurred.', title: 'Access dashboard', caption: 'The dashboard summarizes access status and aggregate activity; personal names and individual timestamps are blurred.', frame: 'laptop' },
     ],
     links: [
       { label: 'Face recognition service', href: 'https://github.com/brianashari18/face_lock_ai', kind: 'github' },

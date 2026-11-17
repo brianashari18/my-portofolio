@@ -1,7 +1,7 @@
 import { useId } from 'react';
 import { Link } from 'react-router-dom';
 import type { Project } from '../data/portfolioData';
-import { getProjectGalleryImages } from '../lib/resolvePortfolioImage';
+import { getProjectPresentationImages } from '../lib/resolvePortfolioImage';
 import ProjectArtwork from './ProjectArtwork';
 
 export default function ProjectCard({ project, variant = 'feature', search = '' }: {
@@ -10,8 +10,9 @@ export default function ProjectCard({ project, variant = 'feature', search = '' 
   search?: string;
 }) {
   const titleId = useId();
-  const images = getProjectGalleryImages(project).slice(0, 2);
   const isFeature = variant === 'feature';
+  const presentation = getProjectPresentationImages(project);
+  const images = presentation.images.slice(0, isFeature ? Math.min(2, presentation.coverImageCount) : 1);
   const platformLabel = project.platforms.join(' · ') || project.categories[0];
   const context = [project.timeline, project.location].filter(Boolean).join(' · ');
 

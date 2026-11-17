@@ -871,7 +871,7 @@ function ProjectGalleryEditor({ projectTitle, platforms, folder, images, coverSo
             <TextField label="Caption" value={image.caption ?? ''} onChange={(caption) => updateImage(index, { caption })} hint="Explain what the screenshot demonstrates." />
             <label className="admin-field">
               <span>Presentation frame</span>
-              <select value={image.frame === 'phone' ? image.frameStyle ?? 'phone' : image.frame ?? 'none'} onChange={(event) => {
+              <select value={image.frame === 'phone' ? image.frameStyle ?? 'none' : image.frame ?? 'none'} onChange={(event) => {
                 const style = event.currentTarget.value;
                 updateImage(index, {
                   frame: style === 'ios' || style === 'android' ? 'phone' : style as ProjectGalleryImage['frame'],
@@ -879,13 +879,12 @@ function ProjectGalleryEditor({ projectTitle, platforms, folder, images, coverSo
                 });
               }}>
                 <option value="none">Original image</option>
-                <option value="phone">Neutral phone frame</option>
-                <option value="ios">iOS frame</option>
-                <option value="android">Android frame</option>
+                <option value="ios">iPhone 17 frame · Figma</option>
+                <option value="android">Android Compact frame · Figma</option>
+                <option value="laptop">MacBook Pro frame · Figma</option>
                 <option value="browser">Browser frame</option>
-                <option value="laptop">Laptop frame</option>
               </select>
-              <small>Applies wherever this screenshot appears, including the cover, walkthrough, and project card.</small>
+              <small>Figma-based iPhone 17, Android Compact, and MacBook Pro frames keep the uploaded screenshot replaceable. The choice applies to covers, galleries, and cards.</small>
             </label>
           </div>
         </div>
