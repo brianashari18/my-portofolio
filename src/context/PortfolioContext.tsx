@@ -3,7 +3,7 @@ import type { PropsWithChildren } from 'react';
 import { defaultPortfolioContent } from '../data/portfolioData';
 import type { PortfolioContent } from '../data/portfolioData';
 import { readPortfolioContent, writePortfolioContent } from '../lib/portfolioRepository';
-import { mergeReviewedTechnologies } from '../lib/mergeReviewedTechnologies';
+import { mergeReviewedProjectUpdates } from '../lib/mergeReviewedProjectUpdates';
 import { isSupabaseConfigured } from '../lib/supabase';
 import { PortfolioContext } from './portfolio-context';
 import type { RemoteState } from './portfolio-context';
@@ -21,7 +21,7 @@ export function PortfolioProvider({ children }: PropsWithChildren) {
       .then((remoteContent) => {
         if (!active) return;
         if (remoteContent) {
-          setContent(mergeReviewedTechnologies(remoteContent));
+          setContent(mergeReviewedProjectUpdates(remoteContent));
           setRemoteState('ready');
         } else {
           setRemoteState('missing');

@@ -1,7 +1,7 @@
 import { defaultPortfolioContent } from '../data/portfolioData';
 import type { PortfolioContent } from '../data/portfolioData';
 
-// The public CMS still has these earlier lists. Upgrade only an exact match so
+// The public CMS still has these earlier lists. Upgrade only exact matches so
 // later edits made in the admin remain the source of truth.
 const previousTechnologies: Record<string, string[][]> = {
   sprout: [['SwiftUI', 'SwiftData', 'Core ML', 'Foundation Models', 'Speech', 'AVFoundation', 'Go', 'FastAPI', 'Qdrant', 'Ollama', 'bge-m3', 'Docker']],
@@ -23,21 +23,34 @@ const previousTechnologies: Record<string, string[][]> = {
     ['Flutter', 'Dart', 'Firebase'],
     ['Flutter', 'Dart', 'Firebase Authentication', 'Cloud Firestore', 'FlutterMap', 'Geolocator'],
   ],
+  'mabrur-hajj-umrah': [[]],
 };
 
 function isSameList(left: string[], right: string[]) {
   return left.length === right.length && left.every((item, index) => item === right[index]);
 }
 
-export function mergeReviewedTechnologies(content: PortfolioContent): PortfolioContent {
-  const reviewedById = new Map(defaultPortfolioContent.projects.map((project) => [project.id, project.technologies]));
+export function mergeReviewedProjectUpdates(content: PortfolioContent): PortfolioContent {
+  const reviewedById = new Map(defaultPortfolioContent.projects.map((project) => [project.id, project]));
   let changed = false;
   const projects = content.projects.map((project) => {
     const previous = previousTechnologies[project.id];
     const reviewed = reviewedById.get(project.id);
-    if (!previous || !reviewed || !previous.some((list) => isSameList(project.technologies, list))) return project;
-    changed = true;
-    return { ...project, technologies: reviewed };
+    if (!reviewed) return project;
+
+    let updated = project;
+    if (previous?.some((list) => isSameList(project.technologies, list))) {
+      updated = { ...updated, technologies: reviewed.technologies };
+    }
+
+    if (project.id === 'mabrur-hajj-umrah') {
+      if (isSameList(project.platforms, ['Mobile'])) updated = { ...updated, platforms: reviewed.platforms };
+      if (!project.architecture && reviewed.architecture) updated = { ...updated, architecture: reviewed.architecture };
+      if (!project.links?.length && reviewed.links) updated = { ...updated, links: reviewed.links };
+    }
+
+    if (updated !== project) changed = true;
+    return updated;
   });
 
   return changed ? { ...content, projects } : content;

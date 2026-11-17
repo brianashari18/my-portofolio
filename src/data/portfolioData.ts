@@ -708,7 +708,8 @@ const projectRecords: Project[] = [
     id: 'mabrur-hajj-umrah', slug: 'mabrur-hajj-umrah', title: 'Mabrur Hajj & Umrah App',
     tagline: 'Prayer guidance and group tools for a pilgrimage companion',
     description: 'A mobile companion app concept for Hajj and Umrah, with prayer guidance and group communication.',
-    categories: ['Software Engineering'], platforms: ['Mobile'], technologies: [],
+    categories: ['Software Engineering'], platforms: ['Mobile', 'API'],
+    technologies: ['Flutter', 'Dart', 'PHP', 'Laravel', 'Node.js', 'JavaScript', 'Express', 'Prisma', 'MySQL', 'Joi', 'bcrypt', 'Winston', 'Jest', 'Supertest'],
     role: 'Mobile Developer · Community Service Program', timeline: 'Dec 2024 – Apr 2025', location: 'Bandung, Indonesia', featured: false,
     thumbnail: mabrurPrayerHomeImage,
     gallery: [
@@ -724,6 +725,8 @@ const projectRecords: Project[] = [
     problem: 'The concept brings prayer guidance and group communication into a single Hajj and Umrah companion.',
     solution: 'A mobile app concept centered on prayer guidance, with group tools for pilgrimage coordination.',
     features: ['Browse prayer guidance', 'Read individual prayer details', 'Sign in to the companion app'],
+    architecture: { summary: 'The mobile app uses Flutter. Laravel and Node.js/Express were used in separate backend versions. The linked Node.js repository uses Prisma with MySQL for user and content records.' },
+    links: [{ label: 'Node.js backend repository', href: 'https://github.com/brianashari18/belajar-mabrur-backend', kind: 'github' }],
   },
   {
     id: 'chat-app', slug: 'chat-app', title: 'Chat App', tagline: 'An early Flutter project built through a chat app',

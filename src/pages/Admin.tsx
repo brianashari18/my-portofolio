@@ -7,6 +7,7 @@ import { usePortfolioContent } from '../context/usePortfolioContent';
 import { defaultPortfolioContent } from '../data/portfolioData';
 import type { EvidenceLevel, Experience, GalleryTone, PortfolioContent, Project, ProjectCategory, ProjectGalleryImage, Skill } from '../data/portfolioData';
 import { checkPortfolioAdmin, readPortfolioContent } from '../lib/portfolioRepository';
+import { mergeReviewedProjectUpdates } from '../lib/mergeReviewedProjectUpdates';
 import { getDefaultProjectImageFrame, getProjectGalleryImage } from '../lib/resolvePortfolioImage';
 import { PORTFOLIO_IMAGE_ACCEPT, PORTFOLIO_IMAGE_MAX_BYTES, uploadPortfolioImage } from '../lib/imageStorage';
 import { isSupabaseConfigured, supabase } from '../lib/supabase';
@@ -38,6 +39,7 @@ export default function Admin() {
   const [contentRetry, setContentRetry] = useState(0);
   const [editorRevision, setEditorRevision] = useState(0);
   const [hasRemoteDocument, setHasRemoteDocument] = useState(false);
+  const [hasPendingContentSync, setHasPendingContentSync] = useState(false);
   const [isSaving, setIsSaving] = useState(false);
   const [notice, setNotice] = useState('');
   const [errorMessage, setErrorMessage] = useState('');
@@ -82,6 +84,7 @@ export default function Admin() {
     if (!session || !supabase) {
       setAccess('checking');
       setHasRemoteDocument(false);
+      setHasPendingContentSync(false);
       setDocumentState('checking');
       return;
     }
@@ -103,7 +106,13 @@ export default function Admin() {
             if (!active) return;
             setHasRemoteDocument(Boolean(remoteContent));
             setDocumentState(remoteContent ? 'ready' : 'missing');
-            if (remoteContent) setDraft(cloneContent(remoteContent));
+            if (remoteContent) {
+              const reviewedContent = mergeReviewedProjectUpdates(remoteContent);
+              setHasPendingContentSync(reviewedContent !== remoteContent);
+              setDraft(cloneContent(reviewedContent));
+            } else {
+              setHasPendingContentSync(false);
+            }
           })
           .catch((error: unknown) => {
             if (!active) return;
@@ -172,6 +181,7 @@ export default function Admin() {
       await saveContent(initial);
       setDraft(initial);
       setHasRemoteDocument(true);
+      setHasPendingContentSync(false);
       setDocumentState('ready');
       setNotice('Portfolio content is initialized. Review it and save any changes you make.');
     } catch (error) {
@@ -194,6 +204,7 @@ export default function Admin() {
     try {
       await saveContent(draft);
       setHasRemoteDocument(true);
+      setHasPendingContentSync(false);
       setDocumentState('ready');
       setNotice('Changes saved and published to the portfolio.');
     } catch (error) {
@@ -359,12 +370,12 @@ export default function Admin() {
       <PasswordSetupPanel />
 
       <div className="admin-toolbar">
-        <span className={`admin-save-state${isDirty ? ' is-dirty' : ''}`} aria-live="polite">
-          {isDirty ? 'Unsaved changes' : 'All changes saved'}
+        <span className={`admin-save-state${isDirty || hasPendingContentSync ? ' is-dirty' : ''}`} aria-live="polite">
+          {isDirty ? 'Unsaved changes' : hasPendingContentSync ? 'Reviewed project updates await CMS save' : 'All changes saved'}
         </span>
         <div className="admin-toolbar__actions">
           <button className="button button--outline" type="button" onClick={() => { setDraft(cloneContent(content)); setEditorRevision((revision) => revision + 1); setNotice('Draft changes discarded.'); setErrorMessage(''); }} disabled={!isDirty || isSaving}>Discard</button>
-          <button className="button button--dark" type="button" onClick={handleSave} disabled={!isDirty || isSaving}>
+          <button className="button button--dark" type="button" onClick={handleSave} disabled={(!isDirty && !hasPendingContentSync) || isSaving}>
             {isSaving ? 'Saving…' : 'Save & publish'} <span aria-hidden="true">↗</span>
           </button>
         </div>
