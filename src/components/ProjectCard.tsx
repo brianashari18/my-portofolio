@@ -11,8 +11,7 @@ export default function ProjectCard({ project, variant = 'feature', search = '' 
 }) {
   const titleId = useId();
   const isFeature = variant === 'feature';
-  const presentation = getProjectPresentationImages(project);
-  const images = presentation.images.slice(0, isFeature ? Math.min(2, presentation.coverImageCount) : 1);
+  const images = getProjectPresentationImages(project).coverImages.slice(0, isFeature ? 2 : 1);
   const platformLabel = project.platforms.join(' · ') || project.categories[0];
   const context = [project.timeline, project.location].filter(Boolean).join(' · ');
 

@@ -7,7 +7,7 @@ export default function ProjectDetailCover({ project, images, onOpen }: {
   images: ProjectGalleryImage[];
   onOpen: (index: number, event: MouseEvent<HTMLButtonElement>) => void;
 }) {
-  const featuredImages = images.slice(0, 5);
+  const featuredImages = images.slice(0, 4);
   const details = [
     project.timeline && { label: 'Timeline', value: project.timeline },
     project.role && { label: project.role === 'College project' || project.role === 'Course project' ? 'Project context' : 'Role', value: project.role },

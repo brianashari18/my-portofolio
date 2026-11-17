@@ -81,14 +81,11 @@ export function getProjectPresentationImages(project: Project) {
   const dominantFrame = [...frameCounts].reduce<string | undefined>((best, [key, count]) =>
     count > (best ? frameCounts.get(best) ?? 0 : 0) ? key : best, undefined);
   const matching = images.filter((image) => frameKey(image) === dominantFrame);
-
-  if (matching.length < 2) {
-    return { images, coverImageCount: Math.min(1, images.length) };
-  }
+  const coverCandidates = matching.length >= 2 ? matching : images.slice(0, 1);
 
   return {
-    images: [...matching, ...images.filter((image) => frameKey(image) !== dominantFrame)],
-    coverImageCount: Math.min(5, matching.length),
+    images,
+    coverImages: coverCandidates.slice(0, 4),
   };
 }
 

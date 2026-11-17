@@ -40,7 +40,7 @@ export default function ProjectDetail() {
 function ProjectCase({ project, search, previous, next }: { project: Project; search: string; previous?: Project; next?: Project }) {
   const [imageIndex, setImageIndex] = useState<number | null>(null);
   const imageTrigger = useRef<HTMLButtonElement | null>(null);
-  const { images, coverImageCount } = getProjectPresentationImages(project);
+  const { images, coverImages } = getProjectPresentationImages(project);
   const diagram = resolvePortfolioImage(project.architecture?.diagram);
   const bundledWorkflow = defaultPortfolioContent.projects.find((item) => item.id === project.id)?.workflow;
   const workflow = project.workflow
@@ -62,12 +62,11 @@ function ProjectCase({ project, search, previous, next }: { project: Project; se
     id: 'workflow', title: 'How it works', wide: true,
     content: <ProjectWorkflowMap workflow={workflow} />,
   });
-  if (images.length > coverImageCount) sections.push({
+  if (images.length > 0) sections.push({
     id: 'gallery',
     title: 'Product walkthrough',
     content: <div className="nova-case-gallery__grid">
-      {images.slice(coverImageCount).map((image, offset) => {
-        const index = offset + coverImageCount;
+      {images.map((image, index) => {
         return <figure key={image.src}>
         <button className="nova-case-gallery__button" type="button" aria-haspopup="dialog" aria-label={`Open screen ${index + 1} of ${images.length}: ${image.title}`} onClick={(event) => openImage(index, event)}>
           <span className="nova-case-gallery__preview" data-gallery-tone={project.galleryTone}>
@@ -117,7 +116,9 @@ function ProjectCase({ project, search, previous, next }: { project: Project; se
       <Link to={{ pathname: '/projects', search }}>← {search ? 'Filtered projects' : 'All projects'}</Link>
       <span aria-hidden="true">/</span><span aria-current="page">{project.title}</span>
     </nav>
-    <ProjectDetailCover project={project} images={images.slice(0, coverImageCount)} onOpen={openImage} />
+    <ProjectDetailCover project={project} images={coverImages} onOpen={(index, event) => {
+      openImage(images.findIndex((image) => image.src === coverImages[index].src), event);
+    }} />
 
     {sections.length > 0 && <div className="nova-case__story">
       {sections.length > 1 && <nav className="nova-case__contents" aria-label="In this case study">

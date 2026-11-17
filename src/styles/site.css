@@ -688,12 +688,11 @@ html:has(.nova-image-dialog[open]) { overflow: hidden; }
 .nova-detail-cover__facts > div { display: grid; gap: 5px; min-width: min(100%, 125px); }
 .nova-detail-cover__facts dt { color: var(--green-dark); font-size: 9px; font-weight: 700; letter-spacing: .12em; text-transform: uppercase; }
 .nova-detail-cover__facts dd { margin: 0; font-size: 12px; font-weight: 600; line-height: 1.4; }
-.nova-detail-cover__screens { display: grid; grid-auto-rows: max-content; grid-template-columns: repeat(5, minmax(0, 1fr)); align-content: start; align-items: start; gap: clamp(8px, 1.5vw, 20px); min-width: 0; padding: clamp(16px, 2.5vw, 34px) clamp(8px, 1.3vw, 18px) 28px; overflow: visible; border-bottom: 1px solid var(--line); }
+.nova-detail-cover__screens { display: grid; grid-auto-rows: max-content; grid-template-columns: repeat(4, minmax(0, 1fr)); align-content: start; align-items: start; gap: clamp(8px, 1.5vw, 20px); min-width: 0; padding: clamp(16px, 2.5vw, 34px) clamp(8px, 1.3vw, 18px) 28px; overflow: visible; border-bottom: 1px solid var(--line); }
 .nova-detail-cover__screens--count-1 { grid-template-columns: minmax(0, 440px); justify-content: center; }
 .nova-detail-cover__screens--count-2 { grid-template-columns: repeat(2, minmax(0, 340px)); justify-content: center; }
 .nova-detail-cover__screens--count-3 { grid-template-columns: repeat(3, minmax(0, 260px)); justify-content: center; }
 .nova-detail-cover__screens--count-4 { grid-template-columns: repeat(4, minmax(0, 1fr)); }
-.nova-detail-cover__screens--count-5 { grid-template-columns: repeat(5, minmax(0, 1fr)); }
 .nova-detail-cover__screen { display: grid; min-width: 0; justify-items: center; gap: 8px; margin: 0; }
 .nova-detail-cover__screen button { position: relative; display: flex; width: 100%; height: clamp(170px, 22vw, 285px); min-height: 0; align-items: center; justify-content: center; padding: 0; overflow: clip; border: 0; background: transparent; cursor: zoom-in; }
 .nova-detail-cover__screens--count-1 .nova-detail-cover__screen button { height: clamp(220px, 28vw, 320px); }
@@ -734,8 +733,8 @@ html:has(.nova-image-dialog[open]) { overflow: hidden; }
   .nova-detail-cover__screens { grid-template-columns: repeat(2, minmax(0, 1fr)); overflow: visible; }
   .nova-detail-cover__screens--count-1 { grid-template-columns: minmax(0, 440px); }
   .nova-detail-cover__screens--count-2 { grid-template-columns: repeat(2, minmax(0, 1fr)); }
-  .nova-detail-cover__screens--count-3, .nova-detail-cover__screens--count-4, .nova-detail-cover__screens--count-5 { grid-template-columns: repeat(2, minmax(0, 1fr)); }
-  .nova-detail-cover__screens--count-3 .nova-detail-cover__screen:last-child, .nova-detail-cover__screens--count-5 .nova-detail-cover__screen:last-child { grid-column: 1 / -1; }
+  .nova-detail-cover__screens--count-3, .nova-detail-cover__screens--count-4 { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .nova-detail-cover__screens--count-3 .nova-detail-cover__screen:last-child { grid-column: 1 / -1; }
   .nova-detail-cover__screen--laptop { grid-column: auto; width: min(100%, 460px); justify-self: center; }
   .nova-detail-cover__screens--count-2:has(.nova-detail-cover__screen--laptop) { grid-template-columns: minmax(0, 1fr); justify-content: center; }
   .nova-detail-cover__screens--count-1 .nova-detail-cover__screen--laptop { grid-column: auto; }
@@ -774,7 +773,7 @@ html:has(.nova-image-dialog[open]) { overflow: hidden; }
   .nova-detail-cover__facts > div { min-width: calc(50% - 20px); }
   .nova-detail-cover__screens { gap: 10px; margin-inline: -18px; padding: 12px 18px 14px; }
   .nova-detail-cover__screens--count-1 { grid-template-columns: minmax(0, 440px); }
-  .nova-detail-cover__screens--count-2, .nova-detail-cover__screens--count-3, .nova-detail-cover__screens--count-4, .nova-detail-cover__screens--count-5 { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .nova-detail-cover__screens--count-2, .nova-detail-cover__screens--count-3, .nova-detail-cover__screens--count-4 { grid-template-columns: repeat(2, minmax(0, 1fr)); }
   .nova-detail-cover__screen--laptop { grid-column: 1 / -1; }
   .nova-detail-cover__screens--count-1 .nova-detail-cover__screen--laptop { grid-column: auto; }
   .nova-detail-cover__screen button { height: 195px; }
