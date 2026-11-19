@@ -52,6 +52,10 @@ export function mergeReviewedProjectUpdates(content: PortfolioContent): Portfoli
       if (!project.links?.length && reviewed.links) updated = { ...updated, links: reviewed.links };
     }
 
+    if (project.id === 'hichef' && !project.links?.length && reviewed.links?.length) {
+      updated = { ...updated, links: reviewed.links };
+    }
+
     if (updated !== project) changed = true;
     return updated;
   });

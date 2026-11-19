@@ -339,6 +339,9 @@ const projectRecords: Project[] = [
       'Built local recipe persistence with SwiftData and Indonesian speech-guided controls for hands-free cooking.',
       'Contributed to HiChef’s development, TestFlight beta testing, and App Store publication.',
     ],
+    links: [
+      { label: 'App Store listing', href: 'https://apps.apple.com/id/app/hichef/id6780226542', kind: 'other' },
+    ],
   },
   {
     id: 'muncakin', slug: 'muncakin', title: 'Muncakin', tagline: 'Mountain-aware packing for a better-prepared hike',
